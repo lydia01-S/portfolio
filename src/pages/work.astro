@@ -1,30 +1,341 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+// Array of portfolio project cards
+const projects = [
+  {
+    title: "STU: Online Student Platform",
+    category: "UX/UI Case Study",
+    year: "2026",
+    description: "An integrated platform helping students organize coursework, manage schedules, and track deadlines seamlessly.",
+    imageSrc: "/3.png",
+    slug: "/stu", // Target page URL
+    tags: ["Research", "Figma", "Usability Testing"]
+  },
+  {
+    title: "Critter & Friends",
+    category: "Web Design & Game Design",
+    year: "2026",
+    description: "An interactive, browser-based web application with playful micro-interactions and custom illustrations.",
+    imageSrc: "/critterandfriends.png",
+    slug: "/critter-and-friends",
+    tags: ["Web Dev", "UI/UX", "Illustration"]
+  },
+  {
+    title: "UX Research",
+    category: "Design System & Strategy",
+    year: "2025",
+    description: "A comprehensive exploration of user personas, affinity mapping, wireframes, and design components.",
+
+    slug: "/research",
+    tags: ["User Flow", "Personas", "IA"]
+  }
+];
 ---
 
-<Layout title="Work — Lydia Stewart">
-  <main class="work-container">
-    <!-- Project Section 1 -->
-    <section id="editorial-brand-identity" class="project-section">
-      <h2>Editorial Brand Identity</h2>
-      <p>Detailed breakdown of this project...</p>
-    </section>
+<Layout title="Selected Work — Lydia Stewart">
+  <main class="work-page">
+    
+    <!-- Page Title & Header -->
+    <header class="work-header reveal-on-scroll">
+      <div class="header-container">
+        <span class="page-category">PORTFOLIO</span>
+        <h1 class="page-title">Selected Work</h1>
+        <p class="page-description">
+          A curated collection of digital product design, interactive experiences, and UX research.
+        </p>
+      </div>
+    </header>
 
-    <!-- Project Section 2 -->
-    <section id="digital-art-exhibition" class="project-section">
-      <h2>Digital Art Exhibition</h2>
-      <p>Detailed breakdown of this project...</p>
-    </section>
+    <!-- Clickable Projects Grid -->
+    <!-- Clickable Projects Grid -->
+<section class="work-grid-container">
+  <div class="projects-grid">
+    {projects.map((project) => (
+      <a href={project.slug} class="project-card-link">
+        <article class="project-card">
+          
+          <!-- Image Banner Container -->
+          <div class="card-image-wrapper">
+            <img src={project.imageSrc} alt={project.title} class="card-image" />
+            <div class="card-overlay">
+              <span class="view-btn">View Case Study →</span>
+            </div>
+          </div>
+
+          <!-- Card Details Content -->
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-category">{project.category}</span>
+              <span class="card-year">{project.year}</span>
+            </div>
+
+            <h2 class="card-title">{project.title}</h2>
+            <p class="card-description">{project.description}</p>
+
+            <!-- Skill Tags -->
+            <div class="card-tags">
+              {project.tags.map((tag) => (
+                <span class="tag-pill">{tag}</span>
+              ))}
+            </div>
+          </div>
+
+        </article>
+      </a>
+    ))}
+  </div>
+</section>
+
   </main>
 </Layout>
 
+<script>
+  // Scroll reveal animation observer
+  function initScrollReveal() {
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+  }
+
+  document.addEventListener('DOMContentLoaded', initScrollReveal);
+  document.addEventListener('astro:page-load', initScrollReveal);
+</script>
+
 <style>
   html {
-    scroll-behavior: smooth; /* Enables smooth jump scrolling */
+    scroll-behavior: smooth;
   }
-  
-  .project-section {
-    padding: 100px 0;
-    border-bottom: 1px solid #eee;
+
+  /* --- Scroll Reveal Animations --- */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .reveal-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* --- Page Layout Background --- */
+  .work-page {
+    background-color: #f7f4ed;
+    min-height: 100vh;
+    padding: 60px 24px 120px;
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    color: #1a1a1a;
+  }
+
+  /* --- Header Styles --- */
+  .work-header {
+    max-width: 1100px;
+    margin: 0 auto 56px auto;
+  }
+
+  .header-container {
+    max-width: 650px;
+  }
+
+  .page-category {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #7500f3;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .page-title {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+    font-weight: 400;
+    line-height: 1.1;
+    margin: 0 0 16px 0;
+    color: #111111;
+  }
+
+  .page-description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555555;
+    margin: 0;
+  }
+
+  /* --- Responsive Cards Grid Layout --- */
+  .work-grid-container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 32px;
+  }
+
+  /* --- Card Link & Card Container --- */
+  .project-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    border-radius: 20px;
+  }
+
+  .project-card {
+    background: #ffffff;
+    border: 1px solid #e2ded4;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s ease;
+  }
+
+  /* Card Hover Elevate Effect */
+  .project-card-link:hover .project-card {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+    border-color: #7500f3;
+  }
+
+  /* --- Card Media / Image --- */
+  .card-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    background-color: #eeebe3;
+    overflow: hidden;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  /* Zoom image slightly on card hover */
+  .project-card-link:hover .card-image {
+    transform: scale(1.05);
+  }
+
+  /* Hover Overlay & Action Button */
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .project-card-link:hover .card-overlay {
+    opacity: 1;
+  }
+
+  .view-btn {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 100px;
+    transform: translateY(10px);
+    transition: transform 0.3s ease;
+  }
+
+  .project-card-link:hover .view-btn {
+    transform: translateY(0);
+  }
+
+  /* --- Card Body Text Layout --- */
+  .card-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+
+  .card-category {
+    font-weight: 700;
+    color: #7500f3;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .card-year {
+    color: #888888;
+    font-weight: 600;
+  }
+
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: #111111;
+    line-height: 1.3;
+  }
+
+  .card-description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #555555;
+    margin: 0 0 20px 0;
+    flex-grow: 1;
+  }
+
+  /* Skill Pill Badges */
+  .card-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tag-pill {
+    background: #f0ebe1;
+    color: #444444;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 768px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .card-image-wrapper {
+      height: 200px;
+    }
   }
 </style>

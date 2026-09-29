@@ -5,18 +5,18 @@ import ProjectCard from '../components/projectcard.astro';
 
 const projects = [
   {
-    slug: "STU: An online student platform",
+    slug: "/stu",               // Leads to src/pages/stu.astro
     title: "STU: An online student platform",
     category: "UX/UI prototype",
     year: "2025",
-    imageSrc: "../public/3.png"
+    imageSrc: "/3.png"
   },
   {
-    slug: "Critter & Friends'",
+    slug: "/critterandfriends", // Leads to src/pages/critterandfriends.astro
     title: "Critter & Friends': An interactive game",
     category: "Web Design, UX/UI",
     year: "2026",
-    imageSrc: "../public/critterandfriends.png"
+    imageSrc: "/critterandfriends.png"
   }
 ];
 ---
@@ -27,13 +27,23 @@ const projects = [
     <Hero year="2026" />
     
     <!-- Scroll Down Indicator -->
-    <a href="#work" class="scroll-indicator">
+    <a href="#intro" class="scroll-indicator">
       <span>SCROLL TO EXPLORE</span>
       <div class="line"></div>
     </a>
   </section>
 
-  <!-- Selected Work Section (Targeted for scroll reveal) -->
+  <!-- Short Introduction Section -->
+  <section id="intro" class="intro-section reveal-on-scroll">
+    <div class="intro-content">
+  
+      <h2 class="intro-heading">
+        Hi, I'm Lydia — an Interactive Digital Media graduate passionate about web development and UI/UX design. 
+      </h2>
+    </div>
+  </section>
+
+  <!-- Selected Work Section -->
   <section id="work" class="work-section reveal-on-scroll">
     <div class="section-header">
       <h2 class="section-title">Selected Work</h2>
@@ -41,23 +51,25 @@ const projects = [
     </div>
 
     <p class="section-description">
-      A curated collection of branding, digital art direction, and editorial designs exploring minimalist form and typography.
+      A curated collection of branding, digital art direction and designs.
     </p>
     
     <!-- Staggered 2-Column Projects Grid -->
     <div class="projects-grid">
-      {projects.map((project, index) => (
-        <div class={`grid-col ${index % 2 === 1 ? 'right-col' : 'left-col'}`}>
-          <ProjectCard 
-            slug={project.slug}
-            title={project.title}
-            category={project.category}
-            year={project.year}
-            imageSrc={project.imageSrc}
-          />
-        </div>
-      ))}
+  {projects.map((project, index) => (
+    <div class={`grid-col ${index % 2 === 1 ? 'right-col' : 'left-col'}`}>
+      <a href={project.slug} class="card-link">
+        <ProjectCard 
+          slug={project.slug}
+          title={project.title}
+          category={project.category}
+          year={project.year}
+          imageSrc={project.imageSrc}
+        />
+      </a>
     </div>
+  ))}
+</div>
   </section>
 </Layout>
 
@@ -72,7 +84,7 @@ const projects = [
   };
 
   const observer = new IntersectionObserver(observerCallback, {
-    threshold: 0.1, // Triggers as soon as 10% of the section enters the screen
+    threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
   });
 
@@ -121,25 +133,62 @@ const projects = [
     50% { opacity: 1; transform: scaleY(1.2); }
   }
 
-  /* --- Scroll Reveal Animations --- */
-  .work-section {
-    padding: 100px 0 80px;
-    max-width: 1100px;
-    margin: 0 auto;
-    width: 100%;
-    
-    /* Initial state before scrolling into view */
+  /* --- Scroll Reveal Base Animations --- */
+  .reveal-on-scroll {
     opacity: 0;
-    transform: translateY(60px);
+    transform: translateY(40px);
     transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), 
                 transform 1s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: opacity, transform;
   }
 
-  /* Active state when scrolled into view */
-  .work-section.visible {
+  .reveal-on-scroll.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* --- Introduction Section Styles --- */
+  .intro-section {
+    padding: 120px 0 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .intro-content {
+    max-width: 800px;
+  }
+
+  .section-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #888;
+    margin-bottom: 24px;
+  }
+
+  .intro-heading {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    line-height: 1.3;
+    color: #111;
+    margin-bottom: 24px;
+  }
+
+  .intro-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #555;
+    max-width: 600px;
+  }
+
+  /* --- Work Section Styles --- */
+  .work-section {
+    padding: 60px 0 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
   }
 
   .section-header {
@@ -184,6 +233,10 @@ const projects = [
   }
 
   @media (max-width: 768px) {
+    .intro-section {
+      padding: 80px 0 40px;
+    }
+
     .projects-grid {
       grid-template-columns: 1fr;
       gap: 40px;

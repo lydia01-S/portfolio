@@ -1,0 +1,575 @@
+---
+// src/pages/research.astro
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+
+// Persona Data
+const personas = [
+  {
+    name: "Alex Rivera",
+    role: "Product Manager",
+    archetype: "The Power Planner",
+    avatar: "persona-1.png",
+    quote: "I need a tool that seamlessly integrates into my daily routine without adding clutter.",
+    demographics: { age: 32, location: "San Francisco, CA", experience: "5+ years" },
+    goals: [
+      "Streamline daily team updates",
+      "Reduce time spent on manual tracking",
+      "Export clean reports for stakeholders"
+    ],
+    frustrations: [
+      "Overly complex navigation in current apps",
+      "Lack of customizable dashboard views"
+    ]
+  },
+  {
+    name: "Maya Chen",
+    role: "Freelance Designer",
+    archetype: "The Visual Thinker",
+    avatar: "persona-2.png",
+    quote: "Visual clarity is key for me. If I can't find what I need in two clicks, I lose momentum.",
+    demographics: { age: 27, location: "Austin, TX", experience: "3 years" },
+    goals: [
+      "Quick access to design tokens and assets",
+      "Clean, distraction-free interface",
+      "Smooth mobile-to-desktop handoff"
+    ],
+    frustrations: [
+      "Inconsistent typography and UI elements",
+      "Slow load times on graphic-heavy pages"
+    ]
+  }
+];
+
+// Key Survey Metrics
+const surveyMetrics = [
+  { target: "78", suffix: "%", decimals: "0", initial: "0%", label: "Prefer minimal, low-clutter interfaces" },
+  { target: "64", suffix: "%", decimals: "0", initial: "0%", label: "Access workflow tools primary via desktop" },
+  { target: "3.2", suffix: " hrs", decimals: "1", initial: "0 hrs", label: "Average daily time spent in project tools" },
+  { target: "120", suffix: "+", decimals: "0", initial: "0+", label: "Total active survey respondents" }
+];
+---
+
+<Layout title="User Research & Personas">
+  <main class="research-page">
+    
+    <!-- Top Header -->
+    <header class="rs-header reveal-on-scroll">
+      <div class="rs-title-group">
+        <a href="/work" class="back-btn" aria-label="Go back">←</a>
+        <h1 class="rs-title">User Research</h1>
+      </div>
+       <div class="project-components">
+ <a href="/stylesheet" class="proto-btn">
+  Style Guide
+</a>
+  <a href="/wireframe" class="proto-btn">
+    Wireframes and Site map
+  </a>
+  <a href="/research" class="proto-btn">
+    Research
+  </a>
+</div>
+
+    </header>
+
+    <div class="rs-container">
+      
+      <!-- SECTION 1: Survey Insights -->
+      <section class="research-section reveal-on-scroll">
+        <div class="section-tag">
+          <span class="tag-label">01 / Surveys & Quantitative Data</span>
+        </div>
+        
+        <!-- Metrics Bar with Animated Counters -->
+        <div class="metrics-grid">
+          {surveyMetrics.map((item) => (
+            <div class="metric-card">
+              <span 
+                class="metric-stat count-up" 
+                data-target={item.target} 
+                data-suffix={item.suffix} 
+                data-decimals={item.decimals}
+              >
+                {item.initial}
+              </span>
+              <p class="metric-label">{item.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Key Survey Findings Box -->
+        <div class="findings-card">
+          <h3 class="card-subtitle">Key Takeaways from User Surveys</h3>
+          <ul class="findings-list">
+            <li>
+              <strong>Efficiency over novelty:</strong> 82% of users cited speed and clear visual hierarchy as their primary requirement.
+            </li>
+            <li>
+              <strong>Mobile vs Desktop split:</strong> While primary work occurs on desktop, 45% perform quick status checks via mobile.
+            </li>
+            <li>
+              <strong>Onboarding drop-off:</strong> Complex initial setups cause a 30% drop in user retention within the first week.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SECTION 2: User Personas -->
+      <section class="research-section reveal-on-scroll">
+        <div class="section-tag">
+          <span class="tag-label">02 / User Personas</span>
+        </div>
+
+        <div class="personas-grid">
+          {personas.map((persona) => (
+            <div class="persona-card">
+              
+              <!-- Header Profile -->
+              <div class="persona-header">
+                <img class="persona-avatar" src={persona.avatar} alt={persona.name} />
+                <div class="persona-meta">
+                  <h3 class="persona-name">{persona.name}</h3>
+                  <span class="persona-role">{persona.role}</span>
+                  <span class="persona-archetype">{persona.archetype}</span>
+                </div>
+              </div>
+
+              <!-- Quote Block -->
+              <blockquote class="persona-quote">
+                "{persona.quote}"
+              </blockquote>
+
+              <!-- Details Grid -->
+              <div class="persona-details">
+                <div class="detail-block">
+                  <h4 class="block-title">Goals & Needs</h4>
+                  <ul>
+                    {persona.goals.map((goal) => (
+                      <li>{goal}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div class="detail-block">
+                  <h4 class="block-title">Frustrations & Pain Points</h4>
+                  <ul>
+                    {persona.frustrations.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- SECTION 3: Visual Persona Image Card -->
+      <section class="research-section reveal-on-scroll">
+        <div class="section-tag">
+          <span class="tag-label">03 / Overview Artefacts</span>
+        </div>
+        <div class="persona-image-wrapper">
+          <img class="persona-full-img" src="persona.png" alt="User Persona Spectrum" />
+        </div>
+      </section>
+
+    </div>
+  </main>
+  
+
+</Layout>
+
+<script>
+  // --- 1. Scroll Reveal Animation Observer ---
+  function initScrollReveal() {
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    };
+
+    const scrollObserver = new IntersectionObserver(observerCallback, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    document.querySelectorAll('.reveal-on-scroll').forEach((el) => scrollObserver.observe(el));
+  }
+
+  // --- 2. Dynamic Counter Calculator Animation ---
+  function initCounters() {
+    const counters = document.querySelectorAll('.count-up');
+    const duration = 600; // Fast 0.6s calculation speed
+
+    const counterObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const targetEl = entry.target as HTMLElement;
+          const targetValue = parseFloat(targetEl.dataset.target || '0');
+          const suffix = targetEl.dataset.suffix || '';
+          const decimals = parseInt(targetEl.dataset.decimals || '0', 10);
+          
+          let startTime: number | null = null;
+
+          function updateCount(timestamp: number) {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            
+            const easeOutProgress = 1 - Math.pow(1 - progress, 3);
+            const currentCount = easeOutProgress * targetValue;
+
+            targetEl.textContent = currentCount.toFixed(decimals) + suffix;
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCount);
+            } else {
+              targetEl.textContent = targetValue.toFixed(decimals) + suffix;
+            }
+          }
+
+          requestAnimationFrame(updateCount);
+          obs.unobserve(targetEl);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    counters.forEach(counter => counterObserver.observe(counter));
+  }
+
+  // Master Setup function
+  function setupAnimations() {
+    initScrollReveal();
+    initCounters();
+  }
+
+  document.addEventListener('DOMContentLoaded', setupAnimations);
+  document.addEventListener('astro:page-load', setupAnimations);
+</script>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .project-components {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  align-items: center;      /* Center items vertically */
+  gap: 10px;                /* Reduced gap between buttons (was 16px) */
+  margin: 20px 0;           /* Reduced outer margin (was 32px 0) */
+  width: 100%;
+}
+
+/* Reusable class for smaller buttons */
+.proto-btn {
+  display: inline-block;
+  padding: 8px 16px;        /* Reduced padding (was 15px 24px) */
+  background-color: #7500f3;
+  color: #ffffff;
+  text-decoration: none;
+ font-family: 'Bodoni Moda', 'Playfair Display', serif;
+  font-size: 13px;          /* Reduced text size (was 15px) */
+  font-weight: 600;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.proto-btn:hover {
+  background-color: #0051a8;
+  transform: translateY(-1px);
+}
+  /* --- Scroll Reveal Animations --- */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .reveal-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* --- Canvas & Background --- */
+  .research-page {
+    background-color: #f7f4ed;
+    min-height: 100vh;
+    padding: 0 24px 80px;
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    color: #1a1a1a;
+  }
+
+  .rs-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  /* --- Header --- */
+  .rs-header {
+    max-width: 1100px;
+    margin: 0 auto 48px;
+    padding-top: 48px;
+    padding-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .rs-title-group {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .rs-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: #ffffff;
+    border-radius: 50%;
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+  }
+
+  .back-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .pill-badge {
+    background: #ffffff;
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid #dcdcdc;
+  }
+
+  /* --- Section Tags & Dividers --- */
+  .research-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .section-tag {
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 8px;
+  }
+
+  .tag-label {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* --- Metrics Grid --- */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .metric-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid #e2ded4;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .metric-stat {
+    font-size: 36px;
+    font-weight: 800;
+    color: #3a1cec;
+    letter-spacing: -1px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .metric-label {
+    font-size: 13px;
+    color: #71717a;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* --- Findings Card --- */
+  .findings-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 28px;
+    border: 1px solid #e2ded4;
+  }
+
+  .card-subtitle {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
+
+  .findings-list {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 14px;
+    color: #3f3f46;
+    line-height: 1.5;
+  }
+
+  /* --- Personas Grid --- */
+  .personas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .persona-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 28px;
+    border: 1px solid #e2ded4;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .persona-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .persona-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #eae9e5;
+  }
+
+  .persona-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .persona-name {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .persona-role {
+    font-size: 13px;
+    font-weight: 600;
+    color: #3a1cec;
+  }
+
+  .persona-archetype {
+    font-size: 12px;
+    color: #71717a;
+  }
+
+  .persona-quote {
+    margin: 0;
+    padding: 12px 16px;
+    background: #f7f4ed;
+    border-left: 3px solid #1a1a1a;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    font-style: italic;
+    color: #27272a;
+    line-height: 1.4;
+  }
+
+  .persona-details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .block-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #71717a;
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  .detail-block ul {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13px;
+    color: #3f3f46;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    line-height: 1.4;
+  }
+
+  /* --- Image Card Centering --- */
+  .persona-image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid #e2ded4;
+  }
+
+  .persona-full-img {
+    width: 100%;
+    max-width: 650px;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .rs-header {
+      padding-top: 24px;
+      margin-bottom: 24px;
+    }
+
+    .personas-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

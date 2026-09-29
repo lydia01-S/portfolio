@@ -10,7 +10,7 @@ interface Props {
 const { slug, title, category, imageSrc, year } = Astro.props;
 ---
 
-<a href={`/work#${slug}`} class="project-card reveal-on-scroll">
+<a href={slug} class="project-card reveal-on-scroll">
   <div class="image-wrapper">
     <img src={imageSrc} alt={title} loading="lazy" />
   </div>

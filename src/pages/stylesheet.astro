@@ -1,0 +1,374 @@
+---
+// src/pages/stylesheet.astro
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="STU: UI Kit & Style Guide">
+  <main class="style-guide-bg">
+   <header class="sg-header">
+      <div class="sg-title-group">
+        <a href="/work" class="back-btn" aria-label="Go back">←</a>
+        <h1 class="sg-title">UI-Kit</h1>
+      </div>
+     <div class="project-components">
+ <a href="/stylesheet" class="proto-btn">
+  Style Guide
+</a>
+  <a href="/wireframe" class="proto-btn">
+    Wireframes and Site map
+  </a>
+  <a href="/research" class="proto-btn">
+    Research
+  </a>
+</div>
+    </header>
+
+
+   
+
+    <!-- UI Kit Grid Container -->
+    <div class="ui-kit-grid">
+      
+      <!-- TOP ROW: Buttons Section (Full Width) -->
+      <section class="ui-card full-width">
+        <h2 class="card-title">Buttons</h2>
+        <div class="table-container">
+          <div class="state-row">
+            <span class="state-label">Default</span>
+            <div class="btn-group">
+              <button class="btn btn-dark">Button Title</button>
+              <button class="btn btn-dark">Button Title <span class="icon">↗</span></button>
+              <button class="btn btn-dark icon-only">↗</button>
+              <button class="btn btn-outline">Button Title</button>
+              <button class="btn btn-outline">Button Title <span class="icon">↗</span></button>
+              <button class="btn btn-dark icon-only">↗</button>
+            </div>
+          </div>
+
+          <div class="state-row">
+            <span class="state-label">Pressed</span>
+            <div class="btn-group">
+              <button class="btn btn-purple">Button Title</button>
+              <button class="btn btn-purple">Button Title <span class="icon">↗</span></button>
+              <button class="btn btn-purple icon-only">↗</button>
+              <button class="btn btn-dark2">Button Title</button>
+              <button class="btn btn-dark2">Button Title <span class="icon">↗</span></button>
+              <button class="btn btn-purple2 icon-only">↗</button>
+            </div>
+          </div>
+
+          <div class="state-row">
+            <span class="state-label">Disabled</span>
+            <div class="btn-group">
+              <button class="btn btn-disabled">Button Title</button>
+              <button class="btn btn-disabled">Button Title <span class="icon">↗</span></button>
+              <button class="btn btn-disabled icon-only">↗</button>
+              <button class="btn btn-outline-disabled">Button Title</button>
+              <button class="btn btn-outline-disabled">Button Title <span class="icon">↗</span></button>
+              <button class="btn btn-outline-disabled icon-only">↗</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LEFT COLUMN -->
+      <div class="column-left">
+        <!-- Icons -->
+        <section class="ui-card">
+          <h2 class="card-title">Assets</h2>
+           <img id="assets" src="assets.png" alt="UI Icons" />
+          
+        </section>
+
+        <!-- Decorative Elements -->
+        <section class="ui-card">
+          <h2 class="card-title">Icons</h2>
+         <img id="icons" src="icons.png" alt="UI Icons" />
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN: Cards & Other Components -->
+      <div class="column-right">
+        <section class="ui-card">
+          <h2 class="card-title">Cards & Other</h2>
+          <div class="components-stack">
+            
+            <!-- Alert Banner -->
+            <div class="alert-banner">
+              <img class="card-img-1" src="card4.png" alt="Card 1" />
+            </div>
+
+            <!-- Side Card -->
+            <div class="side-card">
+              <img class="card-img-2" src="card2.png" alt="Card 2" />
+            </div>
+
+            <!-- Testimonial Card -->
+            <div class="testimonial-card">
+              <img class="card-img-3" src="card3.png" alt="Card 3" />
+            </div>
+
+            <!-- Address / Purple Info Block -->
+            <div class="purple-card">
+              <img class="card-img-4" src="card1.png" alt="Card 4" />
+            </div>
+
+            <!-- Accordion items -->
+            <div class="accordion-item">
+              <img class="card-img-5" src="card5.png" alt="Card 5" />
+            </div>
+
+          
+
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </main>
+
+
+</Layout>
+
+
+
+<style>
+  /* --- Layout & Background --- */
+  .style-guide-bg {
+  background: radial-gradient(circle at 15% 25%, rgba(147, 112, 219, 0.35), transparent 45%),
+                radial-gradient(circle at 85% 30%, rgba(66, 153, 225, 0.35), transparent 45%),
+                linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+    min-height: 100vh;
+    padding: 32px 24px 80px;
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    color: #1a1a1a;
+  }
+
+  /* Reduced sizes for left-side assets */
+  #icons {
+    width: 100%;
+    max-width: 320px; /* Reduced from 450px */
+    height: auto;
+    display: block;
+   
+    
+  }
+
+.project-components {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  align-items: center;      /* Center items vertically */
+  gap: 10px;                /* Reduced gap between buttons (was 16px) */
+  margin: 20px 0;           /* Reduced outer margin (was 32px 0) */
+  width: 100%;
+}
+
+/* Reusable class for smaller buttons */
+.proto-btn {
+  display: inline-block;
+  padding: 8px 16px;        /* Reduced padding (was 15px 24px) */
+  background-color: #7500f3;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: 'Bodoni Moda', 'Playfair Display', serif;
+  font-size: 13px;          /* Reduced text size (was 15px) */
+  font-weight: 600;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.proto-btn:hover {
+  background-color: #0051a8;
+  transform: translateY(-1px);
+}
+
+
+
+  #assets {
+    width: 100%;
+    max-width: 800px; /* Reduced from 900px */
+    height: auto;
+    display: block;
+  }
+
+  .sg-header {
+    max-width: 1100px;
+    margin: 0 auto 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sg-title-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #ffffff;
+    border-radius: 50%;
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+  }
+
+  .pill-badge {
+    background: #ffffff;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #dcdcdc;
+  }
+
+  /* --- Main Outer Grid System --- */
+  .ui-kit-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px; /* Tightened from 20px */
+  }
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  /* --- Card Container Base --- */
+  .ui-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px; /* Reduced padding from 28px */
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  /* --- Button Grid / Rows --- */
+  .table-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .state-row, .input-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    align-items: center;
+  }
+
+  .state-label {
+    font-size: 12px;
+    color: #71717a;
+    font-weight: 500;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* Button Styles */
+  .btn {
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-dark { background: #3a1cec; color: #fff; }
+  .btn-dark2 { background: #261493; color: #fff; }
+  .btn-purple { background: #3a1cec; color: #fff; }
+  .btn-purple2 { background: #261493; color: #fff; }
+  .btn-outline { background: transparent; border: 1px solid #d4d4d8; color: #18181b; }
+  .btn-disabled { background: #c6bdf9; color: #ffff; }
+  .btn-outline-disabled { background: #c6bdf9; border: 1px solid #e4e4e7; color: #ffff; }
+  
+  .icon-only {
+    padding: 10px;
+    border-radius: 50%;
+  }
+
+  /* --- FLEXBOX GRID FOR CARDS & OTHER --- */
+  .components-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Reduced gap between images from 12px to 8px */
+    align-items: flex-start;
+  }
+
+  /* Left-column sub-grid wrappers (~58% width) */
+  .alert-banner,
+  .testimonial-card {
+    flex: 1 1 calc(58% - 4px);
+    width: calc(58% - 4px);
+  }
+
+  /* Right-column sub-grid wrappers (~42% width) */
+  .side-card,
+  .purple-card {
+    flex: 1 1 calc(42% - 4px);
+    width: calc(42% - 4px);
+  }
+
+  /* Full-width wrappers */
+  .accordion-item,
+  .pricing-card {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  /* Individual image size controls */
+  .card-img-1,
+  .card-img-2,
+  .card-img-3,
+  .card-img-4,
+  .card-img-5,
+  .card-img-6 {
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+  }
+
+  .card-img-6 {
+     max-width: 400px;
+  }
+
+  
+
+  @media (max-width: 768px) {
+    .ui-kit-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .alert-banner,
+    .side-card,
+    .testimonial-card,
+    .purple-card {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+  }
+</style>

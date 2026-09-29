@@ -1,12 +1,14 @@
 ---
+// src/layouts/Layout.astro
 import Header from '../components/header.astro';
 import Footer from '../components/footer.astro';
 
 interface Props {
   title?: string;
+  hideNav?: boolean; // New prop to toggle site header/footer
 }
 
-const { title = "Lydia Stewart — Portfolio" } = Astro.props;
+const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
 ---
 
 <html lang="en">
@@ -22,27 +24,32 @@ const { title = "Lydia Stewart — Portfolio" } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
   </head>
   <body>
-    <div id="page-wrapper">
-      <Header />
-      <!-- The slot inserts the unique content of each page here -->
+    {hideNav ? (
+      /* Clean slot for full-page UI Kit layout without extra padding */
       <slot />
-      <Footer />
-    </div>
+    ) : (
+      <div id="page-wrapper">
+        <Header />
+        <slot />
+        <Footer />
+      </div>
+    )}
   </body>
 </html>
 
 <style is:global>
-  * {
+  /* Global CSS Resets */
+  *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
 
   html, body {
-    height: 100%;
+    min-height: 100%;
     background-color: #ffffff;
     color: #0d0d0d;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
   }
 
   #page-wrapper {
