@@ -43,6 +43,32 @@ const projects = [
     </div>
   </section>
 
+
+<!-- What I Focus On Section -->
+  <section id="focus" class="focus-section reveal-on-scroll">
+   
+
+    <!-- Skills Cloud Grid -->
+    <div class="skills-cloud">
+      <div class="skill-row top-row">
+        <span class="skill-tag">UI Design</span>
+        <span class="skill-tag">UX Design</span>
+        <span class="skill-tag">User Research</span>
+        <span class="skill-tag">Wireframing</span>
+        <span class="skill-tag">Prototyping</span>
+      </div>
+      <div class="skill-row bottom-row">
+        <span class="skill-tag">Design Systems</span>
+        <span class="skill-tag">Responsive Design</span>
+        <span class="skill-tag">Astro</span>
+        <span class="skill-tag">HTML/CSS</span>
+      </div>
+    </div>
+  </section>
+
+
+
+
   <!-- Selected Work Section -->
   <section id="work" class="work-section reveal-on-scroll">
     <div class="section-header">
@@ -94,6 +120,130 @@ const projects = [
 <style>
   html {
     scroll-behavior: smooth;
+  }
+
+/* --- What I Focus On Section --- */
+  .focus-section {
+    padding: 80px 0 100px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .focus-header {
+    margin-bottom: 60px;
+  }
+
+  .focus-title {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 4.8rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0c0c0c;
+    margin-bottom: 20px;
+    line-height: 1.05;
+   
+
+  }
+
+  .focus-subtitle {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #444;
+    max-width: 480px;
+    margin-bottom: 32px;
+  }
+
+  /* Tools Row */
+  .tools-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .tools-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+  }
+
+  .tool-icons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tool-badge {
+    width: 38px;
+    height: 38px;
+    background: #ffffff;
+    border: 1px solid #e2e2e2;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .tool-badge:hover {
+    transform: translateY(-2px);
+    border-color: #bbb;
+  }
+
+  /* Skills Cloud Layout */
+  .skills-cloud {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-top: 40px;
+  }
+
+  .skill-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 36px;
+  }
+
+  .top-row {
+    justify-content: space-between;
+  }
+
+  .bottom-row {
+    justify-content: center;
+    gap: 48px;
+  }
+
+  .skill-tag {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111;
+    letter-spacing: -0.01em;
+    transition: color 0.2s ease;
+  }
+
+  .skill-tag:hover {
+    color: #7500f3; /* Matches your brand highlight color */
+  }
+
+  @media (max-width: 768px) {
+    .focus-section {
+      padding: 60px 0;
+    }
+
+    .skill-row {
+      justify-content: flex-start;
+      gap: 20px;
+    }
+
+    .bottom-row {
+      justify-content: flex-start;
+    }
+
+    .skill-tag {
+      font-size: 15px;
+    }
   }
 
   .hero-wrapper {

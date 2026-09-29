@@ -1,5 +1,4 @@
 ---
-// src/pages/research.astro
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 
@@ -9,7 +8,7 @@ const personas = [
     name: "Alex Rivera",
     role: "Product Manager",
     archetype: "The Power Planner",
-    avatar: "persona-1.png",
+    avatar: "/persona-1.png",
     quote: "I need a tool that seamlessly integrates into my daily routine without adding clutter.",
     demographics: { age: 32, location: "San Francisco, CA", experience: "5+ years" },
     goals: [
@@ -26,7 +25,7 @@ const personas = [
     name: "Maya Chen",
     role: "Freelance Designer",
     archetype: "The Visual Thinker",
-    avatar: "persona-2.png",
+    avatar: "/persona-2.png",
     quote: "Visual clarity is key for me. If I can't find what I need in two clicks, I lose momentum.",
     demographics: { age: 27, location: "Austin, TX", experience: "3 years" },
     goals: [
@@ -48,37 +47,60 @@ const surveyMetrics = [
   { target: "3.2", suffix: " hrs", decimals: "1", initial: "0 hrs", label: "Average daily time spent in project tools" },
   { target: "120", suffix: "+", decimals: "0", initial: "0+", label: "Total active survey respondents" }
 ];
+
+// Agency Research Synthesis (Insight to Action mapping)
+const researchSynthesis = [
+  {
+    finding: "Navigation Overload & Cognitive Fatigue",
+    insight: "68% of users expressed frustration when navigating nested university sub-menus.",
+    impact: "Designed flat, persistent bottom tabs and unified search for immediate access to core tools."
+  },
+  {
+    finding: "Context Switching between Mobile & Desktop",
+    insight: "Students start tasks on desktop but check real-time updates (schedules, grades) on mobile.",
+    impact: "Prioritized high-contrast status cards and swipeable deadline drawers for mobile states."
+  },
+  {
+    finding: "Accessibility & Low-Light Usage",
+    insight: "Late-night studying requires high-contrast UI components and clear typographic visual hierarchy.",
+    impact: "Adopted strict AAA contrast guidelines and clean sans-serif typography for interactive components."
+  }
+];
 ---
 
-<Layout title="User Research & Personas">
+<Layout title="STU: User Research & Insights">
   <main class="research-page">
     
-    <!-- Top Header -->
+    <!-- Header & Sub Navigation -->
     <header class="rs-header reveal-on-scroll">
-      <div class="rs-title-group">
-        <a href="/work" class="back-btn" aria-label="Go back">←</a>
-        <h1 class="rs-title">User Research</h1>
+      <div class="header-top">
+        <a href="/work" class="back-link" aria-label="Back to Work">← Back to Work</a>
+        
+        <nav class="project-nav" aria-label="Project Sections">
+          <a href="/stylesheet" class="nav-tab">Style Guide</a>
+          <a href="/wireframe" class="nav-tab">Wireframes & Site Map</a>
+          <a href="/research" class="nav-tab active">Research</a>
+        </nav>
       </div>
-       <div class="project-components">
- <a href="/stylesheet" class="proto-btn">
-  Style Guide
-</a>
-  <a href="/wireframe" class="proto-btn">
-    Wireframes and Site map
-  </a>
-  <a href="/research" class="proto-btn">
-    Research
-  </a>
-</div>
 
+      <div class="header-content">
+        <span class="section-tag">UX Methodology</span>
+        <h1 class="rs-title">User Research & Behavioral Insights</h1>
+        <p class="rs-subtitle">
+          Informing product architecture through quantitative user surveys, qualitative persona studies, and usability mapping.
+        </p>
+      </div>
     </header>
 
     <div class="rs-container">
       
       <!-- SECTION 1: Survey Insights -->
       <section class="research-section reveal-on-scroll">
-        <div class="section-tag">
-          <span class="tag-label">01 / Surveys & Quantitative Data</span>
+        <div class="section-header-row">
+          <div>
+            <span class="section-tag">01 / Quantitative Data</span>
+            <h2>Survey Metrics & Core Takeaways</h2>
+          </div>
         </div>
         
         <!-- Metrics Bar with Animated Counters -->
@@ -100,7 +122,7 @@ const surveyMetrics = [
 
         <!-- Key Survey Findings Box -->
         <div class="findings-card">
-          <h3 class="card-subtitle">Key Takeaways from User Surveys</h3>
+          <h3 class="card-subtitle">Key Quantitative Findings</h3>
           <ul class="findings-list">
             <li>
               <strong>Efficiency over novelty:</strong> 82% of users cited speed and clear visual hierarchy as their primary requirement.
@@ -115,10 +137,35 @@ const surveyMetrics = [
         </div>
       </section>
 
-      <!-- SECTION 2: User Personas -->
+      <!-- SECTION 2: Insight to Action Matrix (Agency Quality Addition) -->
       <section class="research-section reveal-on-scroll">
-        <div class="section-tag">
-          <span class="tag-label">02 / User Personas</span>
+        <div class="section-header-row">
+          <div>
+            <span class="section-tag">02 / Synthesis Matrix</span>
+            <h2>Connecting Research to Design Decisions</h2>
+          </div>
+        </div>
+
+        <div class="synthesis-grid">
+          {researchSynthesis.map((item) => (
+            <div class="synthesis-card">
+              <span class="synthesis-finding">{item.finding}</span>
+              <p class="synthesis-insight"><strong>User Insight:</strong> {item.insight}</p>
+              <div class="synthesis-impact">
+                <strong>Design Impact:</strong> {item.impact}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- SECTION 3: User Personas -->
+      <section class="research-section reveal-on-scroll">
+        <div class="section-header-row">
+          <div>
+            <span class="section-tag">03 / Qualitative Personas</span>
+            <h2>User Archetypes & Behavioral Models</h2>
+          </div>
         </div>
 
         <div class="personas-grid">
@@ -166,20 +213,23 @@ const surveyMetrics = [
         </div>
       </section>
 
-      <!-- SECTION 3: Visual Persona Image Card -->
+      <!-- SECTION 4: Visual Persona Artefacts -->
       <section class="research-section reveal-on-scroll">
-        <div class="section-tag">
-          <span class="tag-label">03 / Overview Artefacts</span>
+        <div class="section-header-row">
+          <div>
+            <span class="section-tag">04 / Research Artifacts</span>
+            <h2>Persona Mapping Spectrum</h2>
+          </div>
         </div>
+
         <div class="persona-image-wrapper">
-          <img class="persona-full-img" src="persona.png" alt="User Persona Spectrum" />
+          <img class="persona-full-img" src="/persona.png" alt="User Persona Spectrum Mapping" />
         </div>
       </section>
 
     </div>
   </main>
-  
-
+  <Footer />
 </Layout>
 
 <script>
@@ -194,8 +244,8 @@ const surveyMetrics = [
     };
 
     const scrollObserver = new IntersectionObserver(observerCallback, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
+      threshold: 0.08,
+      rootMargin: '0px 0px -40px 0px'
     });
 
     document.querySelectorAll('.reveal-on-scroll').forEach((el) => scrollObserver.observe(el));
@@ -252,46 +302,48 @@ const surveyMetrics = [
 </script>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
   html {
     scroll-behavior: smooth;
   }
 
-  .project-components {
-  display: flex;
-  justify-content: flex-end; /* Align buttons to the right */
-  align-items: center;      /* Center items vertically */
-  gap: 10px;                /* Reduced gap between buttons (was 16px) */
-  margin: 20px 0;           /* Reduced outer margin (was 32px 0) */
-  width: 100%;
-}
+  /* --- Base Typography & Reset --- */
+  .research-page,
+  .research-page p,
+  .research-page span,
+  .research-page button,
+  .research-page a,
+  .research-page li {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
 
-/* Reusable class for smaller buttons */
-.proto-btn {
-  display: inline-block;
-  padding: 8px 16px;        /* Reduced padding (was 15px 24px) */
-  background-color: #7500f3;
-  color: #ffffff;
-  text-decoration: none;
- font-family: 'Bodoni Moda', 'Playfair Display', serif;
-  font-size: 13px;          /* Reduced text size (was 15px) */
-  font-weight: 600;
-  border-radius: 100px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
+  .research-page h1,
+  .research-page h2 {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+  }
 
-.proto-btn:hover {
-  background-color: #0051a8;
-  transform: translateY(-1px);
-}
+  .research-page {
+    background-color: #f8f7f4;
+    color: #1a1a1a;
+    min-height: 100vh;
+    padding: 40px 5% 120px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .rs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+  }
+
   /* --- Scroll Reveal Animations --- */
   .reveal-on-scroll {
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), 
-                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal-on-scroll.visible {
@@ -299,96 +351,96 @@ const surveyMetrics = [
     transform: translateY(0);
   }
 
-  /* --- Canvas & Background --- */
-  .research-page {
-    background-color: #f7f4ed;
-    min-height: 100vh;
-    padding: 0 24px 80px;
-    font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    color: #1a1a1a;
-  }
-
-  .rs-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 56px;
-  }
-
-  /* --- Header --- */
+  /* --- Header & Sub Navigation --- */
   .rs-header {
-    max-width: 1100px;
-    margin: 0 auto 48px;
-    padding-top: 48px;
-    padding-bottom: 24px;
+    margin-bottom: 50px;
+  }
+
+  .header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
   }
 
-  .rs-title-group {
+  .back-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: #000;
+  }
+
+  .project-nav {
     display: flex;
-    align-items: center;
-    gap: 24px;
+    background: #eae8e1;
+    padding: 4px;
+    border-radius: 100px;
+    gap: 4px;
+  }
+
+  .nav-tab {
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    text-decoration: none;
+    border-radius: 100px;
+    transition: all 0.2s ease;
+  }
+
+  .nav-tab.active,
+  .nav-tab:hover {
+    background: #ffffff;
+    color: #0c0c0c;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .section-tag {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #7500f3;
+    display: block;
+    margin-bottom: 8px;
   }
 
   .rs-title {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+    font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .rs-subtitle {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #555;
+    max-width: 680px;
+  }
+
+  /* --- Section Header Row --- */
+  .section-header-row {
+    margin-bottom: 24px;
+  }
+
+  .section-header-row h2 {
+    font-size: 2rem;
+    font-weight: 400;
     margin: 0;
   }
 
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: #ffffff;
-    border-radius: 50%;
-    text-decoration: none;
-    color: #000;
-    font-size: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease;
-  }
-
-  .back-btn:hover {
-    transform: translateY(-1px);
-  }
-
-  .pill-badge {
-    background: #ffffff;
-    padding: 8px 20px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 600;
-    border: 1px solid #dcdcdc;
-  }
-
-  /* --- Section Tags & Dividers --- */
   .research-section {
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-
-  .section-tag {
-    border-bottom: 2px solid #1a1a1a;
-    padding-bottom: 8px;
-  }
-
-  .tag-label {
-    background-color: #1a1a1a;
-    color: #ffffff;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
 
   /* --- Metrics Grid --- */
@@ -400,25 +452,26 @@ const surveyMetrics = [
 
   .metric-card {
     background: #ffffff;
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 24px;
-    border: 1px solid #e2ded4;
+    border: 1px solid #e5e3dc;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
 
   .metric-stat {
-    font-size: 36px;
-    font-weight: 800;
-    color: #3a1cec;
-    letter-spacing: -1px;
+    font-size: 40px;
+    font-weight: 700;
+    color: #7500f3;
+    letter-spacing: -0.02em;
     font-variant-numeric: tabular-nums;
   }
 
   .metric-label {
     font-size: 13px;
-    color: #71717a;
+    color: #555;
     font-weight: 500;
     margin: 0;
     line-height: 1.4;
@@ -429,12 +482,13 @@ const surveyMetrics = [
     background: #ffffff;
     border-radius: 20px;
     padding: 28px;
-    border: 1px solid #e2ded4;
+    border: 1px solid #e5e3dc;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
   }
 
   .card-subtitle {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 600;
     margin-top: 0;
     margin-bottom: 16px;
   }
@@ -446,22 +500,68 @@ const surveyMetrics = [
     flex-direction: column;
     gap: 12px;
     font-size: 14px;
-    color: #3f3f46;
+    color: #4a4a4a;
+    line-height: 1.6;
+  }
+
+  .findings-list strong {
+    color: #1a1a1a;
+  }
+
+  /* --- Synthesis Matrix --- */
+  .synthesis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .synthesis-card {
+    background: #ffffff;
+    border: 1px solid #e5e3dc;
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  }
+
+  .synthesis-finding {
+    font-size: 15px;
+    font-weight: 600;
+    color: #7500f3;
+  }
+
+  .synthesis-insight {
+    font-size: 13px;
     line-height: 1.5;
+    color: #555;
+    margin: 0;
+  }
+
+  .synthesis-impact {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #1a1a1a;
+    background: #f7f5f0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border-left: 3px solid #7500f3;
   }
 
   /* --- Personas Grid --- */
   .personas-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
+    gap: 24px;
   }
 
   .persona-card {
     background: #ffffff;
     border-radius: 20px;
     padding: 28px;
-    border: 1px solid #e2ded4;
+    border: 1px solid #e5e3dc;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -474,11 +574,11 @@ const surveyMetrics = [
   }
 
   .persona-avatar {
-    width: 64px;
-    height: 64px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     object-fit: cover;
-    background-color: #eae9e5;
+    background-color: #f0eee6;
   }
 
   .persona-meta {
@@ -489,14 +589,14 @@ const surveyMetrics = [
 
   .persona-name {
     font-size: 18px;
-    font-weight: 800;
+    font-weight: 600;
     margin: 0;
   }
 
   .persona-role {
     font-size: 13px;
     font-weight: 600;
-    color: #3a1cec;
+    color: #7500f3;
   }
 
   .persona-archetype {
@@ -507,13 +607,13 @@ const surveyMetrics = [
   .persona-quote {
     margin: 0;
     padding: 12px 16px;
-    background: #f7f4ed;
+    background: #f8f7f4;
     border-left: 3px solid #1a1a1a;
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 12px 12px 0;
     font-size: 13px;
     font-style: italic;
     color: #27272a;
-    line-height: 1.4;
+    line-height: 1.5;
   }
 
   .persona-details {
@@ -526,7 +626,7 @@ const surveyMetrics = [
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
     color: #71717a;
     margin-top: 0;
     margin-bottom: 8px;
@@ -536,14 +636,14 @@ const surveyMetrics = [
     margin: 0;
     padding-left: 18px;
     font-size: 13px;
-    color: #3f3f46;
+    color: #4a4a4a;
     display: flex;
     flex-direction: column;
     gap: 6px;
-    line-height: 1.4;
+    line-height: 1.5;
   }
 
-  /* --- Image Card Centering --- */
+  /* --- Image Card Artifact Wrapper --- */
   .persona-image-wrapper {
     display: flex;
     justify-content: center;
@@ -551,7 +651,8 @@ const surveyMetrics = [
     background: #ffffff;
     border-radius: 20px;
     padding: 24px;
-    border: 1px solid #e2ded4;
+    border: 1px solid #e5e3dc;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
   }
 
   .persona-full-img {
@@ -563,9 +664,13 @@ const surveyMetrics = [
   }
 
   @media (max-width: 768px) {
-    .rs-header {
-      padding-top: 24px;
-      margin-bottom: 24px;
+    .research-page {
+      padding: 24px 16px 80px;
+    }
+
+    .header-top {
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .personas-grid {

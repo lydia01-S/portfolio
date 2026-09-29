@@ -1,301 +1,226 @@
 ---
-// src/pages/wireframes.astro
 import Layout from '../layouts/Layout.astro';
 
-// 1. Low-Fidelity Wireframes Data
-const lowResSections = [
+const wireframeFlows = [
   {
-    title: "Log in",
-    screens: [
-      { img: "/w1.png", caption: "" },
-      { img: "/w2.png", caption: "" },
-      { img: "/w3.png", caption: "Homescreen showing courses" },
-      { img: "/w4.png", caption: "Assignment page" },
-      { img: "/w5.png", caption: "Material Page" },
-      { img: "/w6.png", caption: "Grades page" },
+    category: "Academic & Coursework",
+    lowRes: [
+      { img: "/w1.png", title: "Login Entry", caption: "Standardized SSO login flow" },
+      { img: "/w3.png", title: "Dashboard", caption: "At-a-glance active modules & alerts" },
+      { img: "/w4.png", title: "Assignment View", caption: "Priority deadlines and submission status" },
+      { img: "/w6.png", title: "Grades Overview", caption: "Filterable module grade break-down" }
+    ],
+    highRes: [
+      { img: "/hr1.png", title: "Login Entry", caption: "Brand-aligned authentication state" },
+      { img: "/h3.png", title: "Dashboard", caption: "High-contrast priority module cards" },
+      { img: "/h4.png", title: "Assignment View", caption: "Interactive submission drawer & brief" },
+      { img: "/h6.png", title: "Grades Overview", caption: "Visual progress tracking indicators" }
     ]
   },
   {
-    title: "Personal",
-    screens: [
-      { img: "/w7.png", caption: "Choose which part of the map to explore" },
-      { img: "/w8.png", caption: "" },
-      { img: "/w9.png", caption: "One choice" },
-      { img: "/w10.png", caption: "5 choices" },
-      { img: "/w11.png", caption: "1 choice" },
-      { img: "/w12.png", caption: "Location Discovered" },
-    ]
-  },
-  {
-    title: "Information",
-    screens: [
-      { img: "/w13.png", caption: "" },
-      { img: "/w14.png", caption: "Use item in Story" },
-      { img: "/w15.png", caption: "Item overlay" },
-      { img: "/w16.png", caption: "Overview of journal entries" },
-      { img: "/w17.png", caption: "" },
-    ]
-  }
-];
-
-// 2. High-Fidelity Wireframes Data (Replace image paths with your high-res assets)
-const highResSections = [
-  {
-    title: "Log in & Authentication",
-    screens: [
-      { img: "/hr1.png", caption: "Login View" },
-      { img: "/h2.png", caption: "Signup View" },
-      { img: "/h3.png", caption: "Homescreen showing courses" },
-      { img: "/h4.png", caption: "Assignment page" },
-      { img: "/h5.png", caption: "Material Page" },
-      { img: "/h6.png", caption: "Grades page" },
-    ]
-  },
-  {
-    title: "Personal Workspace",
-    screens: [
-      { img: "/h7.png", caption: "Explore Map" },
-      { img: "/h8.png", caption: "Calendar Detail" },
-      { img: "/h9.png", caption: "One choice" },
-      { img: "/h10.png", caption: "5 choices" },
-      { img: "/h11.png", caption: "1 choice" },
-      { img: "/h12.png", caption: "Location Discovered" },
-    ]
-  },
-  {
-    title: "Information",
-    screens: [
-      { img: "/h13.png", caption: "Faculty Info" },
-      { img: "/h14.png", caption: "Use item in Story" },
-      { img: "/h15.png", caption: "Item overlay" },
-      { img: "/h16.png", caption: "Overview of journal entries" },
-      { img: "/h17.png", caption: "Equipment Info" },
+    category: "Personal Workspace",
+    lowRes: [
+      { img: "/w7.png", title: "Campus Map", caption: "Interactive spatial selection" },
+      { img: "/w9.png", title: "Schedule View", caption: "Daily time-block mapping" },
+      { img: "/w12.png", title: "Location Detail", caption: "Building utilities & room status" }
+    ],
+    highRes: [
+      { img: "/h7.png", title: "Campus Map", caption: "Vector map integration with live occupancy" },
+      { img: "/h8.png", title: "Schedule View", caption: "Calendar sync & conflict detection" },
+      { img: "/h12.png", title: "Location Detail", caption: "Equipment booking integrations" }
     ]
   }
 ];
 ---
 
-<Layout title="Wireframes Flow">
+<Layout title="STU Platform — Wireframes & UX Flow">
   <main class="wireframe-page">
-    <!-- Top Header Navigation -->
-    <header class="sg-header reveal-on-scroll">
-      <div class="sg-title-group">
-        <a href="/work" class="back-btn" aria-label="Go back">←</a>
-        <h1 class="sg-title">Wireframes</h1>
+    
+    <!-- Header & Sub Navigation -->
+    <header class="wf-header reveal-on-scroll">
+      <div class="header-top">
+        <a href="/work" class="back-link" aria-label="Back to Work">← Back to Work</a>
+        
+        <nav class="project-nav" aria-label="Project Sections">
+          <a href="/stylesheet" class="nav-tab">Style Guide</a>
+          <a href="/wireframe" class="nav-tab active">Wireframes & Site Map</a>
+          <a href="/research" class="nav-tab">Research</a>
+        </nav>
       </div>
-      <div class="project-components">
-        <a href="/stylesheet" class="proto-btn">Style Guide</a>
-        <a href="/wireframe" class="proto-btn">Wireframes and Site map</a>
-        <a href="/research" class="proto-btn">Research</a>
-      </div>
+
+      <h1 class="page-title">Information Architecture & Wireframes</h1>
+      <p class="page-subtitle">
+        Bridging academic tools and campus infrastructure through structured mobile-first wireframing.
+      </p>
     </header>
 
-    <!-- Intro Explanation & Low-Res Heading -->
-    <div class="intro-block reveal-on-scroll">
-      <p class="intro-paragraph">
-        To establish a seamless mobile user experience for the platform, low-fidelity wireframes were mapped across three core structural domains: <strong>Academic/Courses</strong>, <strong>Personal Workspace</strong>, and <strong>Institutional Information</strong>. By adhering to mobile-first responsive principles, each view utilises standardized UI patterns, including persistent global tab navigation, contextual back buttons, and top-level notification triggers to minimize cognitive load.
-      </p>
+    <!-- Key UX Highlights -->
+    <section class="ux-summary-card reveal-on-scroll">
+      <h2 class="summary-title">Core UX Principles</h2>
+      <div class="highlights-grid">
+        <div class="highlight-item">
+          <h3>Visual Hierarchy</h3>
+          <p>Critical deadlines, course announcements, and campus updates placed above the fold to minimize cognitive load.</p>
+        </div>
+        <div class="highlight-item">
+          <h3>Frictionless Navigation</h3>
+          <p>Persistent global tab bars paired with contextual back buttons ensure users never lose their spatial orientation.</p>
+        </div>
+        <div class="highlight-item">
+          <h3>Component Consistency</h3>
+          <p>Standardized form inputs, accordion filters, and utility cards maintain strict design system alignment.</p>
+        </div>
+      </div>
+    </section>
 
-      <ul class="ux-highlights-list">
-        <li>
-          <strong>Visual Hierarchy & Scannability:</strong> Crucial information (such as urgent deadline countdowns, assignment statuses, and email previews) is positioned above the fold using clear typographical scale.
-        </li>
-        <li>
-          <strong>Interactive State Mapping:</strong> Key screens explicitly define sub-states, filter pill toggles (e.g., Assignments Materials, Grades), accordion drawers, and search triggers to ensure friction-free navigation paths before entering high-fidelity visual design.
-        </li>
-        <li>
-          <strong>Modular UI Componentry:</strong> Standardized container cards, list items, and form input controls maintain systemic consistency throughout authentication, schedule tracking, and campus info modules.
-        </li>
-      </ul>    
-      
-      <h1 class="low-res-title">Low-res Wireframes</h1>      
-    </div>
+    <!-- Site Map Section -->
+    <section class="sitemap-section reveal-on-scroll">
+      <div class="section-heading">
+        <span class="section-tag">Information Architecture</span>
+        <h2>System Site Map</h2>
+        <p>A unified hub mapping direct paths from high-priority academic tasks to student services.</p>
+      </div>
 
-    <!-- Low-Res Wireframe Flow Container -->
-    <div class="wf-flow-container">
-      {lowResSections.map((section) => (
-        <section class="wf-row reveal-on-scroll">
-          <div class="divider-bar">
-            <span class="red-tag">{section.title}</span>
-          </div>
+      <div class="sitemap-card">
+        <img src="/sitemap.png" alt="STU Platform Sitemap Architecture" class="sitemap-img" />
+      </div>
+    </section>
 
-          <div class="screens-container">
-            {section.screens.map((screen) => (
-              <div class="screen-wrapper">
+    <!-- Wireframe Flow Section with Low-Fi / Hi-Fi Toggle -->
+    <section class="wireframes-section reveal-on-scroll">
+      <div class="section-heading-row">
+        <div>
+          <span class="section-tag">Interaction Design</span>
+          <h2>Screen Flows & Key States</h2>
+        </div>
+
+        <!-- Mode Toggle Switch -->
+        <div class="view-toggle" role="tablist">
+          <button class="toggle-btn active" id="btn-hifi" onclick="switchView('hifi')">High-Fidelity</button>
+          <button class="toggle-btn" id="btn-lofi" onclick="switchView('lofi')">Low-Fidelity Wireframes</button>
+        </div>
+      </div>
+
+      <!-- Flows Container -->
+      <div class="flows-list">
+        {wireframeFlows.map((flow) => (
+          <div class="flow-group">
+            <h3 class="flow-category-title">{flow.category}</h3>
+
+            <!-- High-Res View (Default Active) -->
+            <div class="screens-grid view-hifi">
+              {flow.highRes.map((screen) => (
                 <div class="screen-card">
-                  <img src={screen.img} alt={screen.caption || "Wireframe screen"} class="screen-img" />
+                  <div class="phone-frame">
+                    <img src={screen.img} alt={screen.title} class="screen-img" loading="lazy" />
+                  </div>
+                  <div class="screen-meta">
+                    <span class="screen-title">{screen.title}</span>
+                    <p class="screen-caption">{screen.caption}</p>
+                  </div>
                 </div>
-                {screen.caption && (
-                  <span class="pill-caption">{screen.caption}</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
+              ))}
+            </div>
 
-    <!-- High-Res Section Header & Intro -->
-    <div class="intro-block reveal-on-scroll high-res-wrapper">
-      <h1 class="high-res-title">High-res Wireframes</h1>
-      <p class="intro-paragraph">
-        Building upon the structural foundations established in the low-fidelity phase, the high-fidelity wireframes introduce refined typography, explicit component states, design system tokens, and detailed layout hierarchy for optimal usability across screen sizes.
-      </p>
-    </div>
-
-    <!-- High-Res Wireframe Flow Container -->
-    <div class="wf-flow-container">
-      {highResSections.map((section) => (
-        <section class="wf-row reveal-on-scroll">
-          <div class="divider-bar">
-            <span class="red-tag purple-tag">{section.title}</span>
-          </div>
-
-          <div class="screens-container">
-            {section.screens.map((screen) => (
-              <div class="screen-wrapper">
+            <!-- Low-Res View (Hidden by Default) -->
+            <div class="screens-grid view-lofi" style="display: none;">
+              {flow.lowRes.map((screen) => (
                 <div class="screen-card">
-                  <img src={screen.img} alt={screen.caption || "High-res screen"} class="screen-img" />
+                  <div class="phone-frame lofi-frame">
+                    <img src={screen.img} alt={screen.title} class="screen-img" loading="lazy" />
+                  </div>
+                  <div class="screen-meta">
+                    <span class="screen-title">{screen.title}</span>
+                    <p class="screen-caption">{screen.caption}</p>
+                  </div>
                 </div>
-                {screen.caption && (
-                  <span class="pill-caption">{screen.caption}</span>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </section>
-      ))}
-    </div>
-
-  <!-- Site Map Section -->
-    <div class="intro-block reveal-on-scroll">
-      <h1 class="sitemap-title">Site Map</h1>
-
-      <p class="intro-paragraph">
-        The platform’s information architecture maps out a centralized digital hub designed to connect academic coursework directly with campus services and personal utility tools. Unlike conventional learning platforms like Canvas or Moodle, which often isolate course materials from campus infrastructure, this site map integrates daily student administrative tasks into a single, cohesive workflow.
-      </p>
-
-      <ul class="ux-highlights-list">
-        <li>
-          <strong>Unified Campus Architecture:</strong> Integrates core academic subjects with institutional utilities, such as faculty directories, student union services, IT support, and equipment reservations, into one accessible navigation structure.
-        </li>
-        <li>
-          <strong>Optimized Primary Flow:</strong> Maps an explicit task route (highlighted in orange) from Login directly to Assignment Briefs, drastically reducing click depth for urgent academic tasks.
-        </li>
-        <li>
-          <strong>Interconnected Navigation Nodes:</strong> Features bidirectional relationships between Profile, Student Info, Calendar, Email, and Subjects, allowing users to pivot smoothly between personal schedule tracking and subject-specific deliverables.
-        </li>
-      </ul>    
-       <img id="sitemap" src="sitemap.png" alt="sitemap" />     
-    </div>
+        ))}
+      </div>
+    </section>
 
   </main>
 </Layout>
 
 <script>
+  // Toggle between Hi-Fi and Low-Fi Wireframe views
+  function switchView(mode: 'hifi' | 'lofi') {
+    const hifiGrids = document.querySelectorAll('.view-hifi');
+    const lofiGrids = document.querySelectorAll('.view-lofi');
+    const btnHifi = document.getElementById('btn-hifi');
+    const btnLofi = document.getElementById('btn-lofi');
+
+    if (mode === 'lofi') {
+      hifiGrids.forEach(el => (el as HTMLElement).style.display = 'none');
+      lofiGrids.forEach(el => (el as HTMLElement).style.display = 'grid');
+      btnHifi?.classList.remove('active');
+      btnLofi?.classList.add('active');
+    } else {
+      lofiGrids.forEach(el => (el as HTMLElement).style.display = 'none');
+      hifiGrids.forEach(el => (el as HTMLElement).style.display = 'grid');
+      btnLofi?.classList.remove('active');
+      btnHifi?.classList.add('active');
+    }
+  }
+
+  // Scroll Reveal Observer
   function initScrollReveal() {
-    const observerCallback: IntersectionObserverCallback = (entries) => {
-      entries.forEach((entry) => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    };
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-    const observer = new IntersectionObserver(observerCallback, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    });
-
-    document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
   }
 
   document.addEventListener('DOMContentLoaded', initScrollReveal);
   document.addEventListener('astro:page-load', initScrollReveal);
+  
+  // Expose function globally for inline click handlers
+  (window as any).switchView = switchView;
 </script>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
   html {
     scroll-behavior: smooth;
   }
 
- #sitemap {
-  width: 100%;             /* Fills the parent container width */
-  max-width: 800px;       /* Prevents the diagram from becoming overly massive on large monitors */
-  height: auto;            /* Preserves original image proportions without stretching */
-  display: block;          /* Eliminates extra whitespace below inline images */
-  margin: 32px auto;       /* Centers the image with vertical breathing room */
-  border-radius: 16px;     /* Subtle rounded corners matching your phone frames */
-}
-
-  /* Main paragraph */
-  .intro-paragraph {
-    font-size: 16px;
-    line-height: 1.65;
-    color: #2d2d2d;
-    margin-bottom: 15px;
+  /* Base Typography reset */
+  .wireframe-page,
+  .wireframe-page p,
+  .wireframe-page span,
+  .wireframe-page button,
+  .wireframe-page a {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
-  .sitemap-title {
-    margin-top: 60px;
-    font-size: 28px;
+  .wireframe-page h1,
+  .wireframe-page h2 {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
   }
 
-  .low-res-title,
-  .high-res-title {
-    margin: 32px 0 16px 0;
-    font-size: 28px;
-  }
-
-  .high-res-wrapper {
-    margin-top: 64px;
-    padding-top: 32px;
-    border-top: 1px solid #d1cdb8;
-  }
-
-  /* Bullet list container */
-  .ux-highlights-list {
-    list-style: none; /* Removes default browser bullets for a modern look */
-    padding: 0;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px; /* Space between each point */
-  }
-
-  /* Individual feature points */
-  .ux-highlights-list li {
-    position: relative;
-    padding-left: 20px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #4a4a4a;
-  }
-
-  /* Custom accent bullet dot matching your theme */
-  .ux-highlights-list li::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    top: 0;
-    color: #7500f3; /* Your primary purple accent color */
-    font-size: 18px;
-    line-height: 1;
-  }
-
-  /* Bold key terms styling */
-  .ux-highlights-list strong {
+  .wireframe-page {
+    background-color: #f8f7f4;
     color: #1a1a1a;
-    font-weight: 600;
+    min-height: 100vh;
+    padding: 40px 5% 120px;
+    max-width: 1280px;
+    margin: 0 auto;
   }
 
-  /* --- Scroll Reveal Animations --- */
+  /* --- Scroll Reveal --- */
   .reveal-on-scroll {
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), 
-                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal-on-scroll.visible {
@@ -303,188 +228,268 @@ const highResSections = [
     transform: translateY(0);
   }
 
-  /* --- Canvas Background --- */
-  .wireframe-page {
-    background-color: #f7f4ed;
-    min-height: 100vh;
-    padding: 32px 40px 100px;
-    font-family: 'Bodoni Moda', 'Playfair Display', serif;
-  }
-
   /* --- Header --- */
-  .sg-header {
-    margin-bottom: 32px;
+  .wf-header {
+    margin-bottom: 60px;
   }
 
-  .project-components {
+  .header-top {
     display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
-    align-items: center;      /* Center items vertically */
-    gap: 10px;                /* Reduced gap between buttons */
-    margin: 20px 0;           /* Outer margin */
-    width: 100%;
-  }
-
-  /* Reusable class for smaller buttons */
-  .proto-btn {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: #7500f3;
-    color: #ffffff;
-    text-decoration: none;
-    font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 100px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-  }
-
-  .intro-heading { 
-    padding: 20px;
-    margin: 15px;
-    font-weight: 500;
-    font-size: 20px;
-  }
-
-  .proto-btn:hover {
-    background-color: #0051a8;
-    transform: translateY(-1px);
-  }
-
-  .sg-title-group {
-    display: flex;
+    justify-content: space-between;
     align-items: center;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .back-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: #000;
+  }
+
+  .project-nav {
+    display: flex;
+    background: #eae8e1;
+    padding: 4px;
+    border-radius: 100px;
+    gap: 4px;
+  }
+
+  .nav-tab {
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    text-decoration: none;
+    border-radius: 100px;
+    transition: all 0.2s ease;
+  }
+
+  .nav-tab.active,
+  .nav-tab:hover {
+    background: #ffffff;
+    color: #0c0c0c;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .page-title {
+    font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .page-subtitle {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #555;
+    max-width: 680px;
+  }
+
+  /* --- UX Summary Card --- */
+  .ux-summary-card {
+    background: #ffffff;
+    border: 1px solid #e5e3dc;
+    border-radius: 20px;
+    padding: 36px;
+    margin-bottom: 80px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  }
+
+  .summary-title {
+    font-size: 1.8rem;
+    margin-bottom: 24px;
+  }
+
+  .highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+  }
+
+  .highlight-item h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #7500f3;
+  }
+
+  .highlight-item p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4a4a4a;
+  }
+
+  /* --- Sitemap Section --- */
+  .sitemap-section {
+    margin-bottom: 90px;
+  }
+
+  .section-heading {
+    margin-bottom: 28px;
+  }
+
+  .section-tag {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #7500f3;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .section-heading h2 {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+  }
+
+  .section-heading p {
+    font-size: 15px;
+    color: #555;
+    max-width: 600px;
+  }
+
+  .sitemap-card {
+    background: #ffffff;
+    border: 1px solid #e5e3dc;
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .sitemap-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  /* --- Wireframe Toggle & Grid --- */
+  .section-heading-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
     gap: 20px;
   }
 
-  .sg-title {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin: 0;
-  }
-
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    background: #ffffff;
-    border-radius: 50%;
-    text-decoration: none;
-    color: #000;
-    font-size: 24px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    transition: transform 0.2s ease;
-  }
-
-  .back-btn:hover {
-    transform: translateY(-1px);
-  }
-
-  /* --- Flow Layout Container --- */
-  .wf-flow-container {
+  .view-toggle {
     display: flex;
-    flex-direction: column;
-    gap: 48px;
+    background: #eae8e1;
+    padding: 4px;
+    border-radius: 100px;
+    gap: 4px;
   }
 
-  .wf-row {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  /* --- Divider Line with Red Tag --- */
-  .divider-bar {
-    width: 100%;
-    height: 2px;
-    background-color: #1a1a1a;
-    position: relative;
-    margin-top: 12px;
-  }
-
-  .red-tag {
-    position: absolute;
-    top: -12px;
-    left: 0;
-    background-color: #e54d38;
-    color: #ffffff;
-    font-size: 11px;
+  .toggle-btn {
+    padding: 8px 20px;
+    font-size: 13px;
     font-weight: 600;
-    padding: 4px 12px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: #666;
+    background: transparent;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
 
-  .purple-tag {
-    background-color: #7500f3;
+  .toggle-btn.active {
+    background: #0c0c0c;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
   }
 
-  /* --- Horizontal Screen List --- */
-  .screens-container {
-    display: flex;
-    gap: 24px;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    align-items: flex-start;
+  .flow-group {
+    margin-bottom: 60px;
   }
 
-  .screens-container::-webkit-scrollbar {
-    height: 6px;
-  }
-  .screens-container::-webkit-scrollbar-thumb {
-    background: #d1cdb8;
-    border-radius: 10px;
+  .flow-category-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2ded4;
   }
 
-  .screen-wrapper {
+  .screens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 32px;
+  }
+
+  .screen-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-    width: 170px;
+    gap: 14px;
   }
 
-  /* --- Mobile Phone Frame Container --- */
-  .screen-card {
-    width: 100%;
+  .phone-frame {
     background: #ffffff;
-    border-radius: 20px;
-    border: 1px solid #1a1a1a;
-    padding: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    overflow: hidden;
+    border: 1px solid #222;
+    border-radius: 28px;
+    padding: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .screen-card:hover {
+  .lofi-frame {
+    border-style: dashed;
+    border-color: #888;
+    background: #fcfbf8;
+  }
+
+  .phone-frame:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
   }
 
   .screen-img {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 14px;
+    border-radius: 20px;
   }
 
-  /* --- Black Pill Captions --- */
-  .pill-caption {
-    background-color: #1a1a1a;
-    color: #ffffff;
-    font-size: 10px;
-    font-weight: 500;
-    padding: 5px 12px;
-    border-radius: 100px;
-    text-align: center;
-    line-height: 1.2;
-    max-width: 160px;
+  .screen-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .screen-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+  }
+
+  .screen-caption {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #666;
+  }
+
+  @media (max-width: 768px) {
+    .wireframe-page {
+      padding: 24px 16px 80px;
+    }
+
+    .screens-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .header-top {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 </style>

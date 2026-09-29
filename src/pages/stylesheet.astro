@@ -1,11 +1,7 @@
 ---
-// src/pages/stylesheet.astro
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import { Image } from 'astro:assets';
-
-// 🔍 Update this line to match your exact file name/extension:
-import iconsImg from '../../public/icons.png'; //
 
 // Import image assets directly for Astro image processing
 import assetsImg from '../../public/assets.png';
@@ -19,21 +15,25 @@ import card5Img from '../../public/card5.png';
 
 <Layout title="STU: UI Kit & Style Guide">
   <main class="style-guide-bg">
-    <header class="sg-header">
-      <div class="sg-title-group">
-        <a href="/work" class="back-btn" aria-label="Go back">←</a>
-        <h1 class="sg-title">UI-Kit</h1>
+    
+    <!-- Header & Navigation -->
+    <header class="sg-header reveal-on-scroll">
+      <div class="header-top">
+        <a href="/work" class="back-link" aria-label="Back to Work">← Back to Work</a>
+        
+        <nav class="project-nav" aria-label="Project Sections">
+          <a href="/stylesheet" class="nav-tab active">Style Guide</a>
+          <a href="/wireframe" class="nav-tab">Wireframes & Site Map</a>
+          <a href="/research" class="nav-tab">Research</a>
+        </nav>
       </div>
-      <div class="project-components">
-        <a href="/stylesheet" class="proto-btn">
-          Style Guide
-        </a>
-        <a href="/wireframe" class="proto-btn">
-          Wireframes and Site map
-        </a>
-        <a href="/research" class="proto-btn">
-          Research
-        </a>
+
+      <div class="header-content">
+        <span class="section-tag">Design System</span>
+        <h1 class="sg-title">UI Kit & Style Guide</h1>
+        <p class="sg-subtitle">
+          Foundational design tokens, button states, typography, and reusable component libraries powering the STU platform.
+        </p>
       </div>
     </header>
 
@@ -41,8 +41,12 @@ import card5Img from '../../public/card5.png';
     <div class="ui-kit-grid">
       
       <!-- TOP ROW: Buttons Section (Full Width) -->
-      <section class="ui-card full-width">
-        <h2 class="card-title">Buttons</h2>
+      <section class="ui-card full-width reveal-on-scroll">
+        <div class="card-header">
+          <h2 class="card-title">Buttons & Interactive States</h2>
+          <span class="card-badge">Base Components</span>
+        </div>
+        
         <div class="table-container">
           <div class="state-row">
             <span class="state-label">Default</span>
@@ -82,50 +86,60 @@ import card5Img from '../../public/card5.png';
         </div>
       </section>
 
-      <!-- LEFT COLUMN -->
+      <!-- LEFT COLUMN: Assets & Icons -->
       <div class="column-left">
         <!-- Assets -->
-        <section class="ui-card">
-          <h2 class="card-title">Assets</h2>
-          <Image id="assets" src={assetsImg} alt="UI Assets" />
+        <section class="ui-card reveal-on-scroll">
+          <div class="card-header">
+            <h2 class="card-title">Assets & Branding</h2>
+          </div>
+          <div class="asset-preview-wrapper">
+            <Image id="assets" src={assetsImg} alt="UI Assets" class="preview-img" />
+          </div>
         </section>
 
         <!-- Icons -->
-        <section class="ui-card">
-          <h2 class="card-title">Icons</h2>
-          <Image id="icons" src={iconsImg} alt="UI Icons" />
+        <section class="ui-card reveal-on-scroll">
+          <div class="card-header">
+            <h2 class="card-title">System Icons</h2>
+          </div>
+          <div class="asset-preview-wrapper">
+            <Image id="icons" src={iconsImg} alt="UI Icons" class="preview-img icons-img" />
+          </div>
         </section>
       </div>
 
       <!-- RIGHT COLUMN: Cards & Other Components -->
       <div class="column-right">
-        <section class="ui-card">
-          <h2 class="card-title">Cards & Other</h2>
+        <section class="ui-card reveal-on-scroll">
+          <div class="card-header">
+            <h2 class="card-title">Cards & Modules</h2>
+          </div>
           <div class="components-stack">
             
             <!-- Alert Banner -->
-            <div class="alert-banner">
-              <Image class="card-img-1" src={card4Img} alt="Card 1" />
+            <div class="component-item alert-banner">
+              <Image class="card-img" src={card4Img} alt="Alert Card Component" />
             </div>
 
             <!-- Side Card -->
-            <div class="side-card">
-              <Image class="card-img-2" src={card2Img} alt="Card 2" />
+            <div class="component-item side-card">
+              <Image class="card-img" src={card2Img} alt="Side Navigation Card Component" />
             </div>
 
             <!-- Testimonial Card -->
-            <div class="testimonial-card">
-              <Image class="card-img-3" src={card3Img} alt="Card 3" />
+            <div class="component-item testimonial-card">
+              <Image class="card-img" src={card3Img} alt="Testimonial Card Component" />
             </div>
 
             <!-- Address / Purple Info Block -->
-            <div class="purple-card">
-              <Image class="card-img-4" src={card1Img} alt="Card 4" />
+            <div class="component-item purple-card">
+              <Image class="card-img" src={card1Img} alt="Information Block Component" />
             </div>
 
             <!-- Accordion items -->
-            <div class="accordion-item">
-              <Image class="card-img-5" src={card5Img} alt="Card 5" />
+            <div class="component-item accordion-item">
+              <Image class="card-img" src={card5Img} alt="Accordion Menu Component" />
             </div>
 
           </div>
@@ -134,143 +148,212 @@ import card5Img from '../../public/card5.png';
 
     </div>
   </main>
+
 </Layout>
 
+<script>
+  // Scroll Reveal Observer
+  function initScrollReveal() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+  }
+
+  document.addEventListener('DOMContentLoaded', initScrollReveal);
+  document.addEventListener('astro:page-load', initScrollReveal);
+</script>
+
 <style>
-  /* --- Layout & Background --- */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* --- Base Typography & Reset --- */
+  .style-guide-bg,
+  .style-guide-bg p,
+  .style-guide-bg span,
+  .style-guide-bg button,
+  .style-guide-bg a {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  .style-guide-bg h1,
+  .style-guide-bg h2 {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+  }
+
   .style-guide-bg {
-    background: radial-gradient(circle at 15% 25%, rgba(147, 112, 219, 0.35), transparent 45%),
-                radial-gradient(circle at 85% 30%, rgba(66, 153, 225, 0.35), transparent 45%),
-                linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
-    min-height: 100vh;
-    padding: 32px 24px 80px;
-    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    background-color: #f8f7f4;
     color: #1a1a1a;
+    min-height: 100vh;
+    padding: 40px 5% 120px;
+    max-width: 1280px;
+    margin: 0 auto;
   }
 
-  /* Reduced sizes for left-side assets */
-  #icons {
-    width: 100%;
-    max-width: 320px;
-    height: auto;
-    display: block;
+  /* --- Scroll Reveal Animations --- */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .project-components {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-    margin: 20px 0;
-    width: 100%;
+  .reveal-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  /* Reusable class for smaller buttons */
-  .proto-btn {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: #7500f3;
-    color: #ffffff;
-    text-decoration: none;
-    font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 100px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-  }
-
-  .proto-btn:hover {
-    background-color: #0051a8;
-    transform: translateY(-1px);
-  }
-
-  #assets {
-    width: 100%;
-    max-width: 800px;
-    height: auto;
-    display: block;
-  }
-
+  /* --- Header & Sub-Navigation --- */
   .sg-header {
-    max-width: 1100px;
-    margin: 0 auto 24px;
+    margin-bottom: 50px;
+  }
+
+  .header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  .sg-title-group {
-    display: flex;
-    align-items: center;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
     gap: 16px;
   }
 
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: #ffffff;
-    border-radius: 50%;
+  .back-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
     text-decoration: none;
-    color: #000;
-    font-size: 20px;
+    transition: color 0.2s ease;
   }
 
-  .pill-badge {
-    background: #ffffff;
-    padding: 6px 16px;
+  .back-link:hover {
+    color: #000;
+  }
+
+  .project-nav {
+    display: flex;
+    background: #eae8e1;
+    padding: 4px;
     border-radius: 100px;
+    gap: 4px;
+  }
+
+  .nav-tab {
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    text-decoration: none;
+    border-radius: 100px;
+    transition: all 0.2s ease;
+  }
+
+  .nav-tab.active,
+  .nav-tab:hover {
+    background: #ffffff;
+    color: #0c0c0c;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .section-tag {
     font-size: 12px;
     font-weight: 600;
-    border: 1px solid #dcdcdc;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #7500f3;
+    display: block;
+    margin-bottom: 8px;
   }
 
-  /* --- Main Outer Grid System --- */
+  .sg-title {
+    font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .sg-subtitle {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #555;
+    max-width: 680px;
+  }
+
+  /* --- Outer Layout Grid --- */
   .ui-kit-grid {
-    max-width: 1100px;
-    margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 24px;
   }
 
   .full-width {
     grid-column: 1 / -1;
   }
 
-  /* --- Card Container Base --- */
+  .column-left,
+  .column-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* --- UI Card Container Base --- */
   .ui-card {
     background: #ffffff;
+    border: 1px solid #e5e3dc;
     border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0eee6;
   }
 
   .card-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 14px;
+    font-size: 1.4rem;
+    font-weight: 400;
   }
 
-  /* --- Button Grid / Rows --- */
+  .card-badge {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: #f0eafc;
+    color: #7500f3;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  /* --- Button Grid & Rows --- */
   .table-container {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
   }
 
-  .state-row, .input-row {
+  .state-row {
     display: grid;
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 100px 1fr;
     align-items: center;
+    gap: 12px;
   }
 
   .state-label {
-    font-size: 12px;
+    font-size: 13px;
     color: #71717a;
     font-weight: 500;
   }
@@ -293,79 +376,106 @@ import card5Img from '../../public/card5.png';
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    transition: all 0.2s ease;
   }
 
-  .btn-dark { background: #3a1cec; color: #fff; }
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-dark { background: #18181b; color: #fff; }
   .btn-dark2 { background: #261493; color: #fff; }
-  .btn-purple { background: #3a1cec; color: #fff; }
-  .btn-purple2 { background: #261493; color: #fff; }
+  .btn-purple { background: #7500f3; color: #fff; }
+  .btn-purple2 { background: #5600b3; color: #fff; }
   .btn-outline { background: transparent; border: 1px solid #d4d4d8; color: #18181b; }
-  .btn-disabled { background: #c6bdf9; color: #ffff; }
-  .btn-outline-disabled { background: #c6bdf9; border: 1px solid #e4e4e7; color: #ffff; }
+  .btn-disabled { background: #e4e4e7; color: #a1a1aa; cursor: not-allowed; }
+  .btn-outline-disabled { background: transparent; border: 1px solid #e4e4e7; color: #a1a1aa; cursor: not-allowed; }
   
   .icon-only {
-    padding: 10px;
+    padding: 10px 14px;
     border-radius: 50%;
   }
 
-  /* --- FLEXBOX GRID FOR CARDS & OTHER --- */
+  /* --- Image Previews --- */
+  .asset-preview-wrapper {
+    background: #fbfbf9;
+    border: 1px solid #f0ede6;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .preview-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  .icons-img {
+    max-width: 320px;
+  }
+
+  /* --- Components Stack --- */
   .components-stack {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    align-items: flex-start;
+    gap: 12px;
   }
 
-  /* Left-column sub-grid wrappers (~58% width) */
+  .component-item {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+
+  .component-item:hover {
+    transform: translateY(-2px);
+  }
+
   .alert-banner,
   .testimonial-card {
-    flex: 1 1 calc(58% - 4px);
-    width: calc(58% - 4px);
+    flex: 1 1 calc(58% - 6px);
   }
 
-  /* Right-column sub-grid wrappers (~42% width) */
   .side-card,
   .purple-card {
-    flex: 1 1 calc(42% - 4px);
-    width: calc(42% - 4px);
+    flex: 1 1 calc(42% - 6px);
   }
 
-  /* Full-width wrappers */
-  .accordion-item,
-  .pricing-card {
+  .accordion-item {
     flex: 1 1 100%;
-    width: 100%;
   }
 
-  /* Individual image size controls */
-  .card-img-1,
-  .card-img-2,
-  .card-img-3,
-  .card-img-4,
-  .card-img-5,
-  .card-img-6 {
+  .card-img {
     width: 100%;
-    max-width: 900px;
     height: auto;
     display: block;
-    border-radius: 10px;
+    border-radius: 12px;
   }
 
-  .card-img-6 {
-    max-width: 400px;
-  }
-
-  @media (max-width: 768px) {
+  /* --- Responsive Styles --- */
+  @media (max-width: 860px) {
     .ui-kit-grid {
       grid-template-columns: 1fr;
     }
-    
+
+    .state-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
     .alert-banner,
     .side-card,
     .testimonial-card,
     .purple-card {
       flex: 1 1 100%;
-      width: 100%;
+    }
+
+    .header-top {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 </style>
