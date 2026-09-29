@@ -1,0 +1,228 @@
+---
+interface CarouselItem {
+  slug: string;
+  title: string;
+  category: string;
+  year: string;
+  imageSrc: string;
+}
+
+interface Props {
+  items: CarouselItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="carousel-container reveal-on-scroll">
+  <!-- Navigation Controls -->
+  <div class="carousel-controls">
+    <button class="nav-btn prev-btn" aria-label="Previous Slide">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <button class="nav-btn next-btn" aria-label="Next Slide">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Track & Slides -->
+  <div class="carousel-track-wrapper">
+    <div class="carousel-track">
+      {items.map((item) => (
+        <a href={`/work#${item.slug}`} class="carousel-slide">
+          <div class="image-wrapper">
+            <img src={item.imageSrc} alt={item.title} loading="lazy" />
+          </div>
+          <div class="slide-info">
+            <div class="meta">
+              <span>{item.category}</span>
+              <span>{item.year}</span>
+            </div>
+            <h3 class="title">{item.title}</h3>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupCarousel() {
+    const track = document.querySelector('.carousel-track') as HTMLElement;
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    let isDown = false;
+    let startX: number;
+    let scrollLeft: number;
+
+    const scrollAmount = () => {
+      const slide = track.querySelector('.carousel-slide') as HTMLElement;
+      return slide ? slide.offsetWidth + 32 : 400; // slide width + gap
+    };
+
+    // Button Click Controls
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+    });
+
+    // Touch & Drag Support
+    track.addEventListener('mousedown', (e) => {
+      isDown = true;
+      track.classList.add('active');
+      startX = e.pageX - track.offsetLeft;
+      scrollLeft = track.scrollLeft;
+    });
+
+    track.addEventListener('mouseleave', () => {
+      isDown = false;
+      track.classList.remove('active');
+    });
+
+    track.addEventListener('mouseup', () => {
+      isDown = false;
+      track.classList.remove('active');
+    });
+
+    track.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - track.offsetLeft;
+      const walk = (x - startX) * 2;
+      track.scrollLeft = scrollLeft - walk;
+    });
+  }
+
+  // Initialize on initial page load and view transitions
+  setupCarousel();
+  document.addEventListener('astro:page-load', setupCarousel);
+</script>
+
+<style>
+  .carousel-container {
+    position: relative;
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  /* Control Buttons Header */
+  .carousel-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .nav-btn {
+    background: transparent;
+    border: 1px solid #1a1a1a;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #1a1a1a;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  }
+
+  .nav-btn:hover {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    transform: scale(1.05);
+  }
+
+  /* Carousel Track & Slides */
+  .carousel-track-wrapper {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 32px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar IE/Edge */
+    cursor: grab;
+    padding-bottom: 20px;
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
+  }
+
+  .carousel-track.active {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  .carousel-slide {
+    flex: 0 0 calc(50% - 16px); /* Displays 2 slides on desktop */
+    min-width: 320px;
+    scroll-snap-align: start;
+    text-decoration: none;
+    color: inherit;
+    user-select: none;
+  }
+
+  .image-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: #f2f2f2;
+    border-radius: 4px;
+  }
+
+  .image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .carousel-slide:hover .image-wrapper img {
+    transform: scale(1.04);
+  }
+
+  .slide-info {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #666;
+  }
+
+  .title {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+
+  @media (max-width: 768px) {
+    .carousel-slide {
+      flex: 0 0 85%; /* 1 slide with peek on mobile */
+    }
+  }
+</style>

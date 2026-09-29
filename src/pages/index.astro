@@ -1,11 +1,196 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/hero.astro';
+import ProjectCard from '../components/projectcard.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const projects = [
+  {
+    slug: "STU: An online student platform",
+    title: "STU: An online student platform",
+    category: "UX/UI prototype",
+    year: "2025",
+    imageSrc: "../public/3.png"
+  },
+  {
+    slug: "Critter & Friends'",
+    title: "Critter & Friends': An interactive game",
+    category: "Web Design, UX/UI",
+    year: "2026",
+    imageSrc: "../public/critterandfriends.png"
+  }
+];
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Lydia Stewart — Portfolio">
+  <!-- Full Screen Hero Fold -->
+  <section class="hero-wrapper">
+    <Hero year="2026" />
+    
+    <!-- Scroll Down Indicator -->
+    <a href="#work" class="scroll-indicator">
+      <span>SCROLL TO EXPLORE</span>
+      <div class="line"></div>
+    </a>
+  </section>
+
+  <!-- Selected Work Section (Targeted for scroll reveal) -->
+  <section id="work" class="work-section reveal-on-scroll">
+    <div class="section-header">
+      <h2 class="section-title">Selected Work</h2>
+      <span class="project-count">( 02 )</span>
+    </div>
+
+    <p class="section-description">
+      A curated collection of branding, digital art direction, and editorial designs exploring minimalist form and typography.
+    </p>
+    
+    <!-- Staggered 2-Column Projects Grid -->
+    <div class="projects-grid">
+      {projects.map((project, index) => (
+        <div class={`grid-col ${index % 2 === 1 ? 'right-col' : 'left-col'}`}>
+          <ProjectCard 
+            slug={project.slug}
+            title={project.title}
+            category={project.category}
+            year={project.year}
+            imageSrc={project.imageSrc}
+          />
+        </div>
+      ))}
+    </div>
+  </section>
 </Layout>
+
+<script>
+  // Scroll reveal trigger using IntersectionObserver
+  const observerCallback: IntersectionObserverCallback = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(observerCallback, {
+    threshold: 0.1, // Triggers as soon as 10% of the section enters the screen
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+</script>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .hero-wrapper {
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .scroll-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #888;
+    padding-bottom: 20px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .scroll-indicator:hover {
+    color: #0c0c0c;
+  }
+
+  .scroll-indicator .line {
+    width: 1px;
+    height: 24px;
+    background-color: currentColor;
+    animation: pulse 2s infinite ease-in-out;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+  }
+
+  /* --- Scroll Reveal Animations --- */
+  .work-section {
+    padding: 100px 0 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    
+    /* Initial state before scrolling into view */
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  /* Active state when scrolled into view */
+  .work-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 400;
+  }
+
+  .project-count {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: #666;
+  }
+
+  .section-description {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+    max-width: 540px;
+    margin-bottom: 60px;
+  }
+
+  /* 2-Column Staggered Grid Layout */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .right-col {
+    margin-top: 90px;
+  }
+
+  @media (max-width: 768px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .right-col {
+      margin-top: 0;
+    }
+  }
+</style>

@@ -1,0 +1,58 @@
+---
+const pathname = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <a href="/" class="brand-logo">LYDIA STEWART</a>
+
+  <nav class="nav-links">
+    <a href="/" class={pathname === "/" ? "active" : ""}>Home</a>
+    <a href="/aboutMe" class={pathname === "/aboutMe" || pathname === "/aboutMe/" ? "active" : ""}>About</a>
+    <a href="/work" class={pathname === "/work" || pathname === "/work/" ? "active" : ""}>Work</a>
+    <a href="/contact" class={pathname === "/contact" || pathname === "/contact/" ? "active" : ""}>Contact</a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0;
+    z-index: 10;
+  }
+
+  .brand-logo {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #0c0c0c;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #666;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    color: #0c0c0c;
+  }
+
+  .nav-links a.active {
+    color: #0c0c0c;
+    font-weight: 600;
+    border-bottom: 1px solid #0c0c0c;
+  }
+</style>
