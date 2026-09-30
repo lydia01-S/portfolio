@@ -5,6 +5,10 @@ interface CarouselItem {
   category: string;
   year: string;
   imageSrc: string;
+  // Added properties for handwritten content
+  label?: string;
+  handwritten?: string;
+  text?: string;
 }
 
 interface Props {
@@ -42,7 +46,17 @@ const { items } = Astro.props;
               <span>{item.category}</span>
               <span>{item.year}</span>
             </div>
+            
             <h3 class="title">{item.title}</h3>
+
+            <!-- Added Handwritten Section -->
+            {item.handwritten && (
+              <div class="handwritten-block">
+                {item.label && <span class="label">{item.label}</span>}
+                <span class="handwritten-text">{item.handwritten}</span>
+                {item.text && <p class="description">{item.text}</p>}
+              </div>
+            )}
           </div>
         </a>
       ))}
@@ -109,6 +123,8 @@ const { items } = Astro.props;
 </script>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap');
+
   .carousel-container {
     position: relative;
     width: 100%;
@@ -182,7 +198,7 @@ const { items } = Astro.props;
     width: 100%;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    background-color: #f2f2f2;
+    background-color: #fcfcee;
     border-radius: 4px;
   }
 
@@ -218,6 +234,36 @@ const { items } = Astro.props;
     font-family: 'Bodoni Moda', 'Playfair Display', serif;
     font-size: 1.5rem;
     font-weight: 400;
+  }
+
+  /* --- HANDWRITTEN SECTION STYLES --- */
+  .handwritten-block {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: #666666;
+    letter-spacing: 0.08em;
+  }
+
+  .handwritten-text {
+    font-family: 'Caveat', 'Comic Sans MS', cursive;
+    font-size: 1.4rem;
+    color: #0038FF; /* Electric Blue Accent */
+    line-height: 1.1;
+  }
+
+  .description {
+    font-size: 13px;
+    color: #333333;
+    line-height: 1.5;
+    margin: 4px 0 0 0;
   }
 
   @media (max-width: 768px) {

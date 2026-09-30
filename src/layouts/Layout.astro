@@ -12,21 +12,18 @@ interface Props {
 const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
 ---
 
+<!xhtml>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-
-    <!-- Native Astro View Transitions for page slide animations -->
     <ClientRouter />
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 1. Load Lenis core library via CDN -->
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
   </head>
+
   <body>
     {hideNav ? (
       /* Clean slot for full-page UI Kit layout without extra padding */
@@ -38,22 +35,80 @@ const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
         <Footer />
       </div>
     )}
+
+    <!-- 2. Global Lenis Initialization Script -->
+    <script>
+      function initSmoothScroll() {
+        const LenisGlobal = (window as any).Lenis;
+        if (!LenisGlobal) return;
+
+        const lenis = new LenisGlobal({
+          duration: 1.2,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: 'vertical',
+          gestureOrientation: 'vertical',
+          smoothWheel: true,
+          wheelMultiplier: 1,
+          touchMultiplier: 2,
+        });
+
+        // Expose instance so index.astro can hook into scroll events
+        (window as any).lenisInstance = lenis;
+
+        function raf(time: number) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+      }
+
+      // Initialize on load & Astro View Transitions navigation
+      document.addEventListener('DOMContentLoaded', initSmoothScroll);
+      document.addEventListener('astro:page-load', initSmoothScroll);
+    </script>
   </body>
 </html>
 
 <style is:global>
-  /* Global CSS Resets */
-  *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  /* --- 1. LENIS CORE CSS --- */
+  /* Prevent native smooth scroll from fighting Lenis physics */
+  html {
+    scroll-behavior: auto !important;
   }
 
+  html.lenis, 
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
+  }
+
+  /* --- 2. GLOBAL LAYOUT CSS --- */
   html, body {
     min-height: 100%;
-    background-color: #ffffff;
-    color: #0d0d0d;
     font-family: 'Bodoni Moda', 'Playfair Display', serif;
+  }
+
+  body {
+    margin: 0;
+    background-color: #fcfcee; /* Warm parchment base */
+    color: #111111;
+    overflow-x: hidden;
   }
 
   #page-wrapper {
@@ -62,6 +117,7 @@ const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
     justify-content: space-between;
     min-height: 100vh;
     padding: 40px 60px;
+    background-color: #fcfcee
   }
 
   @media (max-width: 768px) {

@@ -1,8 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Array of portfolio project cards
-const projects = [
+interface Project {
+  title: string;
+  category: string;
+  year: string;
+  description: string;
+  imageSrc: string;
+  slug: string;
+  tags: string[];
+}
+
+const projects: Project[] = [
   {
     title: "STU: Online Student Platform",
     category: "UX/UI Case Study",
@@ -27,7 +36,7 @@ const projects = [
     year: "2026",
     description: "A comprehensive exploration of user personas, affinity mapping, wireframes, and design components.",
     imageSrc: "",
-    slug: "",
+    slug: "", // Unlinked project
     tags: ["User Flow", "Personas", "IA"]
   }
 ];
@@ -38,38 +47,66 @@ const projects = [
     
     <!-- Page Title & Header -->
     <header class="work-header reveal-on-scroll">
+      <p class="header-label">Portfolio & Case Studies</p>
       <h1 class="page-title">SELECTED<br />WORK</h1>
     </header>
 
     <!-- Editorial Horizontal List Layout -->
     <section class="work-list-container reveal-on-scroll">
       <div class="projects-list">
-        {projects.map((project) => (
-          <a href={project.slug} class="project-row-link">
-            <article class="project-row">
-              
-              <!-- Left Column: Title & Subtitle -->
-              <div class="project-info">
-                <h2 class="project-title">
-                  {project.title}
-                  <span class="arrow-icon">↗</span>
-                </h2>
-                <span class="project-category">{project.category}</span>
-              </div>
-
-              <!-- Right Column: Thumbnail & Metadata -->
-              <div class="project-media">
-                {project.imageSrc && (
-                  <div class="thumbnail-wrapper">
-                    <img src={project.imageSrc} alt={project.title} class="thumbnail-img" />
+        {projects.map((project) => {
+          const isInteractive = Boolean(project.slug);
+          const Element = isInteractive ? 'a' : 'div';
+          
+          return (
+            <Element 
+              href={isInteractive ? project.slug : undefined} 
+              class={`project-row-link ${!isInteractive ? 'is-disabled' : ''}`}
+            >
+              <article class="project-row">
+                
+                <!-- Left Column: Title, Description, Tags -->
+                <div class="project-info">
+                  <div class="meta-header">
+                    <span class="project-category">{project.category}</span>
+                    <span class="project-date">{project.year}</span>
                   </div>
-                )}
-                <span class="project-date">{project.year}</span>
-              </div>
 
-            </article>
-          </a>
-        ))}
+                  <h2 class="project-title">
+                    {project.title}
+                    {isInteractive ? (
+                      <span class="arrow-icon" aria-hidden="true">↗</span>
+                    ) : (
+                      <span class="badge-draft">In Progress</span>
+                    )}
+                  </h2>
+
+                  <p class="project-description">{project.description}</p>
+
+                  <ul class="project-tags" aria-label="Project Tags">
+                    {project.tags.map((tag) => (
+                      <li class="tag-item">{tag}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <!-- Right Column: Thumbnail -->
+                <div class="project-media">
+                  {project.imageSrc ? (
+                    <div class="thumbnail-wrapper">
+                      <img src={project.imageSrc} alt={`Preview of ${project.title}`} class="thumbnail-img" />
+                    </div>
+                  ) : (
+                    <div class="thumbnail-wrapper thumbnail-placeholder">
+                      <span>Case Study Coming Soon</span>
+                    </div>
+                  )}
+                </div>
+
+              </article>
+            </Element>
+          );
+        })}
       </div>
     </section>
 
@@ -77,7 +114,6 @@ const projects = [
 </Layout>
 
 <script>
-  // Scroll reveal animation observer
   function initScrollReveal() {
     const observerCallback: IntersectionObserverCallback = (entries) => {
       entries.forEach((entry) => {
@@ -100,11 +136,12 @@ const projects = [
 </script>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,700;0,900;1,400&family=Inter:wght@400;500;600;700&display=swap');
+
   html {
     scroll-behavior: smooth;
   }
 
-  /* --- Scroll Reveal Base Animations --- */
   .reveal-on-scroll {
     opacity: 0;
     transform: translateY(24px);
@@ -118,19 +155,26 @@ const projects = [
     transform: translateY(0);
   }
 
-  /* --- Page Layout Background --- */
   .work-page {
-    background-color: #f6f5f1;
+    background-color: #fcfcee;
     min-height: 100vh;
     padding: 80px 40px 120px;
-   font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     color: #0c0c0c;
   }
 
-  /* --- Header Styles --- */
   .work-header {
     max-width: 1000px;
-    margin: 0 auto 40px auto;
+    margin: 0 auto 48px auto;
+  }
+
+  .header-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #555555;
+    margin-bottom: 12px;
   }
 
   .page-title {
@@ -144,7 +188,6 @@ const projects = [
     margin: 0;
   }
 
-  /* --- Editorial List Layout --- */
   .work-list-container {
     max-width: 1000px;
     margin: 0 auto;
@@ -162,43 +205,68 @@ const projects = [
     display: block;
   }
 
+  .project-row-link.is-disabled {
+    cursor: default;
+    opacity: 0.75;
+  }
+
   .project-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 36px 0;
+    align-items: flex-start;
+    padding: 40px 0;
     border-bottom: 1px solid #dcdad4;
     transition: border-color 0.2s ease;
+    gap: 32px;
   }
 
-  .project-row-link:hover .project-row {
+  .project-row-link:not(.is-disabled):hover .project-row {
     border-bottom-color: #0d0d0d;
   }
 
-  /* Left Column Info */
   .project-info {
-    max-width: 480px;
+    max-width: 520px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+  }
+
+  .meta-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .project-category {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #444444; /* Improved AA contrast */
+    text-transform: uppercase;
+  }
+
+  .project-date {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666666;
   }
 
   .project-title {
-   font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    font-size: clamp(1.4rem, 2.5vw, 2.1rem);
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 2.8vw, 2.2rem);
     font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
     text-transform: uppercase;
     color: #0d0d0d;
-    margin: 0;
+    margin: 0 0 12px 0;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
 
   .arrow-icon {
-    font-size: 0.85em;
+    font-size: 0.8em;
     font-weight: 400;
     display: inline-block;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -208,31 +276,70 @@ const projects = [
     transform: translate(4px, -4px);
   }
 
-  .project-category {
-    font-size: 11px;
+  .badge-draft {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
     font-weight: 600;
-    letter-spacing: 0.05em;
-    color: #777777;
     text-transform: uppercase;
+    padding: 3px 8px;
+    background-color: #fcfcee;
+    color: #555555;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
   }
 
-  /* Right Column Media */
+  .project-description {
+    font-size: 14px;
+    line-height: 1.55;
+    color: #333333;
+    margin: 0 0 16px 0;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tag-item {
+    font-size: 11px;
+    font-weight: 500;
+    color: #444444;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
   .project-media {
     display: flex;
     align-items: center;
-    gap: 28px;
+    flex-shrink: 0;
   }
 
-  /* Scaled up thumbnail container */
   .thumbnail-wrapper {
-    width: 300px;  /* Increased from 110px */
-    height:235px; /* Increased from 80px */
-    background-color: #e5e3db;
+    width: 280px;
+    height: 180px;
+    background-color: #fcfcee;
     overflow: hidden;
     border-radius: 4px;
+    position: relative;
   }
 
-  /* Kept full original color by default */
+  .thumbnail-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: #666666;
+    border: 1px dashed #c2c0b6;
+  }
+
   .thumbnail-img {
     width: 100%;
     height: 100%;
@@ -240,40 +347,25 @@ const projects = [
     transition: transform 0.4s ease;
   }
 
-  .project-row-link:hover .thumbnail-img {
+  .project-row-link:not(.is-disabled):hover .thumbnail-img {
     transform: scale(1.05);
   }
 
-  .project-date {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: #888888;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  /* Mobile Responsive */
   @media (max-width: 768px) {
     .work-page {
       padding: 60px 20px 80px;
     }
 
     .project-row {
-      flex-direction: column;
-      align-items: flex-start;
+      flex-direction: column-reverse;
+      align-items: stretch;
       gap: 20px;
-      padding: 28px 0;
-    }
-
-    .project-media {
-      width: 100%;
-      justify-content: space-between;
+      padding: 32px 0;
     }
 
     .thumbnail-wrapper {
-      width: 140px;
-      height: 95px;
+      width: 100%;
+      height: 200px;
     }
   }
 </style>

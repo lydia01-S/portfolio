@@ -9,249 +9,254 @@ const projects = [
     title: "STU: An online student platform",
     category: "UX/UI prototype",
     year: "2025",
-    imageSrc: "/3.png"
+    imageSrc: "/3.png",
+    cardBg: "#dbe4d9",           // Muted Sage Green
+    rotation: "-1.8deg",
+    offsetY: "0px"
   },
   {
     slug: "/critterandfriends", // Leads to src/pages/critterandfriends.astro
     title: "Critter & Friends': An interactive game",
     category: "Web Design, UX/UI",
     year: "2026",
-    imageSrc: "/critterandfriends.png"
+    imageSrc: "/critterandfriends.png",
+    cardBg: "#e8cfc4",           // Warm Terracotta / Clay
+    rotation: "2.2deg",
+    offsetY: "60px"
+  }
+];
+
+// Content tabs data for the interactive statement section
+const statementTabs = [
+  {
+    id: "identity",
+    label: "WHAT I LIKE",
+    handwritten: "what i like",
+    color: "#0038FF", // Add blue color property here
+    text: "Using color, typography and thoughtful design that just feels right to use."
+  },
+  {
+    id: "focus",
+    label: "WHAT I CARE ABOUT",
+    handwritten: "what i care about",
+    color: "#0038FF",
+    text: "I want to design digital interfaces that improve how people learn, work & interact online."
+  },
+  {
+    id: "philosophy",
+    label: "WHAT I BELIEVE",
+    handwritten: "what i believe",
+    color: "#0038FF",
+    text: "Design should feel warm, accessible, lightweight and fun for everyone."
+  },
+  {
+    id: "stack",
+    label: "WHAT I BUILD WITH",
+    handwritten: "what i build with",
+    color: "#0038FF",
+    text: "HTML, CSS, Astro, Next.js, Figma, Adobe Creative Cloud."
   }
 ];
 ---
 
 <Layout title="Lydia Stewart — Portfolio">
-  <!-- Full Screen Hero Fold -->
-  <section class="hero-wrapper">
-    <Hero year="2026" />
-    
-    <!-- Scroll Down Indicator -->
-    <a href="#intro" class="scroll-indicator">
-      <span>SCROLL TO EXPLORE</span>
-      <div class="line"></div>
-    </a>
-  </section>
-
-  <!-- Short Introduction Section -->
-  <section id="intro" class="intro-section reveal-on-scroll">
-    <div class="intro-content">
-  
-      <h2 class="intro-heading">
-        Hi, I'm Lydia — an Interactive Digital Media graduate passionate about web development and UI/UX design. 
-      </h2>
-    </div>
-  </section>
-
-
-<!-- What I Focus On Section -->
-  <section id="focus" class="focus-section reveal-on-scroll">
-   
-
-    <!-- Skills Cloud Grid -->
-    <div class="skills-cloud">
-      <div class="skill-row top-row">
-        <span class="skill-tag">UI Design</span>
-        <span class="skill-tag">UX Design</span>
-        <span class="skill-tag">User Research</span>
-        <span class="skill-tag">Wireframing</span>
-        <span class="skill-tag">Prototyping</span>
-      </div>
-      <div class="skill-row bottom-row">
-        <span class="skill-tag">Design Systems</span>
-        <span class="skill-tag">Responsive Design</span>
-        <span class="skill-tag">Astro</span>
-        <span class="skill-tag">HTML/CSS</span>
-      </div>
-    </div>
-  </section>
-
-
-
-
-  <!-- Selected Work Section -->
-  <section id="work" class="work-section reveal-on-scroll">
-    <div class="section-header">
-      <h2 class="section-title">Selected Work</h2>
-      <span class="project-count">( 02 )</span>
-    </div>
-
-    <p class="section-description">
-      A curated collection of branding, digital art direction and designs.
-    </p>
-    
-    <!-- Staggered 2-Column Projects Grid -->
-    <div class="projects-grid">
-  {projects.map((project, index) => (
-    <div class={`grid-col ${index % 2 === 1 ? 'right-col' : 'left-col'}`}>
-      <a href={project.slug} class="card-link">
-        <ProjectCard 
-          slug={project.slug}
-          title={project.title}
-          category={project.category}
-          year={project.year}
-          imageSrc={project.imageSrc}
-        />
+  <div class="ho-canvas">
+    <!-- Full Screen Hero Fold -->
+    <section class="hero-wrapper">
+      <Hero year="2026" />
+      
+      <!-- Scroll Down Indicator -->
+      <a href="#intro" class="scroll-indicator">
+        <span>* SCROLL TO EXPLORE (2026)</span>
+        <div class="line"></div>
       </a>
-    </div>
-  ))}
-</div>
-  </section>
+    </section>
+
+    <!-- Short Introduction Section -->
+    <section id="intro" class="intro-section reveal-on-scroll">
+      <div class="intro-content">
+        <span class="mono-meta-tag">* INTRODUCTION</span>
+        <h2 class="intro-heading">
+          Hi, I'm Lydia — an Interactive Digital Media graduate passionate about web development and UI/UX design. 
+        </h2>
+      </div>
+    </section>
+
+    <!-- Interactive Statement Tabs Section -->
+    <section class="interactive-statement-section reveal-on-scroll">
+      <!-- Top Tab Selection Navigation -->
+      <nav class="tab-nav" aria-label="Interactive Statements">
+        {statementTabs.map((tab, idx) => (
+          <button 
+            class={`tab-btn ${idx === 0 ? 'active' : ''}`} 
+            data-tab-target={tab.id}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </nav>
+
+      <!-- Dynamic Center Text Display -->
+      <div class="statement-display-container">
+        {statementTabs.map((tab, idx) => (
+          <div 
+            class={`tab-content-panel ${idx === 0 ? 'active' : ''}`} 
+            id={`tab-${tab.id}`}
+          >
+            <!-- Cursive Script Accent -->
+            <span class="handwritten-accent">{tab.handwritten}</span>
+            
+            <!-- Serif Center Statement -->
+            <h3 class="statement-text">{tab.text}</h3>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Selected Work Section -->
+    <section id="work" class="work-section reveal-on-scroll">
+      <div class="section-header">
+        <div class="title-meta-group">
+          <span class="mono-meta-tag">* INDEXED PROJECT ARCHIVE</span>
+          <h2 class="section-title">Selected Work</h2>
+        </div>
+        <span class="project-count">( 02 )</span>
+      </div>
+
+      <p class="section-description">
+        A curated collection of branding, digital art direction and designs.
+      </p>
+      
+      <!-- Asymmetrical / Skewed Projects Grid -->
+      <div class="projects-ho-grid">
+        {projects.map((project) => (
+          <div 
+            class="ho-card-wrapper"
+            style={`--card-bg: ${project.cardBg}; --card-rot: ${project.rotation}; --card-offset: ${project.offsetY};`}
+          >
+            <a href={project.slug} class="card-link">
+              <ProjectCard 
+                slug={project.slug}
+                title={project.title}
+                category={project.category}
+                year={project.year}
+                imageSrc={project.imageSrc}
+              />
+            </a>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
 </Layout>
 
 <script>
-  // Scroll reveal trigger using IntersectionObserver
-  const observerCallback: IntersectionObserverCallback = (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
+  function initPageAnimations() {
+    // 1. Dynamic Scroll Velocity Tilt for Project Cards (Hooked into Layout's Lenis instance)
+    const checkLenis = setInterval(() => {
+      const lenis = (window as any).lenisInstance;
+      if (!lenis) return;
+      clearInterval(checkLenis);
+
+      const cards = document.querySelectorAll<HTMLElement>('.ho-card-wrapper');
+
+      lenis.on('scroll', (e: { velocity: number }) => {
+        // Clamp velocity so distortion stays subtle and balanced
+        const velocity = Math.max(-12, Math.min(12, e.velocity));
+        const skew = velocity * 0.45;
+
+        cards.forEach((card) => {
+          card.style.setProperty('--scroll-skew', `${skew}deg`);
+        });
+      });
+    }, 50);
+
+    // 2. Interactive Statement Tab Switching
+    const buttons = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.tab-content-panel');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab-target');
+
+        buttons.forEach((b) => b.classList.remove('active'));
+        panels.forEach((p) => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        const activePanel = document.getElementById(`tab-${targetId}`);
+        if (activePanel) {
+          activePanel.classList.add('active');
+        }
+      });
     });
-  };
 
-  const observer = new IntersectionObserver(observerCallback, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  });
+    // 3. Scroll Reveal Observer
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    };
 
-  document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+    const observer = new IntersectionObserver(observerCallback, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+  }
+
+  // Handle standard page loads & Astro View Transitions
+  document.addEventListener('DOMContentLoaded', initPageAnimations);
+  document.addEventListener('astro:page-load', initPageAnimations);
 </script>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
+
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto !important;
+    background-color: #fcfcee;
   }
 
-/* --- What I Focus On Section --- */
-  .focus-section {
-    padding: 80px 0 100px;
-    max-width: 1100px;
-    margin: 0 auto;
-    width: 100%;
+  .ho-canvas {
+    background-color: #fcfcee;
+    color: #111111;
+    padding: 0 24px;
+    min-height: 100vh;
   }
 
-  .focus-header {
-    margin-bottom: 60px;
-  }
-
-  .focus-title {
-    font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    font-size: clamp(2.8rem, 6vw, 4.8rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: #0c0c0c;
-    margin-bottom: 20px;
-    line-height: 1.05;
-   
-
-  }
-
-  .focus-subtitle {
-    font-size: 16px;
-    line-height: 1.5;
+  .mono-meta-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: #444;
-    max-width: 480px;
-    margin-bottom: 32px;
+    display: block;
+    margin-bottom: 8px;
   }
 
-  /* Tools Row */
-  .tools-group {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .tools-label {
-    font-size: 15px;
-    font-weight: 700;
-    color: #111;
-  }
-
-  .tool-icons {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .tool-badge {
-    width: 38px;
-    height: 38px;
-    background: #ffffff;
-    border: 1px solid #e2e2e2;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s ease, border-color 0.2s ease;
-  }
-
-  .tool-badge:hover {
-    transform: translateY(-2px);
-    border-color: #bbb;
-  }
-
-  /* Skills Cloud Layout */
-  .skills-cloud {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    margin-top: 40px;
-  }
-
-  .skill-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 36px;
-  }
-
-  .top-row {
-    justify-content: space-between;
-  }
-
-  .bottom-row {
-    justify-content: center;
-    gap: 48px;
-  }
-
-  .skill-tag {
-    font-size: 17px;
-    font-weight: 700;
-    color: #111;
-    letter-spacing: -0.01em;
-    transition: color 0.2s ease;
-  }
-
-  .skill-tag:hover {
-    color: #7500f3; /* Matches your brand highlight color */
-  }
-
-  @media (max-width: 768px) {
-    .focus-section {
-      padding: 60px 0;
-    }
-
-    .skill-row {
-      justify-content: flex-start;
-      gap: 20px;
-    }
-
-    .bottom-row {
-      justify-content: flex-start;
-    }
-
-    .skill-tag {
-      font-size: 15px;
-    }
-  }
-
+  /* --- Hero Wrapper --- */
   .hero-wrapper {
-    min-height: 85vh;
+    min-height: 90vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+    padding-bottom: 60px;
+    animation: slowFade 2.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slowFade {
+    0% {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .scroll-indicator {
@@ -259,16 +264,17 @@ const projects = [
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.12em;
-    color: #888;
+    color: #555;
     padding-bottom: 20px;
     text-decoration: none;
     transition: color 0.3s ease;
   }
 
   .scroll-indicator:hover {
-    color: #0c0c0c;
+    color: #111;
   }
 
   .scroll-indicator .line {
@@ -283,117 +289,270 @@ const projects = [
     50% { opacity: 1; transform: scaleY(1.2); }
   }
 
-  /* --- Scroll Reveal Base Animations --- */
-  .reveal-on-scroll {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), 
-                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-  }
-
-  .reveal-on-scroll.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* --- Introduction Section Styles --- */
+  /* --- Introduction Section --- */
   .intro-section {
-    padding: 120px 0 60px;
+    padding: 140px 0 80px;
     max-width: 1100px;
     margin: 0 auto;
     width: 100%;
   }
 
   .intro-content {
-    max-width: 800px;
+    max-width: 850px;
   }
 
-  .section-label {
-    display: block;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: #888;
-    margin-bottom: 24px;
-  }
+  .handwritten-text {
+  font-family: 'YourHandwrittenFont', cursive;
+  color: #0038FF; /* Strategic Brutalist / Electric Blue */
+}
 
   .intro-heading {
     font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-size: clamp(2.2rem, 4.2vw, 3.4rem);
     font-weight: 400;
-    line-height: 1.3;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
     color: #111;
-    margin-bottom: 24px;
+    margin-bottom: 0;
   }
 
-  .intro-text {
-    font-size: 16px;
-    line-height: 1.7;
-    color: #555;
-    max-width: 600px;
-  }
-
-  /* --- Work Section Styles --- */
-  .work-section {
-    padding: 60px 0 80px;
+  /* --- Interactive Statement Section --- */
+  .interactive-statement-section {
+    padding: 100px 0 120px;
     max-width: 1100px;
     margin: 0 auto;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tab-nav {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    width: 100%;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.25);
+    padding-bottom: 16px;
+    margin-bottom: 60px;
+  }
+
+  .tab-btn {
+    background: none;
+    border: 1px solid transparent;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #666;
+    cursor: pointer;
+    padding: 6px 12px;
+    transition: all 0.25s ease;
+    text-transform: uppercase;
+  }
+
+  .tab-btn:hover {
+    color: #111;
+    border-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .tab-btn.active {
+    color: #111;
+    background-color: #ffffff;
+    border-color: #111;
+    box-shadow: 2px 2px 0px #111;
+  }
+
+  .statement-display-container {
+    position: relative;
+    width: 100%;
+    max-width: 880px;
+    min-height: 260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .tab-content-panel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .tab-content-panel.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .handwritten-accent {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: #1d4ed8;
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    z-index: 1;
+    pointer-events: none;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0.22;
+  }
+
+  .statement-text {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.25;
+    color: #111111;
+    position: relative;
+    z-index: 2;
+    max-width: 740px;
+    margin: 0;
+  }
+
+  /* --- Scroll Reveal Animations --- */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(48px) scale(0.98);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .reveal-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* --- Work Section --- */
+  .work-section {
+    padding: 120px 0 160px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    border-top: 1px dashed rgba(0, 0, 0, 0.25);
   }
 
   .section-header {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    border-bottom: 1px solid #e5e5e5;
+    align-items: flex-end;
+    border-bottom: 1px solid #111;
     padding-bottom: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
 
   .section-title {
     font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
     font-weight: 400;
+    line-height: 1;
+    margin: 0;
   }
 
   .project-count {
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    color: #666;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #111;
   }
 
   .section-description {
     font-size: 15px;
     line-height: 1.6;
-    color: #555;
-    max-width: 540px;
-    margin-bottom: 60px;
+    color: #444;
+    max-width: 500px;
+    margin-bottom: 72px;
   }
 
-  /* 2-Column Staggered Grid Layout */
-  .projects-grid {
+  /* --- Asymmetrical Cards Grid --- */
+  .projects-ho-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     gap: 48px;
     align-items: start;
   }
 
-  .right-col {
-    margin-top: 90px;
+  .ho-card-wrapper {
+    background-color: var(--card-bg, #ffffff);
+    border: 1px solid #111;
+    padding: 24px;
+    border-radius: 4px;
+    
+    --scroll-skew: 0deg;
+    will-change: transform;
+    
+    transform: translateY(var(--card-offset)) 
+               rotate(calc(var(--card-rot) + var(--scroll-skew)));
+    
+    box-shadow: 4px 4px 0px #111;
+    
+    transition: transform 0.15s ease-out, 
+                box-shadow 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .ho-card-wrapper:hover {
+    transform: translateY(calc(var(--card-offset) - 12px)) 
+               rotate(0deg) 
+               scale(1.02) !important;
+    box-shadow: 12px 12px 0px #111;
+    z-index: 10;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
   }
 
   @media (max-width: 768px) {
     .intro-section {
-      padding: 80px 0 40px;
+      padding: 100px 0 60px;
     }
 
-    .projects-grid {
+    .interactive-statement-section {
+      padding: 80px 0 90px;
+    }
+
+    .work-section {
+      padding: 80px 0;
+    }
+
+    .tab-nav {
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .tab-btn {
+      font-size: 10px;
+      padding: 4px 8px;
+    }
+
+    .statement-display-container {
+      min-height: 240px;
+    }
+
+    .projects-ho-grid {
       grid-template-columns: 1fr;
-      gap: 40px;
+      gap: 32px;
     }
 
-    .right-col {
-      margin-top: 0;
+    .ho-card-wrapper {
+      transform: none !important;
+      box-shadow: 4px 4px 0px #111 !important;
     }
   }
 </style>

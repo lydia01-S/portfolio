@@ -1,44 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Footer from '../components/footer.astro';
-
-// Persona Data
-const personas = [
-  {
-    name: "Alex Rivera",
-    role: "Product Manager",
-    archetype: "The Power Planner",
-    avatar: "/persona-1.png",
-    quote: "I need a tool that seamlessly integrates into my daily routine without adding clutter.",
-    demographics: { age: 32, location: "San Francisco, CA", experience: "5+ years" },
-    goals: [
-      "Streamline daily team updates",
-      "Reduce time spent on manual tracking",
-      "Export clean reports for stakeholders"
-    ],
-    frustrations: [
-      "Overly complex navigation in current apps",
-      "Lack of customizable dashboard views"
-    ]
-  },
-  {
-    name: "Maya Chen",
-    role: "Freelance Designer",
-    archetype: "The Visual Thinker",
-    avatar: "/persona-2.png",
-    quote: "Visual clarity is key for me. If I can't find what I need in two clicks, I lose momentum.",
-    demographics: { age: 27, location: "Austin, TX", experience: "3 years" },
-    goals: [
-      "Quick access to design tokens and assets",
-      "Clean, distraction-free interface",
-      "Smooth mobile-to-desktop handoff"
-    ],
-    frustrations: [
-      "Inconsistent typography and UI elements",
-      "Slow load times on graphic-heavy pages"
-    ]
-  }
-];
+import Footer from '../components/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
 
 // Key Survey Metrics
 const surveyMetrics = [
@@ -69,170 +32,130 @@ const researchSynthesis = [
 ---
 
 <Layout title="STU: User Research & Insights">
-  <main class="research-page">
-    
-    <!-- Header & Sub Navigation -->
-    <header class="rs-header reveal-on-scroll">
-      <div class="header-top">
-        <a href="/work" class="back-link" aria-label="Back to Work">← Back to Work</a>
-        
-        <nav class="project-nav" aria-label="Project Sections">
-          <a href="/stylesheet" class="nav-tab">Style Guide</a>
-          <a href="/wireframe" class="nav-tab">Wireframes & Site Map</a>
-          <a href="/research" class="nav-tab active">Research</a>
-        </nav>
-      </div>
+  <ClientRouter />
 
-      <div class="header-content">
-        <span class="section-tag">UX Methodology</span>
-        <h1 class="rs-title">User Research & Behavioral Insights</h1>
-        <p class="rs-subtitle">
-          Informing product architecture through quantitative user surveys, qualitative persona studies, and usability mapping.
-        </p>
-      </div>
-    </header>
+  <main class="style-guide-bg">
+    <!-- Ambient Blur Glows -->
+    <div class="bg-blur-spot spot-1" aria-hidden="true"></div>
+    <div class="bg-blur-spot spot-2" aria-hidden="true"></div>
 
-    <div class="rs-container">
+    <div class="container">
       
-      <!-- SECTION 1: Survey Insights -->
-      <section class="research-section reveal-on-scroll">
-        <div class="section-header-row">
-          <div>
-            <span class="section-tag">01 / Quantitative Data</span>
-            <h2>Survey Metrics & Core Takeaways</h2>
+      <!-- HEADER & NAVIGATION -->
+      <header class="rs-header reveal-on-scroll">
+        <div class="header-top">
+          <a href="/work" class="back-link" aria-label="Back to Work">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 12L4 8L10 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Back to Portfolio
+          </a>
+          
+          <nav class="project-nav" aria-label="Project Sections">
+            <a href="/stylesheet" class="nav-tab">Style Guide</a>
+            <a href="/wireframe" class="nav-tab">Wireframes & Site Map</a>
+            <a href="/research" class="nav-tab active" aria-current="page">
+              <span class="dot"></span> Research
+            </a>
+          </nav>
+        </div>
+
+        <!-- HERO BANNER -->
+        <div class="header-hero">
+          <div class="header-content">
+            <div class="tag-wrapper">
+              <span class="section-tag">UX Methodology</span>
+              <span class="status-badge">Behavioral Analysis</span>
+            </div>
+            
+            <h1 class="rs-title">User Research & Behavioral Insights</h1>
+            
+            <p class="rs-description">
+              Informing product architecture through quantitative user surveys and usability mapping. Our methodology prioritizes deep empathetic understanding to synthesize raw data into actionable design directives.
+            </p>
           </div>
         </div>
+      </header>
+
+      <div class="rs-container">
         
-        <!-- Metrics Bar with Animated Counters -->
-        <div class="metrics-grid">
-          {surveyMetrics.map((item) => (
-            <div class="metric-card">
-              <span 
-                class="metric-stat count-up" 
-                data-target={item.target} 
-                data-suffix={item.suffix} 
-                data-decimals={item.decimals}
-              >
-                {item.initial}
-              </span>
-              <p class="metric-label">{item.label}</p>
+        <!-- SECTION 1: Survey Insights -->
+        <section class="research-section reveal-on-scroll">
+          <div class="section-heading">
+            <span class="section-tag">01 / Quantitative Data</span>
+            <h2 class="section-title">Survey Metrics & Core Takeaways</h2>
+            <p class="section-desc">Key performance indicators from our active user survey feedback loops.</p>
+          </div>
+          
+          <!-- Metrics Bar with Animated Counters -->
+          <div class="metrics-grid">
+            {surveyMetrics.map((item) => (
+              <div class="ui-card metric-card hover-lift">
+                <span 
+                  class="metric-stat count-up" 
+                  data-target={item.target} 
+                  data-suffix={item.suffix} 
+                  data-decimals={item.decimals}
+                >
+                  {item.initial}
+                </span>
+                <p class="metric-label">{item.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <!-- Key Survey Findings Box -->
+          <div class="ui-card findings-card">
+            <div class="card-header">
+              <h3 class="card-title">Key Quantitative Findings</h3>
             </div>
-          ))}
-        </div>
+            <ul class="clean-bullet-list findings-list">
+              <li>
+                <strong>Efficiency over novelty:</strong> 82% of users cited speed and clear visual hierarchy as their primary requirement.
+              </li>
+              <li>
+                <strong>Mobile vs Desktop split:</strong> While primary work occurs on desktop, 45% perform quick status checks via mobile.
+              </li>
+              <li>
+                <strong>Onboarding drop-off:</strong> Complex initial setups cause a 30% drop in user retention within the first week.
+              </li>
+            </ul>
+          </div>
+        </section>
 
-        <!-- Key Survey Findings Box -->
-        <div class="findings-card">
-          <h3 class="card-subtitle">Key Quantitative Findings</h3>
-          <ul class="findings-list">
-            <li>
-              <strong>Efficiency over novelty:</strong> 82% of users cited speed and clear visual hierarchy as their primary requirement.
-            </li>
-            <li>
-              <strong>Mobile vs Desktop split:</strong> While primary work occurs on desktop, 45% perform quick status checks via mobile.
-            </li>
-            <li>
-              <strong>Onboarding drop-off:</strong> Complex initial setups cause a 30% drop in user retention within the first week.
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- SECTION 2: Insight to Action Matrix (Agency Quality Addition) -->
-      <section class="research-section reveal-on-scroll">
-        <div class="section-header-row">
-          <div>
+        <!-- SECTION 2: Insight to Action Matrix -->
+        <section class="research-section reveal-on-scroll">
+          <div class="section-heading">
             <span class="section-tag">02 / Synthesis Matrix</span>
-            <h2>Connecting Research to Design Decisions</h2>
+            <h2 class="section-title">Connecting Research to Design Decisions</h2>
+            <p class="section-desc">Mapping user friction directly to architectural and component requirements.</p>
           </div>
-        </div>
 
-        <div class="synthesis-grid">
-          {researchSynthesis.map((item) => (
-            <div class="synthesis-card">
-              <span class="synthesis-finding">{item.finding}</span>
-              <p class="synthesis-insight"><strong>User Insight:</strong> {item.insight}</p>
-              <div class="synthesis-impact">
-                <strong>Design Impact:</strong> {item.impact}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- SECTION 3: User Personas -->
-      <section class="research-section reveal-on-scroll">
-        <div class="section-header-row">
-          <div>
-            <span class="section-tag">03 / Qualitative Personas</span>
-            <h2>User Archetypes & Behavioral Models</h2>
-          </div>
-        </div>
-
-        <div class="personas-grid">
-          {personas.map((persona) => (
-            <div class="persona-card">
-              
-              <!-- Header Profile -->
-              <div class="persona-header">
-                <img class="persona-avatar" src={persona.avatar} alt={persona.name} />
-                <div class="persona-meta">
-                  <h3 class="persona-name">{persona.name}</h3>
-                  <span class="persona-role">{persona.role}</span>
-                  <span class="persona-archetype">{persona.archetype}</span>
+          <div class="synthesis-grid">
+            {researchSynthesis.map((item) => (
+              <div class="ui-card synthesis-card hover-lift">
+                <span class="synthesis-finding">{item.finding}</span>
+                <p class="synthesis-insight"><strong>User Insight:</strong> {item.insight}</p>
+                <div class="synthesis-impact">
+                  <strong>Design Impact:</strong> {item.impact}
                 </div>
               </div>
-
-              <!-- Quote Block -->
-              <blockquote class="persona-quote">
-                "{persona.quote}"
-              </blockquote>
-
-              <!-- Details Grid -->
-              <div class="persona-details">
-                <div class="detail-block">
-                  <h4 class="block-title">Goals & Needs</h4>
-                  <ul>
-                    {persona.goals.map((goal) => (
-                      <li>{goal}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div class="detail-block">
-                  <h4 class="block-title">Frustrations & Pain Points</h4>
-                  <ul>
-                    {persona.frustrations.map((item) => (
-                      <li>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <!-- SECTION 4: Visual Persona Artefacts -->
-      <section class="research-section reveal-on-scroll">
-        <div class="section-header-row">
-          <div>
-            <span class="section-tag">04 / Research Artifacts</span>
-            <h2>Persona Mapping Spectrum</h2>
+            ))}
           </div>
-        </div>
+        </section>
 
-        <div class="persona-image-wrapper">
-          <img class="persona-full-img" src="/persona.png" alt="User Persona Spectrum Mapping" />
-        </div>
-      </section>
-
+      </div>
     </div>
   </main>
-
+  <Footer />
 </Layout>
 
 <script>
+  function setupPageInteractions() {
+    initScrollReveal();
+    initCounters();
+  }
+
   // --- 1. Scroll Reveal Animation Observer ---
   function initScrollReveal() {
     const observerCallback: IntersectionObserverCallback = (entries) => {
@@ -251,10 +174,10 @@ const researchSynthesis = [
     document.querySelectorAll('.reveal-on-scroll').forEach((el) => scrollObserver.observe(el));
   }
 
-  // --- 2. Dynamic Counter Calculator Animation ---
+  // --- 2. Animated Counter Calculations ---
   function initCounters() {
     const counters = document.querySelectorAll('.count-up');
-    const duration = 600; // Fast 0.6s calculation speed
+    const duration = 800; // 0.8s calculation speed
 
     const counterObserver = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
@@ -270,6 +193,7 @@ const researchSynthesis = [
             if (!startTime) startTime = timestamp;
             const progress = Math.min((timestamp - startTime) / duration, 1);
             
+            // Cubed EaseOut curve
             const easeOutProgress = 1 - Math.pow(1 - progress, 3);
             const currentCount = easeOutProgress * targetValue;
 
@@ -291,59 +215,76 @@ const researchSynthesis = [
     counters.forEach(counter => counterObserver.observe(counter));
   }
 
-  // Master Setup function
-  function setupAnimations() {
-    initScrollReveal();
-    initCounters();
-  }
-
-  document.addEventListener('DOMContentLoaded', setupAnimations);
-  document.addEventListener('astro:page-load', setupAnimations);
+  document.addEventListener('DOMContentLoaded', setupPageInteractions);
+  document.addEventListener('astro:page-load', setupPageInteractions);
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
   html {
     scroll-behavior: smooth;
   }
 
-  /* --- Base Typography & Reset --- */
-  .research-page,
-  .research-page p,
-  .research-page span,
-  .research-page button,
-  .research-page a,
-  .research-page li {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  }
-
-  .research-page h1,
-  .research-page h2 {
-    font-family: 'Bodoni Moda', 'Playfair Display', serif;
-  }
-
-  .research-page {
-    background-color: #f8f7f4;
+  /* --- Base Reset & Canvas --- */
+  .style-guide-bg {
+    position: relative;
+    background-color: #f6f5f0;
     color: #1a1a1a;
     min-height: 100vh;
-    padding: 40px 5% 120px;
-    max-width: 1280px;
-    margin: 0 auto;
+    padding: 40px 24px 120px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 
-  .rs-container {
-    display: flex;
-    flex-direction: column;
-    gap: 72px;
+  .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Ambient Blur Spots */
+  .bg-blur-spot {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .spot-1 {
+    width: 450px;
+    height: 450px;
+    top: -100px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(117, 0, 243, 0.18) 0%, rgba(255, 255, 255, 0) 70%);
+  }
+
+  .spot-2 {
+    width: 550px;
+    height: 550px;
+    bottom: 10%;
+    left: -150px;
+    background: radial-gradient(circle, rgba(117, 0, 243, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+  }
+
+  /* Typography Scale */
+  .rs-title,
+  .section-title,
+  .card-title {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
   }
 
   /* --- Scroll Reveal Animations --- */
   .reveal-on-scroll {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal-on-scroll.visible {
@@ -351,99 +292,209 @@ const researchSynthesis = [
     transform: translateY(0);
   }
 
-  /* --- Header & Sub Navigation --- */
+  /* --- Header & Navigation --- */
   .rs-header {
-    margin-bottom: 50px;
+    margin-bottom: 40px;
   }
 
   .header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
     flex-wrap: wrap;
     gap: 16px;
   }
 
   .back-link {
-    font-size: 14px;
-    font-weight: 500;
-    color: #666;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444444;
     text-decoration: none;
-    transition: color 0.2s ease;
+    padding: 8px 14px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid #e5e5de;
+    transition: all 0.2s ease;
   }
 
   .back-link:hover {
-    color: #000;
+    color: #0d0d0d;
+    background: #ffffff;
+    border-color: #0d0d0d;
   }
 
   .project-nav {
     display: flex;
-    background: #eae8e1;
+    background: rgba(230, 227, 218, 0.7);
+    backdrop-filter: blur(12px);
     padding: 4px;
     border-radius: 100px;
     gap: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
   }
 
   .nav-tab {
-    padding: 6px 16px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555555;
     text-decoration: none;
     border-radius: 100px;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav-tab .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #7500f3;
   }
 
   .nav-tab.active,
   .nav-tab:hover {
     background: #ffffff;
-    color: #0c0c0c;
+    color: #0d0d0d;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
 
-  .section-tag {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #7500f3;
-    display: block;
-    margin-bottom: 8px;
+  /* Hero Banner Card */
+  .header-hero {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 36px 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
   }
 
-  .rs-title {
-    font-size: clamp(2.2rem, 4.5vw, 3.6rem);
-    font-weight: 400;
-    letter-spacing: -0.02em;
+  .tag-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 12px;
   }
 
-  .rs-subtitle {
-    font-size: 17px;
-    line-height: 1.5;
-    color: #555;
-    max-width: 680px;
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #7500f3;
   }
 
-  /* --- Section Header Row --- */
-  .section-header-row {
-    margin-bottom: 24px;
+  .status-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    background: #eef2ff;
+    color: #3730a3;
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 1px solid #c7d2fe;
   }
 
-  .section-header-row h2 {
-    font-size: 2rem;
-    font-weight: 400;
+  .rs-title {
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    line-height: 1.1;
+    color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+
+  .rs-description {
+    font-size: 15px;
+    line-height: 1.65;
+    color: #333333;
+    max-width: 900px;
     margin: 0;
   }
 
+  .rs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  /* --- Section Cards & Grids --- */
   .research-section {
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
 
-  /* --- Metrics Grid --- */
+  .section-heading {
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+    line-height: 1.15;
+    color: #0d0d0d;
+    margin: 4px 0 8px 0;
+  }
+
+  .section-desc {
+    font-size: 14px;
+    color: #52525b;
+    max-width: 600px;
+    margin: 0;
+  }
+
+  /* Glass Cards */
+  .ui-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #eae6db;
+  }
+
+  .card-title {
+    font-size: 1.6rem;
+    color: #0d0d0d;
+    margin: 0;
+  }
+
+  /* Bullet Lists */
+  .clean-bullet-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13.5px;
+    color: #4a4a4a;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .clean-bullet-list li strong {
+    color: #0d0d0d;
+  }
+
+  /* Metrics Grid */
   .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -451,18 +502,16 @@ const researchSynthesis = [
   }
 
   .metric-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 24px;
-    border: 1px solid #e5e3dc;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
     display: flex;
     flex-direction: column;
     gap: 8px;
+    background: #ffffff;
+    border-color: #eae6db;
   }
 
   .metric-stat {
-    font-size: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 38px;
     font-weight: 700;
     color: #7500f3;
     letter-spacing: -0.02em;
@@ -471,44 +520,13 @@ const researchSynthesis = [
 
   .metric-label {
     font-size: 13px;
-    color: #555;
+    color: #52525b;
     font-weight: 500;
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
-  /* --- Findings Card --- */
-  .findings-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 28px;
-    border: 1px solid #e5e3dc;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-  }
-
-  .card-subtitle {
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 16px;
-  }
-
-  .findings-list {
-    margin: 0;
-    padding-left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    font-size: 14px;
-    color: #4a4a4a;
-    line-height: 1.6;
-  }
-
-  .findings-list strong {
-    color: #1a1a1a;
-  }
-
-  /* --- Synthesis Matrix --- */
+  /* Synthesis Matrix */
   .synthesis-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -516,155 +534,43 @@ const researchSynthesis = [
   }
 
   .synthesis-card {
-    background: #ffffff;
-    border: 1px solid #e5e3dc;
-    border-radius: 20px;
-    padding: 24px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
   }
 
   .synthesis-finding {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     color: #7500f3;
   }
 
   .synthesis-insight {
     font-size: 13px;
     line-height: 1.5;
-    color: #555;
+    color: #52525b;
     margin: 0;
   }
 
   .synthesis-impact {
     font-size: 13px;
     line-height: 1.5;
-    color: #1a1a1a;
-    background: #f7f5f0;
+    color: #0d0d0d;
+    background: #f8f7f4;
     padding: 12px 14px;
     border-radius: 12px;
     border-left: 3px solid #7500f3;
   }
 
-  /* --- Personas Grid --- */
-  .personas-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
-  }
-
-  .persona-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 28px;
-    border: 1px solid #e5e3dc;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .persona-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .persona-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #f0eee6;
-  }
-
-  .persona-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .persona-name {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0;
-  }
-
-  .persona-role {
-    font-size: 13px;
-    font-weight: 600;
-    color: #7500f3;
-  }
-
-  .persona-archetype {
-    font-size: 12px;
-    color: #71717a;
-  }
-
-  .persona-quote {
-    margin: 0;
-    padding: 12px 16px;
-    background: #f8f7f4;
-    border-left: 3px solid #1a1a1a;
-    border-radius: 0 12px 12px 0;
-    font-size: 13px;
-    font-style: italic;
-    color: #27272a;
-    line-height: 1.5;
-  }
-
-  .persona-details {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .block-title {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #71717a;
-    margin-top: 0;
-    margin-bottom: 8px;
-  }
-
-  .detail-block ul {
-    margin: 0;
-    padding-left: 18px;
-    font-size: 13px;
-    color: #4a4a4a;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    line-height: 1.5;
-  }
-
-  /* --- Image Card Artifact Wrapper --- */
-  .persona-image-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 24px;
-    border: 1px solid #e5e3dc;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-  }
-
-  .persona-full-img {
-    width: 100%;
-    max-width: 650px;
-    height: auto;
-    display: block;
-    border-radius: 12px;
+  /* Responsive Adjustments */
+  @media (max-width: 900px) {
+    .header-hero {
+      padding: 24px;
+    }
   }
 
   @media (max-width: 768px) {
-    .research-page {
+    .style-guide-bg {
       padding: 24px 16px 80px;
     }
 
@@ -673,8 +579,8 @@ const researchSynthesis = [
       align-items: flex-start;
     }
 
-    .personas-grid {
-      grid-template-columns: 1fr;
+    .rs-container {
+      gap: 48px;
     }
   }
 </style>

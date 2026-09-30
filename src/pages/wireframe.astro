@@ -1,495 +1,334 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
+
+// High-fidelity imports
+import h1 from '../../public/hr1.png';
+import h3 from '../../public/h3.png';
+import h4 from '../../public/h4.png';
+import h6 from '../../public/h6.png';
+import h7 from '../../public/h7.png';
+import h8 from '../../public/h8.png';
+import h12 from '../../public/h12.png';
+
+// Low-fidelity imports
+import w1 from '../../public/w1.png';
+import w3 from '../../public/w3.png';
+import w4 from '../../public/w4.png';
+import w6 from '../../public/w6.png';
+import w7 from '../../public/w7.png';
+import w9 from '../../public/w9.png';
+import w12 from '../../public/w12.png';
+
+import sitemapImg from '../../public/sitemap.png';
 
 const wireframeFlows = [
   {
-    category: "Academic & Coursework",
+    category: "Academic and coursework",
     lowRes: [
-      { img: "/w1.png", title: "Login Entry", caption: "Standardized SSO login flow" },
-      { img: "/w3.png", title: "Dashboard", caption: "At-a-glance active modules & alerts" },
-      { img: "/w4.png", title: "Assignment View", caption: "Priority deadlines and submission status" },
-      { img: "/w6.png", title: "Grades Overview", caption: "Filterable module grade break-down" }
+      { img: w1, title: "Login entry", caption: "Standard SSO login flow" },
+      { img: w3, title: "Dashboard", caption: "Active modules and alerts at a glance" },
+      { img: w4, title: "Assignment view", caption: "Priority deadlines and submission status" },
+      { img: w6, title: "Grades overview", caption: "Filterable grade breakdown by module" }
     ],
     highRes: [
-      { img: "/hr1.png", title: "Login Entry", caption: "Brand-aligned authentication state" },
-      { img: "/h3.png", title: "Dashboard", caption: "High-contrast priority module cards" },
-      { img: "/h4.png", title: "Assignment View", caption: "Interactive submission drawer & brief" },
-      { img: "/h6.png", title: "Grades Overview", caption: "Visual progress tracking indicators" }
+      { img: h1, title: "Login entry", caption: "Brand-aligned authentication state" },
+      { img: h3, title: "Dashboard", caption: "High-contrast priority module cards" },
+      { img: h4, title: "Assignment view", caption: "Submission drawer and brief" },
+      { img: h6, title: "Grades overview", caption: "Visual progress indicators" }
     ]
   },
   {
-    category: "Personal Workspace",
+    category: "Personal workspace",
     lowRes: [
-      { img: "/w7.png", title: "Campus Map", caption: "Interactive spatial selection" },
-      { img: "/w9.png", title: "Schedule View", caption: "Daily time-block mapping" },
-      { img: "/w12.png", title: "Location Detail", caption: "Building utilities & room status" }
+      { img: w7, title: "Campus map", caption: "Interactive spatial selection" },
+      { img: w9, title: "Schedule view", caption: "Daily time-block mapping" },
+      { img: w12, title: "Location detail", caption: "Building utilities and room status" }
     ],
     highRes: [
-      { img: "/h7.png", title: "Campus Map", caption: "Vector map integration with live occupancy" },
-      { img: "/h8.png", title: "Schedule View", caption: "Calendar sync & conflict detection" },
-      { img: "/h12.png", title: "Location Detail", caption: "Equipment booking integrations" }
+      { img: h7, title: "Campus map", caption: "Vector map with live occupancy" },
+      { img: h8, title: "Schedule view", caption: "Calendar sync and conflict detection" },
+      { img: h12, title: "Location detail", caption: "Equipment booking" }
     ]
   }
 ];
+
+type Flow = typeof wireframeFlows[number];
+const modes = [
+  { id: 'hifi', prefix: 'High-fidelity screen', pick: (f: Flow) => f.highRes },
+  { id: 'lofi', prefix: 'Low-fidelity wireframe', pick: (f: Flow) => f.lowRes }
+];
+
+const principles = [
+  { title: "Visual hierarchy", text: "Critical deadlines, course announcements and campus updates sit above the fold to keep cognitive load low.", color: "mint" },
+  { title: "Frictionless navigation", text: "A persistent tab bar and contextual back buttons mean students never lose their place.", color: "yellow" },
+  { title: "Component consistency", text: "Standard inputs, accordion filters and utility cards keep every screen aligned to the design system.", color: "lavender" }
+];
 ---
 
-<Layout title="STU Platform — Wireframes & UX Flow">
-  <main class="wireframe-page">
-    
-    <!-- Header & Sub Navigation -->
-    <header class="wf-header reveal-on-scroll">
-      <div class="header-top">
-        <a href="/work" class="back-link" aria-label="Back to Work">← Back to Work</a>
-        
-        <nav class="project-nav" aria-label="Project Sections">
-          <a href="/stylesheet" class="nav-tab">Style Guide</a>
-          <a href="/wireframe" class="nav-tab active">Wireframes & Site Map</a>
-          <a href="/research" class="nav-tab">Research</a>
-        </nav>
-      </div>
+<Layout title="STU: Information Architecture & Wireframes">
+  <ClientRouter />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-      <h1 class="page-title">Information Architecture & Wireframes</h1>
-      <p class="page-subtitle">
-        Bridging academic tools and campus infrastructure through structured mobile-first wireframing.
-      </p>
-    </header>
+  <div class="progress" aria-hidden="true"><div id="bar"></div></div>
 
-    <!-- Key UX Highlights -->
-    <section class="ux-summary-card reveal-on-scroll">
-      <h2 class="summary-title">Core UX Principles</h2>
-      <div class="highlights-grid">
-        <div class="highlight-item">
-          <h3>Visual Hierarchy</h3>
-          <p>Critical deadlines, course announcements, and campus updates placed above the fold to minimize cognitive load.</p>
-        </div>
-        <div class="highlight-item">
-          <h3>Frictionless Navigation</h3>
-          <p>Persistent global tab bars paired with contextual back buttons ensure users never lose their spatial orientation.</p>
-        </div>
-        <div class="highlight-item">
-          <h3>Component Consistency</h3>
-          <p>Standardized form inputs, accordion filters, and utility cards maintain strict design system alignment.</p>
-        </div>
-      </div>
-    </section>
+  <main class="wf" id="wf" data-view="hifi">
+    <div class="container">
 
-    <!-- Site Map Section -->
-    <section class="sitemap-section reveal-on-scroll">
-      <div class="section-heading">
-        <span class="section-tag">Information Architecture</span>
-        <h2>System Site Map</h2>
-        <p>A unified hub mapping direct paths from high-priority academic tasks to student services.</p>
-      </div>
-
-      <div class="sitemap-card">
-        <img src="/sitemap.png" alt="STU Platform Sitemap Architecture" class="sitemap-img" />
-      </div>
-    </section>
-
-    <!-- Wireframe Flow Section with Low-Fi / Hi-Fi Toggle -->
-    <section class="wireframes-section reveal-on-scroll">
-      <div class="section-heading-row">
-        <div>
-          <span class="section-tag">Interaction Design</span>
-          <h2>Screen Flows & Key States</h2>
+      <header class="wf-header reveal">
+        <div class="topbar">
+          <a href="/work" class="back">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Back to portfolio
+          </a>
+          <nav class="tabs-top" aria-label="Project pages">
+            <a href="/stylesheet">Design system</a>
+            <a href="/wireframe" aria-current="page">IA and wireframes</a>
+            <a href="/research">UX research</a>
+          </nav>
         </div>
 
-        <!-- Mode Toggle Switch -->
-        <div class="view-toggle" role="tablist">
-          <button class="toggle-btn active" id="btn-hifi" onclick="switchView('hifi')">High-Fidelity</button>
-          <button class="toggle-btn" id="btn-lofi" onclick="switchView('lofi')">Low-Fidelity Wireframes</button>
+        <div class="hero">
+          <p class="chips">
+            <span class="chip" style="--c: var(--lavender)">UX architecture v1.5</span>
+            <span class="chip" style="--c: var(--mint)">Mobile first</span>
+          </p>
+          <h1>Information architecture and wireframes</h1>
+          <p class="lead">
+            Structured, mobile-first wireframing that connects coursework tools with campus services. Clear component hierarchies and persistent navigation keep the mental model simple, and each low-fidelity concept was refined into a high-fidelity interaction flow.
+          </p>
         </div>
-      </div>
+      </header>
 
-      <!-- Flows Container -->
-      <div class="flows-list">
+      <section class="card principles reveal" aria-labelledby="principles-title">
+        <div class="card-header">
+          <div>
+            <h2 id="principles-title">Core UX principles</h2>
+            <p class="desc">Usability heuristics guiding the mobile interactions.</p>
+          </div>
+          <span class="chip" style="--c: var(--sage)">Heuristics</span>
+        </div>
+        <div class="grid3">
+          {principles.map((p) => (
+            <div class="principle" style={`--c: var(--${p.color})`}>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="sitemap reveal" aria-labelledby="sitemap-title">
+        <span class="chip" style="--c: var(--amber)">Information architecture</span>
+        <h2 class="section-title" id="sitemap-title">System site map</h2>
+        <p class="desc section-desc">One hub mapping direct paths from high-priority academic tasks to student services. Select the diagram to enlarge it.</p>
+        <div class="card sitemap-card">
+          <button type="button" class="zoom" aria-label="Enlarge site map diagram">
+            <Image src={sitemapImg} alt="STU site map: the home hub linking to coursework, schedule, campus map, grades and student services" class="sitemap-img" loading="lazy" />
+          </button>
+        </div>
+      </section>
+
+      <section class="flows reveal" aria-labelledby="flows-title">
+        <div class="heading-row">
+          <div>
+            <span class="chip" style="--c: var(--yellow)">Interaction design</span>
+            <h2 class="section-title" id="flows-title">Screen flows and key states</h2>
+          </div>
+          <div class="view-toggle" role="group" aria-label="Fidelity view">
+            <button type="button" class="toggle-btn" data-mode="hifi" aria-pressed="true">High-fidelity</button>
+            <button type="button" class="toggle-btn" data-mode="lofi" aria-pressed="false">Low-fidelity</button>
+          </div>
+        </div>
+        <p class="sr" role="status" id="viewStatus"></p>
+
         {wireframeFlows.map((flow) => (
           <div class="flow-group">
-            <h3 class="flow-category-title">{flow.category}</h3>
-
-            <!-- High-Res View (Default Active) -->
-            <div class="screens-grid view-hifi">
-              {flow.highRes.map((screen) => (
-                <div class="screen-card">
-                  <div class="phone-frame">
-                    <img src={screen.img} alt={screen.title} class="screen-img" loading="lazy" />
-                  </div>
-                  <div class="screen-meta">
-                    <span class="screen-title">{screen.title}</span>
-                    <p class="screen-caption">{screen.caption}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <!-- Low-Res View (Hidden by Default) -->
-            <div class="screens-grid view-lofi" style="display: none;">
-              {flow.lowRes.map((screen) => (
-                <div class="screen-card">
-                  <div class="phone-frame lofi-frame">
-                    <img src={screen.img} alt={screen.title} class="screen-img" loading="lazy" />
-                  </div>
-                  <div class="screen-meta">
-                    <span class="screen-title">{screen.title}</span>
-                    <p class="screen-caption">{screen.caption}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <h3 class="flow-title">{flow.category}</h3>
+            {modes.map((m) => (
+              <div class={`screens view-${m.id}`}>
+                {m.pick(flow).map((s) => (
+                  <figure class={`screen ${m.id}`}>
+                    <button type="button" class="zoom frame" aria-label={`Enlarge ${s.title.toLowerCase()}`}>
+                      <Image src={s.img} alt={`${m.prefix}: ${s.title}. ${s.caption}.`} class="screen-img" loading="lazy" />
+                    </button>
+                    <figcaption><strong>{s.title}</strong><span>{s.caption}</span></figcaption>
+                  </figure>
+                ))}
+              </div>
+            ))}
           </div>
         ))}
-      </div>
-    </section>
+      </section>
+    </div>
 
+    <button type="button" id="top" class="top" aria-label="Back to top">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+
+    <dialog id="lightbox" aria-label="Enlarged image">
+      <button type="button" id="closeLb" class="close">Close</button>
+      <img id="lbImg" alt="" />
+    </dialog>
   </main>
+  <Footer />
 </Layout>
 
 <script>
-  // Toggle between Hi-Fi and Low-Fi Wireframe views
-  function switchView(mode: 'hifi' | 'lofi') {
-    const hifiGrids = document.querySelectorAll('.view-hifi');
-    const lofiGrids = document.querySelectorAll('.view-lofi');
-    const btnHifi = document.getElementById('btn-hifi');
-    const btnLofi = document.getElementById('btn-lofi');
+  function init() {
+    const root = document.getElementById('wf');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+    root.classList.add('js');
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (mode === 'lofi') {
-      hifiGrids.forEach(el => (el as HTMLElement).style.display = 'none');
-      lofiGrids.forEach(el => (el as HTMLElement).style.display = 'grid');
-      btnHifi?.classList.remove('active');
-      btnLofi?.classList.add('active');
-    } else {
-      lofiGrids.forEach(el => (el as HTMLElement).style.display = 'none');
-      hifiGrids.forEach(el => (el as HTMLElement).style.display = 'grid');
-      btnLofi?.classList.remove('active');
-      btnHifi?.classList.add('active');
-    }
+    // Progress bar and back to top
+    const bar = document.getElementById('bar');
+    const top = document.getElementById('top');
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      if (bar) bar.style.width = `${max > 0 ? (scrollY / max) * 100 : 0}%`;
+      top?.classList.toggle('show', scrollY > 400);
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    top?.addEventListener('click', () => scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' }));
+
+    // Reveal on scroll
+    const reveal = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); reveal.unobserve(e.target); }
+    }), { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => reveal.observe(el));
+
+    // Fidelity toggle
+    const buttons = [...document.querySelectorAll<HTMLButtonElement>('.toggle-btn')];
+    const status = document.getElementById('viewStatus');
+    buttons.forEach((b) => b.addEventListener('click', () => {
+      const mode = b.dataset.mode!;
+      root.dataset.view = mode;
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      if (status) status.textContent = mode === 'hifi' ? 'Showing high-fidelity screens' : 'Showing low-fidelity wireframes';
+    }));
+
+    // Lightbox
+    const lb = document.getElementById('lightbox') as HTMLDialogElement | null;
+    const lbImg = document.getElementById('lbImg') as HTMLImageElement | null;
+    document.querySelectorAll<HTMLButtonElement>('.zoom').forEach((b) => b.addEventListener('click', () => {
+      const img = b.querySelector('img');
+      if (!lb || !lbImg || !img) return;
+      lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lb.showModal();
+    }));
+    document.getElementById('closeLb')?.addEventListener('click', () => lb?.close());
+    lb?.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
   }
-
-  // Scroll Reveal Observer
-  function initScrollReveal() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
-  }
-
-  document.addEventListener('DOMContentLoaded', initScrollReveal);
-  document.addEventListener('astro:page-load', initScrollReveal);
-  
-  // Expose function globally for inline click handlers
-  (window as any).switchView = switchView;
+  init();
+  document.addEventListener('astro:page-load', init);
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-  html {
-    scroll-behavior: smooth;
+  .wf {
+    --bg: #fbfaf4; --card: #fff; --ink: #1f2430; --muted: #5a6070; --border: #d3d6df;
+    --deep: #3f6b52; --shadow: 0 8px 28px rgba(31, 36, 48, .08);
+    --yellow: #f6e7b0; --sage: #b5d0bf; --mint: #d0e1d4; --amber: #efd3ac; --lavender: #d3c6ea;
+    --serif: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg); color: var(--ink); font: 16px/1.65 var(--sans); -webkit-font-smoothing: antialiased;
+    min-height: 100vh; padding: 32px 24px 120px;
   }
+  .container { max-width: 1240px; margin: 0 auto; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .wf a { color: inherit; }
+  .wf :focus-visible, .top:focus-visible { outline: 3px solid var(--deep); outline-offset: 3px; border-radius: 8px; }
+  .progress { position: fixed; inset: 0 0 auto 0; height: 4px; z-index: 50; pointer-events: none; }
+  #bar { height: 100%; width: 0; background: var(--deep); }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; text-wrap: balance; }
+  p { margin: 0; }
 
-  /* Base Typography reset */
-  .wireframe-page,
-  .wireframe-page p,
-  .wireframe-page span,
-  .wireframe-page button,
-  .wireframe-page a {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  .chip { display: inline-block; font: 500 12px/1 var(--mono); background: var(--c); color: var(--ink); padding: 7px 12px; border-radius: 999px; white-space: nowrap; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+
+  /* Header */
+  .wf-header { margin-bottom: 40px; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 20px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .back, .tabs-top a { font: 500 13px var(--mono); text-decoration: none; padding: 8px 14px; border-radius: 999px; transition: background .2s; }
+  .back { display: inline-flex; gap: 6px; align-items: center; padding-left: 0; }
+  .back:hover, .tabs-top a:hover { background: var(--mint); }
+  .tabs-top { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tabs-top a { border: 1px solid var(--border); }
+  .tabs-top a[aria-current] { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .hero { background: var(--card); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); padding: 48px; }
+  h1 { font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1.08; margin-bottom: 18px; }
+  .lead { font-size: 18px; line-height: 1.6; color: #2d3340; max-width: 66ch; }
+
+  /* Cards and principles */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); padding: 36px; }
+  .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .card-header h2 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 4px; }
+  .desc { font-size: 14px; color: var(--muted); }
+  .principles { margin-bottom: 64px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .principle { background: var(--bg); border: 1px solid var(--border); border-top: 6px solid var(--c); border-radius: 16px; padding: 22px; transition: transform .2s; }
+  .principle:hover { transform: translateY(-3px); }
+  .principle h3 { font-size: 1.2rem; margin-bottom: 8px; }
+  .principle p { font-size: 15px; color: #333a48; }
+
+  /* Sitemap */
+  .sitemap { margin-bottom: 72px; }
+  .section-title { font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.15; margin: 14px 0 8px; }
+  .section-desc { max-width: 64ch; margin-bottom: 20px; }
+  .sitemap-card { padding: 20px; }
+  .zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 12px; }
+  .sitemap-img { width: 100%; height: auto; display: block; border-radius: 12px; object-fit: contain; }
+
+  /* Flows */
+  .heading-row { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; margin-bottom: 36px; }
+  .heading-row .section-title { margin-bottom: 0; }
+  .view-toggle { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #efede4; border: 1px solid var(--border); }
+  .toggle-btn { min-height: 44px; padding: 10px 20px; font: 600 13px var(--mono); color: var(--ink); background: transparent; border: 0; border-radius: 999px; cursor: pointer; transition: background .2s; }
+  .toggle-btn:hover { background: var(--mint); }
+  .toggle-btn[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .flow-group { margin-bottom: 56px; }
+  .flow-title { font-size: 1.5rem; padding-bottom: 10px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .screens { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+  [data-view="hifi"] .view-lofi, [data-view="lofi"] .view-hifi { display: none; }
+  .screens:not([hidden]) { animation: fade .35s; }
+  @keyframes fade { from { opacity: 0; } }
+
+  .screen { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .frame { padding: 6px; background: var(--card); border: 1px solid var(--border); border-radius: 26px; box-shadow: 0 6px 18px rgba(31, 36, 48, .06); transition: transform .25s, box-shadow .25s, border-color .25s; }
+  .frame:hover { transform: translateY(-4px); border-color: var(--ink); box-shadow: var(--shadow); }
+  .lofi .frame { border: 1.5px dashed #8a90a0; background: #fdfcf8; }
+  .screen-img { width: 100%; height: auto; display: block; border-radius: 20px; object-fit: cover; }
+  figcaption { display: flex; flex-direction: column; gap: 2px; }
+  figcaption strong { font-size: 14px; }
+  figcaption span { font-size: 13px; line-height: 1.45; color: var(--muted); }
+
+  dialog { border: 0; border-radius: 16px; padding: 12px; max-width: min(1200px, 94vw); max-height: 94vh; background: var(--card); }
+  dialog::backdrop { background: rgba(31, 36, 48, .7); }
+  dialog img { max-width: 100%; max-height: 82vh; display: block; margin: 12px auto 0; }
+  .close { font: 600 13px var(--mono); padding: 10px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
+
+  .top { position: fixed; right: 24px; bottom: 24px; width: 46px; height: 46px; display: grid; place-items: center; background: var(--ink); color: #fff; border: 0; border-radius: 50%; box-shadow: var(--shadow); cursor: pointer; opacity: 0; visibility: hidden; z-index: 90; transition: opacity .2s, visibility .2s, transform .2s, background .2s; }
+  .top.show { opacity: 1; visibility: visible; }
+  .top:hover { background: var(--deep); transform: translateY(-2px); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .js .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .js .reveal.visible { opacity: 1; transform: none; }
   }
+  @media (prefers-reduced-motion: reduce) { .screens:not([hidden]) { animation: none; } }
 
-  .wireframe-page h1,
-  .wireframe-page h2 {
-    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+  @media (max-width: 900px) {
+    .hero { padding: 28px 22px; }
+    .card { padding: 24px; }
+    .grid3 { grid-template-columns: 1fr; }
+    .card-header { flex-direction: column; }
+    .screens { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   }
-
-  .wireframe-page {
-    background-color: #f8f7f4;
-    color: #1a1a1a;
-    min-height: 100vh;
-    padding: 40px 5% 120px;
-    max-width: 1280px;
-    margin: 0 auto;
-  }
-
-  /* --- Scroll Reveal --- */
-  .reveal-on-scroll {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .reveal-on-scroll.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* --- Header --- */
-  .wf-header {
-    margin-bottom: 60px;
-  }
-
-  .header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .back-link {
-    font-size: 14px;
-    font-weight: 500;
-    color: #666;
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .back-link:hover {
-    color: #000;
-  }
-
-  .project-nav {
-    display: flex;
-    background: #eae8e1;
-    padding: 4px;
-    border-radius: 100px;
-    gap: 4px;
-  }
-
-  .nav-tab {
-    padding: 6px 16px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #555;
-    text-decoration: none;
-    border-radius: 100px;
-    transition: all 0.2s ease;
-  }
-
-  .nav-tab.active,
-  .nav-tab:hover {
-    background: #ffffff;
-    color: #0c0c0c;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  }
-
-  .page-title {
-    font-size: clamp(2.2rem, 4.5vw, 3.6rem);
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    margin-bottom: 12px;
-  }
-
-  .page-subtitle {
-    font-size: 17px;
-    line-height: 1.5;
-    color: #555;
-    max-width: 680px;
-  }
-
-  /* --- UX Summary Card --- */
-  .ux-summary-card {
-    background: #ffffff;
-    border: 1px solid #e5e3dc;
-    border-radius: 20px;
-    padding: 36px;
-    margin-bottom: 80px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-  }
-
-  .summary-title {
-    font-size: 1.8rem;
-    margin-bottom: 24px;
-  }
-
-  .highlights-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 28px;
-  }
-
-  .highlight-item h3 {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #7500f3;
-  }
-
-  .highlight-item p {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #4a4a4a;
-  }
-
-  /* --- Sitemap Section --- */
-  .sitemap-section {
-    margin-bottom: 90px;
-  }
-
-  .section-heading {
-    margin-bottom: 28px;
-  }
-
-  .section-tag {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #7500f3;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  .section-heading h2 {
-    font-size: 2.2rem;
-    margin-bottom: 8px;
-  }
-
-  .section-heading p {
-    font-size: 15px;
-    color: #555;
-    max-width: 600px;
-  }
-
-  .sitemap-card {
-    background: #ffffff;
-    border: 1px solid #e5e3dc;
-    border-radius: 20px;
-    padding: 24px;
-    text-align: center;
-  }
-
-  .sitemap-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 12px;
-  }
-
-  /* --- Wireframe Toggle & Grid --- */
-  .section-heading-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .view-toggle {
-    display: flex;
-    background: #eae8e1;
-    padding: 4px;
-    border-radius: 100px;
-    gap: 4px;
-  }
-
-  .toggle-btn {
-    padding: 8px 20px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #666;
-    background: transparent;
-    border: none;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .toggle-btn.active {
-    background: #0c0c0c;
-    color: #ffffff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  }
-
-  .flow-group {
-    margin-bottom: 60px;
-  }
-
-  .flow-category-title {
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    margin-bottom: 24px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #e2ded4;
-  }
-
-  .screens-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 32px;
-  }
-
-  .screen-card {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .phone-frame {
-    background: #ffffff;
-    border: 1px solid #222;
-    border-radius: 28px;
-    padding: 8px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .lofi-frame {
-    border-style: dashed;
-    border-color: #888;
-    background: #fcfbf8;
-  }
-
-  .phone-frame:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
-  }
-
-  .screen-img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 20px;
-  }
-
-  .screen-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .screen-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #111;
-  }
-
-  .screen-caption {
-    font-size: 12px;
-    line-height: 1.4;
-    color: #666;
-  }
-
-  @media (max-width: 768px) {
-    .wireframe-page {
-      padding: 24px 16px 80px;
-    }
-
-    .screens-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    .header-top {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
+  @media (max-width: 500px) { .screens { grid-template-columns: 1fr; } }
 </style>
