@@ -1,0 +1,400 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { ClientRouter } from 'astro:transitions';
+
+const project = {
+  title: "Critter & Friends",
+  subtitle: "Design System & Visual Component Library",
+  category: "Web Design & Game Design",
+  year: "2026",
+  role: "Co-UI/UX Designer, Co-Frontend Developer & Researcher",
+  tools: ["Next.js", "HTML/CSS", "JavaScript", "After Effects", "Three.js", "Adobe Illustrator"],
+  liveUrl: "https://critterandfriends.netlify.app/"
+};
+---
+
+<Layout title="Critter & Friends — Design System">
+  <ClientRouter />
+
+  <main class="case-study-page">
+    
+    <!-- Navigation Bar -->
+    <div class="top-nav-row">
+      <a href="/work" class="back-link">← Back to Portfolio</a>
+      <nav class="project-tabs" aria-label="Project Sections">
+        <a href="/work/critter-and-friends" class="tab-link" transition:animate="slide">Overview</a>
+        <a href="/work/critter-and-friends/research" class="tab-link" transition:animate="slide">Research</a>
+        <a href="/work/critter-and-friends/design-system" class="tab-link active" transition:animate="slide">Design System</a>
+      </nav>
+    </div>
+
+    <!-- Header Section -->
+    <header class="case-study-header">
+      <span class="category-badge">{project.category}</span>
+      <h1 class="project-title">Design System</h1>
+      <p class="project-subtitle">Crafting approachable, child-centric UI components and playful character assets for primary school learners.</p>
+
+      <div class="meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">TYPOGRAPHY</span>
+          <span class="meta-value">High-Legibility Sans & Rounded Serif</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">COLOR SYSTEM</span>
+          <span class="meta-value">High-Contrast Accessible Palette</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">ASSET TYPE</span>
+          <span class="meta-value">Vector & Frame-by-Frame Animations</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Parallax Center-to-Exit Floating Gallery -->
+    <section class="design-system-section">
+      <div class="section-intro">
+        <h2 class="section-heading">Visual Asset Showcase</h2>
+        <p class="section-subheading">Scroll down to see design elements appear in the center and float away as you move past.</p>
+      </div>
+
+      <div class="floating-gallery">
+        
+        <!-- Card 1 -->
+        <div class="gallery-item float-slow">
+          <div class="img-frame">
+            <img src="/bog.png" alt="Character Expressions & States" />
+          </div>
+       
+        </div>
+
+        <!-- Card 2 -->
+        <div class="gallery-item float-fast">
+          <div class="img-frame">
+            <img src="/bog.card.png" alt="Child-Friendly Color Palette" />
+          </div>
+         
+        </div>
+
+        <!-- Card 3 -->
+        <div class="gallery-item float-medium">
+          <div class="img-frame">
+            <img src="/forest.png" alt="Micro-Interaction Button Components" />
+          </div>
+         
+        </div>
+
+        <!-- Card 4 -->
+        <div class="gallery-item float-slow">
+          <div class="img-frame">
+            <img src="/design-system/game-assets.png" alt="Hand-Drawn Illustration Assets" />
+          </div>
+          <div class="item-meta">
+            <span class="item-tag">04 / ILLUSTRATION</span>
+            <h3 class="item-title">Hand-Drawn World Elements</h3>
+            <p class="item-desc">Custom vector illustrations designed to reduce cognitive load during puzzles.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Spacer to allow scrolling past the last element -->
+    <div class="scroll-spacer"></div>
+
+  </main>
+</Layout>
+
+<script>
+  // Fallback for browsers without animation-timeline support
+  function initScrollAnimationFallback() {
+    if (CSS.supports('animation-timeline', 'view()')) return;
+
+    const items = document.querySelectorAll('.gallery-item');
+    
+    window.addEventListener('scroll', () => {
+      const windowHeight = window.innerHeight;
+      
+      items.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+        // Calculate position relative to center of viewport
+        const centerOffset = (rect.top + rect.height / 2) - (windowHeight / 2);
+        const progress = centerOffset / (windowHeight / 2); // -1 (top exit) to +1 (bottom entry)
+
+        if (progress > 1 || progress < -1) {
+          // Off screen (top or bottom)
+          (item as HTMLElement).style.opacity = '0';
+        } else {
+          // Calculate fade in / fade out based on proximity to center
+          const opacity = 1 - Math.abs(progress);
+          const translateY = progress * -60; // Moves upwards as progress goes negative
+          const scale = 0.95 + (1 - Math.abs(progress)) * 0.05;
+
+          (item as HTMLElement).style.opacity = `${Math.max(0, opacity)}`;
+          (item as HTMLElement).style.transform = `translateY(${translateY}px) scale(${scale})`;
+        }
+      });
+    }, { passive: true });
+  }
+
+  document.addEventListener('DOMContentLoaded', initScrollAnimationFallback);
+  document.addEventListener('astro:page-load', initScrollAnimationFallback);
+</script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap');
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .case-study-page {
+    background-color: #f8f7f4;
+    min-height: 100vh;
+    padding: 36px 24px 120px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #111111;
+  }
+
+  /* --- Navigation --- */
+  .top-nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto 40px auto;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e3dc;
+  }
+
+  .back-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #71717a;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: #7500f3;
+  }
+
+  .project-tabs {
+    display: flex;
+    gap: 8px;
+  }
+
+  .tab-link {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 100px;
+    background: #ffffff;
+    border: 1px solid #e5e3dc;
+    transition: all 0.2s ease;
+  }
+
+  .tab-link:hover {
+    border-color: #7500f3;
+    color: #7500f3;
+  }
+
+  .tab-link.active {
+    background: #111111;
+    color: #ffffff;
+    border-color: #111111;
+  }
+
+  /* --- Header --- */
+  .case-study-header {
+    max-width: 1000px;
+    margin: 0 auto 80px auto;
+  }
+
+  .category-badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #7500f3;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .project-title {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin: 0 0 12px 0;
+  }
+
+  .project-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    line-height: 1.5;
+    color: #555555;
+    margin: 0 0 32px 0;
+    max-width: 780px;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #dcdad4;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #888888;
+  }
+
+  .meta-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  /* --- Gallery Layout --- */
+  .design-system-section {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-intro {
+    margin-bottom: 60px;
+  }
+
+  .section-heading {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7500f3;
+    margin-bottom: 8px;
+  }
+
+  .section-subheading {
+    font-size: 1.1rem;
+    color: #555555;
+    margin: 0;
+  }
+
+  .floating-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 60px 40px;
+    align-items: start;
+  }
+
+  /* --- Individual Gallery Item & Scroll-Driven Animation --- */
+  .gallery-item {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid #e5e3dc;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.04);
+    opacity: 0; /* Hidden by default until scrolled into view */
+
+    /* Native CSS Scroll-Driven Timeline */
+    animation: scrollCenterAndExit linear both;
+    animation-timeline: view();
+    /* Triggers full cycle from bottom entry (0%) to top exit (100%) */
+    animation-range: entry 0% exit 100%;
+  }
+
+  .img-frame {
+    width: 100%;
+    background-color: #f1f0ec;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e2e0d8;
+  }
+
+  .img-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .item-meta {
+    padding: 16px 8px 8px 8px;
+  }
+
+  .item-tag {
+    font-size: 10px;
+    font-weight: 700;
+    color: #7500f3;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .item-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111111;
+    margin: 0 0 6px 0;
+  }
+
+  .item-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #666666;
+    margin: 0;
+  }
+
+  /* Staggered Vertical Placements */
+  .gallery-item.float-medium {
+    margin-top: 60px;
+  }
+
+  /* 
+    Keyframes for 3-stage lifecycle:
+    0% (Bottom outside screen) -> Invisible, shifted down
+    50% (Center of viewport)   -> Fully visible, scaled, full opacity
+    100% (Top outside screen)  -> Invisible, shifted up, faded out
+  */
+  @keyframes scrollCenterAndExit {
+    0% {
+      opacity: 0;
+      transform: translateY(80px) scale(0.92);
+    }
+    40%, 60% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-80px) scale(0.92);
+    }
+  }
+
+  .scroll-spacer {
+    height: 40vh;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .floating-gallery {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .gallery-item.float-medium {
+      margin-top: 0;
+    }
+  }
+</style>
