@@ -1,9 +1,9 @@
+
 ---
 import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
 import { Image } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
-
+ 
 // High-fidelity imports
 import h1 from '../../public/hr1.png';
 import h3 from '../../public/h3.png';
@@ -12,7 +12,7 @@ import h6 from '../../public/h6.png';
 import h7 from '../../public/h7.png';
 import h8 from '../../public/h8.png';
 import h12 from '../../public/h12.png';
-
+ 
 // Low-fidelity imports
 import w1 from '../../public/w1.png';
 import w3 from '../../public/w3.png';
@@ -21,9 +21,9 @@ import w6 from '../../public/w6.png';
 import w7 from '../../public/w7.png';
 import w9 from '../../public/w9.png';
 import w12 from '../../public/w12.png';
-
+ 
 import sitemapImg from '../../public/sitemap.png';
-
+ 
 const wireframeFlows = [
   {
     category: "Academic and coursework",
@@ -54,44 +54,45 @@ const wireframeFlows = [
     ]
   }
 ];
-
+ 
 type Flow = typeof wireframeFlows[number];
 const modes = [
   { id: 'hifi', prefix: 'High-fidelity screen', pick: (f: Flow) => f.highRes },
   { id: 'lofi', prefix: 'Low-fidelity wireframe', pick: (f: Flow) => f.lowRes }
 ];
-
+ 
 const principles = [
   { title: "Visual hierarchy", text: "Critical deadlines, course announcements and campus updates sit above the fold to keep cognitive load low.", color: "mint" },
   { title: "Frictionless navigation", text: "A persistent tab bar and contextual back buttons mean students never lose their place.", color: "yellow" },
   { title: "Component consistency", text: "Standard inputs, accordion filters and utility cards keep every screen aligned to the design system.", color: "lavender" }
 ];
 ---
-
+ 
 <Layout title="STU: Information Architecture & Wireframes">
   <ClientRouter />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
+ 
   <div class="progress" aria-hidden="true"><div id="bar"></div></div>
-
+ 
   <main class="wf" id="wf" data-view="hifi">
     <div class="container">
-
+ 
       <header class="wf-header reveal">
         <div class="topbar">
-          <a href="/work" class="back">
+          <a href="/stu" class="back">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Back to portfolio
+            Back to STU case study
           </a>
           <nav class="tabs-top" aria-label="Project pages">
+            <a href="/stu">Overview</a>
             <a href="/stylesheet">Design system</a>
             <a href="/wireframe" aria-current="page">IA and wireframes</a>
             <a href="/research">UX research</a>
           </nav>
         </div>
-
+ 
         <div class="hero">
           <p class="chips">
             <span class="chip" style="--c: var(--lavender)">UX architecture v1.5</span>
@@ -103,7 +104,7 @@ const principles = [
           </p>
         </div>
       </header>
-
+ 
       <section class="card principles reveal" aria-labelledby="principles-title">
         <div class="card-header">
           <div>
@@ -121,7 +122,7 @@ const principles = [
           ))}
         </div>
       </section>
-
+ 
       <section class="sitemap reveal" aria-labelledby="sitemap-title">
         <span class="chip" style="--c: var(--amber)">Information architecture</span>
         <h2 class="section-title" id="sitemap-title">System site map</h2>
@@ -132,7 +133,7 @@ const principles = [
           </button>
         </div>
       </section>
-
+ 
       <section class="flows reveal" aria-labelledby="flows-title">
         <div class="heading-row">
           <div>
@@ -145,7 +146,7 @@ const principles = [
           </div>
         </div>
         <p class="sr" role="status" id="viewStatus"></p>
-
+ 
         {wireframeFlows.map((flow) => (
           <div class="flow-group">
             <h3 class="flow-title">{flow.category}</h3>
@@ -164,12 +165,13 @@ const principles = [
           </div>
         ))}
       </section>
+      <p class="end"><a class="end-link" href="/stu">Back to the STU case study</a></p>
     </div>
-
+ 
     <button type="button" id="top" class="top" aria-label="Back to top">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
     </button>
-
+ 
     <dialog id="lightbox" aria-label="Enlarged image">
       <button type="button" id="closeLb" class="close">Close</button>
       <img id="lbImg" alt="" />
@@ -177,7 +179,7 @@ const principles = [
   </main>
 
 </Layout>
-
+ 
 <script>
   function init() {
     const root = document.getElementById('wf');
@@ -185,7 +187,7 @@ const principles = [
     root.dataset.ready = '1';
     root.classList.add('js');
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
+ 
     // Progress bar and back to top
     const bar = document.getElementById('bar');
     const top = document.getElementById('top');
@@ -197,13 +199,13 @@ const principles = [
     addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     top?.addEventListener('click', () => scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' }));
-
+ 
     // Reveal on scroll
     const reveal = new IntersectionObserver((es) => es.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add('visible'); reveal.unobserve(e.target); }
     }), { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach((el) => reveal.observe(el));
-
+ 
     // Fidelity toggle
     const buttons = [...document.querySelectorAll<HTMLButtonElement>('.toggle-btn')];
     const status = document.getElementById('viewStatus');
@@ -213,7 +215,7 @@ const principles = [
       buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
       if (status) status.textContent = mode === 'hifi' ? 'Showing high-fidelity screens' : 'Showing low-fidelity wireframes';
     }));
-
+ 
     // Lightbox
     const lb = document.getElementById('lightbox') as HTMLDialogElement | null;
     const lbImg = document.getElementById('lbImg') as HTMLImageElement | null;
@@ -228,7 +230,7 @@ const principles = [
   init();
   document.addEventListener('astro:page-load', init);
 </script>
-
+ 
 <style>
   .wf {
     --bg: #fbfaf4; --card: #fff; --ink: #1f2430; --muted: #5a6070; --border: #d3d6df;
@@ -248,10 +250,10 @@ const principles = [
   #bar { height: 100%; width: 0; background: var(--deep); }
   h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; text-wrap: balance; }
   p { margin: 0; }
-
+ 
   .chip { display: inline-block; font: 500 12px/1 var(--mono); background: var(--c); color: var(--ink); padding: 7px 12px; border-radius: 999px; white-space: nowrap; }
   .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-
+ 
   /* Header */
   .wf-header { margin-bottom: 40px; }
   .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 20px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
@@ -264,7 +266,7 @@ const principles = [
   .hero { background: var(--card); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); padding: 48px; }
   h1 { font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1.08; margin-bottom: 18px; }
   .lead { font-size: 18px; line-height: 1.6; color: #2d3340; max-width: 66ch; }
-
+ 
   /* Cards and principles */
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); padding: 36px; }
   .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
@@ -276,7 +278,7 @@ const principles = [
   .principle:hover { transform: translateY(-3px); }
   .principle h3 { font-size: 1.2rem; margin-bottom: 8px; }
   .principle p { font-size: 15px; color: #333a48; }
-
+ 
   /* Sitemap */
   .sitemap { margin-bottom: 72px; }
   .section-title { font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.15; margin: 14px 0 8px; }
@@ -284,7 +286,7 @@ const principles = [
   .sitemap-card { padding: 20px; }
   .zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 12px; }
   .sitemap-img { width: 100%; height: auto; display: block; border-radius: 12px; object-fit: contain; }
-
+ 
   /* Flows */
   .heading-row { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; margin-bottom: 36px; }
   .heading-row .section-title { margin-bottom: 0; }
@@ -298,7 +300,7 @@ const principles = [
   [data-view="hifi"] .view-lofi, [data-view="lofi"] .view-hifi { display: none; }
   .screens:not([hidden]) { animation: fade .35s; }
   @keyframes fade { from { opacity: 0; } }
-
+ 
   .screen { margin: 0; display: flex; flex-direction: column; gap: 12px; }
   .frame { padding: 6px; background: var(--card); border: 1px solid var(--border); border-radius: 26px; box-shadow: 0 6px 18px rgba(31, 36, 48, .06); transition: transform .25s, box-shadow .25s, border-color .25s; }
   .frame:hover { transform: translateY(-4px); border-color: var(--ink); box-shadow: var(--shadow); }
@@ -307,22 +309,25 @@ const principles = [
   figcaption { display: flex; flex-direction: column; gap: 2px; }
   figcaption strong { font-size: 14px; }
   figcaption span { font-size: 13px; line-height: 1.45; color: var(--muted); }
-
+ 
   dialog { border: 0; border-radius: 16px; padding: 12px; max-width: min(1200px, 94vw); max-height: 94vh; background: var(--card); }
   dialog::backdrop { background: rgba(31, 36, 48, .7); }
   dialog img { max-width: 100%; max-height: 82vh; display: block; margin: 12px auto 0; }
   .close { font: 600 13px var(--mono); padding: 10px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
-
+ 
+  .end { margin-top: 72px; text-align: center; }
+  .end-link { display: inline-block; font: 600 13px var(--mono); text-decoration: none; padding: 14px 24px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); transition: background .2s; }
+  .end-link:hover { background: var(--mint); }
   .top { position: fixed; right: 24px; bottom: 24px; width: 46px; height: 46px; display: grid; place-items: center; background: var(--ink); color: #fff; border: 0; border-radius: 50%; box-shadow: var(--shadow); cursor: pointer; opacity: 0; visibility: hidden; z-index: 90; transition: opacity .2s, visibility .2s, transform .2s, background .2s; }
   .top.show { opacity: 1; visibility: visible; }
   .top:hover { background: var(--deep); transform: translateY(-2px); }
-
+ 
   @media (prefers-reduced-motion: no-preference) {
     .js .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
     .js .reveal.visible { opacity: 1; transform: none; }
   }
   @media (prefers-reduced-motion: reduce) { .screens:not([hidden]) { animation: none; } }
-
+ 
   @media (max-width: 900px) {
     .hero { padding: 28px 22px; }
     .card { padding: 24px; }

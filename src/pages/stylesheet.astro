@@ -48,11 +48,12 @@ const components = [
 
       <header class="sg-header reveal">
         <div class="topbar">
-          <a href="/work" class="back">
+          <a href="/stu" class="back">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Back to portfolio
+            Back to STU case study
           </a>
           <nav class="tabs-top" aria-label="Project pages">
+            <a href="/stu">Overview</a>
             <a href="/stylesheet" aria-current="page">Design system</a>
             <a href="/wireframe">IA and wireframes</a>
             <a href="/research">UX research</a>
@@ -178,6 +179,7 @@ const components = [
           </div>
         </section>
       </div>
+      <p class="end"><a class="end-link" href="/stu">Back to the STU case study</a></p>
     </div>
 
     <button type="button" id="top" class="top" aria-label="Back to top">
@@ -354,6 +356,9 @@ const components = [
   dialog img { max-width: 100%; max-height: 82vh; display: block; margin: 12px auto 0; }
   .close { font: 600 13px var(--mono); padding: 10px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
 
+  .end { margin-top: 72px; text-align: center; }
+  .end-link { display: inline-block; font: 600 13px var(--mono); text-decoration: none; padding: 14px 24px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); transition: background .2s; }
+  .end-link:hover { background: var(--mint); }
   .top { position: fixed; right: 24px; bottom: 24px; width: 46px; height: 46px; display: grid; place-items: center; background: var(--ink); color: #fff; border: 0; border-radius: 50%; box-shadow: var(--shadow); cursor: pointer; opacity: 0; visibility: hidden; z-index: 90; transition: opacity .2s, visibility .2s, transform .2s, background .2s; }
   .top.show { opacity: 1; visibility: visible; }
   .top:hover { background: var(--deep); transform: translateY(-2px); }
