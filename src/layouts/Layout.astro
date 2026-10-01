@@ -77,6 +77,13 @@ const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
     scroll-behavior: auto !important;
   }
 
+  :global(:focus-visible) { outline: 3px solid #3730a3; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal { opacity: 1; transform: none; transition: none; }
+  .scroll-progress-bar, .scroll-top-btn, .cta-primary { transition: none; }
+}
+
   html.lenis, 
   html.lenis body {
     height: auto;

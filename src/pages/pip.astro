@@ -1,0 +1,467 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import flow from '../../public/pip_full_prototype_figma_view.png';
+import states from '../../public/pip_drag_animation_storyboard.png';
+import welcome from '../../public/pip-welcome.png';
+import mood from '../../public/pip-mood.png';
+import sleep from '../../public/pip-sleep.png';
+import doses from '../../public/pip-doses.png';
+import breathe from '../../public/pip-breathe.png';
+import week from '../../public/pip-week.png';
+
+// TODO: confirm these four lines are accurate for how you worked.
+const meta = [
+  ["Role", "UI designer, solo"],
+  ["Type", "Personal project, in progress"],
+  ["Scope", "Mobile app, six screens"],
+  ["Tools", "Figma, HTML, CSS, JavaScript"]
+];
+
+// What Pip says back when you tell it how your day was (index = mood step).
+const moods = [
+  ["Drained", "A heavy one. I'll keep your seat warm."],
+  ["Low", "Low is allowed. Thanks for telling me."],
+  ["Flat", "Neither here nor there."],
+  ["Steady", "Steady. A fine place to be."],
+  ["Light", "Something lifted today."],
+  ["Good", "A good day. I felt that too."],
+  ["Glowing", "Glowing! Let's remember this one."]
+];
+
+// A small Pip for each mood button, drawn at build time so it shows without JavaScript.
+const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const mix = (a, b, k) => '#' + hx(a).map((v, i) => Math.round(v + (hx(b)[i] - v) * k).toString(16).padStart(2, '0')).join('');
+const INK = '#0e2a2f';
+const col = (l) => (l < 0.5 ? mix('#8a7bd8', '#4fb9a1', l * 2) : mix('#4fb9a1', '#f0a92e', (l - 0.5) * 2));
+const miniPip = (i) => {
+  const l = i / 6, c = col(l), foot = mix(c, INK, 0.3);
+  const st = `stroke="${INK}" stroke-width="8" stroke-linecap="round" fill="none"`;
+  let f;
+  if (l > 0.78) {
+    f = `<path d="M62 120q13-15 26 0M112 120q13-15 26 0" ${st}/><path d="M80 146q20 24 40 0z" fill="${INK}"/>`;
+  } else {
+    const sad = l < 0.25, y = sad ? 122 : 116, r = sad ? 8 : 10;
+    f = `<ellipse cx="75" cy="${y}" rx="${r - 1}" ry="${r}" fill="${INK}"/><ellipse cx="125" cy="${y}" rx="${r - 1}" ry="${r}" fill="${INK}"/>`;
+    f += sad
+      ? `<path d="M62 110L88 102M138 110L112 102" ${st} stroke-width="6"/><path d="M82 152q18-14 36 0" ${st}/>`
+      : `<path d="M82 148q18 ${(l - 0.5) * 40} 36 0" ${st}/>`;
+  }
+  const cheek = (0.12 + 0.4 * l).toFixed(2);
+  return `<svg viewBox="0 0 200 230" aria-hidden="true" focusable="false"><g transform="translate(100 205) scale(${(1.1 - l * 0.1).toFixed(3)} ${(0.86 + l * 0.2).toFixed(3)}) translate(-100 -205)"><ellipse cx="68" cy="205" rx="20" ry="9" fill="${foot}"/><ellipse cx="132" cy="205" rx="20" ry="9" fill="${foot}"/><path d="M100 40C150 40 177 85 177 132C177 178 146 205 100 205C54 205 23 178 23 132C23 85 50 40 100 40Z" fill="${c}"/><ellipse cx="74" cy="84" rx="40" ry="26" fill="#fff" opacity=".28" transform="rotate(-18 74 84)"/><g transform="rotate(${(55 - l * 63).toFixed(1)} 100 46)"><path d="M100 46C100 32 101 22 105 12" stroke="#3f7a52" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M105 16C122 2 144 8 148 26C130 32 113 28 105 16Z" fill="#6fae7f"/></g><circle cx="58" cy="140" r="9" fill="#ff8fa3" opacity="${cheek}"/><circle cx="142" cy="140" r="9" fill="#ff8fa3" opacity="${cheek}"/>${f}</g></svg>`;
+};
+
+// A day with Pip. The times are illustrative.
+const day = [
+  { img: welcome, when: "First launch", title: "A first hello", text: "Pip introduces itself in three short slides, shows the one gesture the app is built on and promises the data stays on the device. The last button says what happens next: Start my first check-in.", alt: "Pip welcome screen with the character and a Next button" },
+  { img: sleep, when: "7:30 am", title: "How long did you sleep?", text: "Sleep is the one place a precise number matters, so it gets a big figure and thumb-sized buttons. Pip's eyes are closed, and its body fills out with more rest.", alt: "Pip sleep screen with a large hours figure and plus and minus buttons" },
+  { img: doses, when: "12:30 pm", title: "Doses, without the guilt", text: "Each dose taken makes Pip a little happier. A missed dose is a quieter Pip, never a red warning.", alt: "Pip doses screen with a checklist and a small Pip" },
+  { img: mood, when: "4:00 pm", title: "How is the day going?", text: "There is no slider. You move Pip. The body squashes and stretches, the leaf droops or lifts, and the colour warms from dusk to amber.", alt: "Pip mood screen with the character in a steady state and a Save button" },
+  { img: breathe, when: "9:00 pm", title: "Slow down together", text: "Breathing reuses Pip instead of inventing a new component. It grows on the in-breath and settles on the out-breath, with the cue in large type above.", alt: "Pip breathe screen with a larger Pip and the cue Breathe in" },
+  { img: week, when: "Sunday", title: "Look back on the week", text: "One plain sentence leads, then seven small Pips let you tap any day for the detail. The figures here are sample data.", alt: "Pip week screen with seven small characters and a day detail card" }
+];
+---
+
+<Layout title="Pip: a wellbeing companion — Case Study">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <main class="ps" id="ps">
+    <a class="skip" href="#story">Skip to the story</a>
+
+    <header class="wrap bar">
+      <a href="/" class="back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to portfolio
+      </a>
+      <a href="/pip-app" class="back">Live app</a>
+    </header>
+
+    <section class="wrap hero">
+      <h1 class="title">
+        <span class="word">Pip<svg class="perch" id="heroPip" viewBox="0 0 200 230" role="img" aria-label="Pip, a small round character with a leaf on its head">
+          <defs><radialGradient id="heroGrad" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop class="ga" offset=".4" stop-color="#4fb9a1"/><stop class="gb" offset="1" stop-color="#419a88"/></radialGradient></defs>
+          <g class="bob"><g class="bd">
+            <ellipse class="ft" cx="68" cy="205" rx="20" ry="9" fill="#3c8e7f"/><ellipse class="ft" cx="132" cy="205" rx="20" ry="9" fill="#3c8e7f"/>
+            <path class="body" d="M100 40C150 40 177 85 177 132C177 178 146 205 100 205C54 205 23 178 23 132C23 85 50 40 100 40Z" fill="url(#heroGrad)"/>
+            <g class="lf"><path d="M100 46C100 32 101 22 105 12" stroke="#3f7a52" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M105 16C122 2 144 8 148 26C130 32 113 28 105 16Z" fill="#6fae7f"/></g>
+            <g class="fc"><circle cx="58" cy="140" r="9" fill="#ff8fa3" opacity=".32"/><circle cx="142" cy="140" r="9" fill="#ff8fa3" opacity=".32"/><ellipse cx="75" cy="116" rx="7" ry="9" fill="#0e2a2f"/><ellipse cx="125" cy="116" rx="7" ry="9" fill="#0e2a2f"/><path d="M82 148h36" stroke="#0e2a2f" stroke-width="5" stroke-linecap="round" fill="none"/></g>
+          </g></g>
+        </svg></span><span class="sr">: a wellbeing companion</span>
+      </h1>
+      <p class="lead">A small wellbeing companion, six screens and one question: how was your day?</p>
+
+      <div class="try">
+        <p id="tryLabel" class="try-label">Tell Pip how your day is going.</p>
+        <div class="moods" role="group" aria-labelledby="tryLabel">
+          {moods.map(([w], i) => (
+            <button type="button" data-l={i} aria-pressed={i === 3 ? "true" : "false"}>
+              <span class="mp" set:html={miniPip(i)} />
+              <span class="mw">{w}</span>
+            </button>
+          ))}
+        </div>
+        <p class="say" id="say" aria-live="polite">{moods[3][1]}</p>
+      </div>
+
+      <a class="cta" href="/pip-app">Meet Pip in the live app</a>
+
+      <dl class="meta">
+        {meta.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+      </dl>
+    </section>
+
+    <div id="story">
+      <section class="wrap status" aria-labelledby="statusH">
+        <div class="status-box">
+          <h2 id="statusH">A personal project, still in progress.</h2>
+          <p>Pip is something I’m making on my own, and I’m still working on it. The six screens and the live app are built. Things like extra states and testing with real people aren’t done yet.</p>
+        </div>
+      </section>
+      <section class="wrap chapter">
+        <h2>Every wellbeing app asks how your day was.</h2>
+        <div class="prose">
+          <p>Most of them answer with a slider and a row of faces. It works, but it can feel like paperwork, and you only see the result after you save. I wanted to find out what would happen if the answer was a character you could move.</p>
+          <p>Three things stood out in the reference screens I studied:</p>
+        </div>
+        <div class="gripes">
+          <p style="--c: var(--lavender)">A slider makes the answer abstract.</p>
+          <p style="--c: var(--yellow)">Feedback arrives after the fact.</p>
+          <p style="--c: var(--coral)">Missed entries often turn into warnings.</p>
+        </div>
+      </section>
+
+      <section class="wrap chapter meet">
+        <div>
+          <h2>Pip is a small round character with a leaf on its head.</h2>
+          <div class="prose">
+            <p>The leaf lifts when the day goes well and droops when it doesn’t. The body stretches up on good days and settles down on heavy ones, and the colour warms from dusk through sea glass to amber.</p>
+            <p>The soft, character-led style started with references like Tiimo. The character, the metaphor and the system are my own.</p>
+          </div>
+        </div>
+        <ul class="swatches" aria-label="What Pip's colours mean">
+          <li><span style="background:#8a7bd8"></span>Dusk<small>low</small></li>
+          <li><span style="background:#4fb9a1"></span>Sea glass<small>steady</small></li>
+          <li><span style="background:#f0a92e"></span>Amber<small>high</small></li>
+        </ul>
+      </section>
+
+      <section class="wrap chapter">
+        <h2>Three decisions shaped everything else.</h2>
+        <div class="decisions">
+          <article>
+            <h3 style="--c: var(--mint)">The control is the feedback.</h3>
+            <p>You never choose a number and wait to be told what it means. Moving Pip changes its body, leaf, face and colour as you go, and screen readers and arrow keys get the same result.</p>
+          </article>
+          <article>
+            <h3 style="--c: var(--yellow)">Numbers only where they help.</h3>
+            <p>Mood is a feeling, so it has no figure. Sleep is a quantity, so it gets a large one. Each screen asks one question and has one obvious action.</p>
+          </article>
+          <article>
+            <h3 style="--c: var(--lavender)">Progress without pressure.</h3>
+            <p>Taking a dose makes Pip happier. Missing one never turns anything red. There are no streaks and no scores to lose.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="wrap chapter">
+        <h2>A day with Pip.</h2>
+        <div class="day">
+          <div class="phone" aria-hidden="true">
+            {day.map((d) => <Image class="shot" src={d.img} alt="" loading="eager" />)}
+          </div>
+          <div class="steps">
+            {day.map((d) => (
+              <article class="step">
+                <p class="when">{d.when}</p>
+                <h3>{d.title}</h3>
+                <p>{d.text}</p>
+                <Image class="mimg" src={d.img} alt={d.alt} loading="lazy" />
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="bench">
+        <div class="wrap">
+          <h2>How it was made.</h2>
+          <div class="acts">
+            <div><h3>Reference</h3><p>I studied wellbeing app screens for tone and layout, then chose a different metaphor so the result wouldn’t be a copy.</p></div>
+            <div><h3>Figma</h3><p>Colour variables for light and dark, text styles and one Pip component with seven mood variants, connected with Smart animate.</p></div>
+            <div><h3>Code</h3><p>Figma moves between steps, so I built the drag and the breathing in code to feel the real motion.</p></div>
+          </div>
+          <figure class="fig">
+            <button class="zoom" type="button" aria-label="Enlarge figure 1"><Image src={flow} alt="Figma canvas showing the Pip screens connected by prototype arrows" loading="lazy" /></button>
+            <figcaption>The connected frames in Figma, from welcome to week.</figcaption>
+          </figure>
+          <figure class="fig">
+            <button class="zoom" type="button" aria-label="Enlarge figure 2"><Image src={states} alt="Seven Pip frames from drained to glowing, with a handle rising on a track" loading="lazy" /></button>
+            <figcaption>The drag as a storyboard: the body stretches, the leaf lifts and the colour warms.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="wrap chapter">
+        <h2>What Pip hasn’t answered yet.</h2>
+        <div class="prose">
+          <!-- TODO: edit this in your own voice, or replace it with real results once you've tested. -->
+          <p>Pip is a concept and hasn’t been tested with people. If I kept going, I would start here:</p>
+          <p><strong>Test with five people.</strong> Does moving a character feel natural, or is a mascot too much for some adults?</p>
+          <p><strong>Design the missing states.</strong> Empty, missed-day and error screens, plus a first-time permission moment.</p>
+          <p><strong>Rethink doses.</strong> A quieter Pip is gentle, but a missed medication may need a clearer prompt.</p>
+        </div>
+      </section>
+
+      <section class="wrap finale">
+        <div class="finale-box">
+          <p class="big">How was your day?</p>
+          <a class="cta" href="/pip-app">Ask Pip in the live app</a>
+        </div>
+      </section>
+    </div>
+
+    <aside class="trail" id="trail" aria-hidden="true"></aside>
+
+    <dialog id="lightbox" aria-label="Enlarged figure">
+      <button type="button" id="closeLb" class="close">Close</button>
+      <img id="lbImg" alt="" />
+    </dialog>
+  </main>
+</Layout>
+
+<script is:inline>
+  function init() {
+    const root = document.getElementById('ps');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+    root.classList.add('js');
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const clamp = (v) => Math.min(1, Math.max(0, v));
+    const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+    const mix = (a, b, k) => '#' + hx(a).map((v, i) => Math.round(v + (hx(b)[i] - v) * k).toString(16).padStart(2, '0')).join('');
+    const INK = '#0e2a2f';
+    const col = (l) => (l < 0.5 ? mix('#8a7bd8', '#4fb9a1', l * 2) : mix('#4fb9a1', '#f0a92e', (l - 0.5) * 2));
+
+    const face = (l) => {
+      const st = `stroke="${INK}" stroke-width="5" stroke-linecap="round" fill="none"`;
+      let s = `<circle cx="58" cy="140" r="9" fill="#ff8fa3" opacity="${0.12 + 0.4 * l}"/><circle cx="142" cy="140" r="9" fill="#ff8fa3" opacity="${0.12 + 0.4 * l}"/>`;
+      if (l > 0.78) return s + `<path d="M62 120q13-15 26 0M112 120q13-15 26 0" ${st}/><path d="M80 146q20 24 40 0z" fill="${INK}"/>`;
+      const sad = l < 0.25, y = sad ? 122 : 116, r = sad ? 7 : 9;
+      s += `<ellipse cx="75" cy="${y}" rx="7" ry="${r}" fill="${INK}"/><ellipse cx="125" cy="${y}" rx="7" ry="${r}" fill="${INK}"/><circle cx="77" cy="${y - 4}" r="2.4" fill="#fff"/><circle cx="127" cy="${y - 4}" r="2.4" fill="#fff"/>`;
+      if (sad) return s + `<path d="M62 110L88 102M138 110L112 102" ${st} stroke-width="4"/><path d="M82 152q18-14 36 0" ${st}/>`;
+      return s + `<path d="M82 148q18 ${(l - 0.5) * 40} 36 0" ${st}/>`;
+    };
+    const setPip = (svg, l, snap) => {
+      const bd = svg.querySelector('.bd'), lf = svg.querySelector('.lf');
+      const t = snap && !still ? 'transform .55s cubic-bezier(.3,1.5,.5,1)' : 'none';
+      bd.style.transition = lf.style.transition = t;
+      bd.style.transform = `scale(${1.1 - l * 0.1},${0.86 + l * 0.2})`;
+      lf.style.transform = `rotate(${55 - l * 63}deg)`;
+      const c = col(l);
+      svg.querySelector('.ga').setAttribute('stop-color', c);
+      svg.querySelector('.gb').setAttribute('stop-color', mix(c, INK, 0.22));
+      svg.querySelectorAll('.ft').forEach((f) => f.setAttribute('fill', mix(c, INK, 0.3)));
+      const key = Math.round(l * 12);
+      if (svg.dataset.k !== String(key)) { svg.dataset.k = String(key); svg.querySelector('.fc').innerHTML = face(l); }
+    };
+
+    // Hero: tell Pip how your day is going
+    const hero = document.getElementById('heroPip');
+    const say = document.getElementById('say');
+    const btns = [...document.querySelectorAll('.moods button')];
+    const lines = ["A heavy one. I'll keep your seat warm.", "Low is allowed. Thanks for telling me.", "Neither here nor there.", "Steady. A fine place to be.", "Something lifted today.", "A good day. I felt that too.", "Glowing! Let's remember this one."];
+    setPip(hero, 0.5);
+    btns.forEach((b) => b.addEventListener('click', () => {
+      const i = Number(b.dataset.l);
+      btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      setPip(hero, i / 6, true);
+      say.textContent = lines[i];
+      if (!still) { hero.classList.remove('hop'); void hero.getBoundingClientRect(); hero.classList.add('hop'); }
+    }));
+
+    // Trail: a small Pip whose mood follows how far you have read
+    const trail = document.getElementById('trail');
+    let tp = null;
+    if (trail && innerWidth >= 1100) {
+      tp = hero.cloneNode(true);
+      tp.removeAttribute('id'); tp.removeAttribute('role'); tp.removeAttribute('aria-label');
+      tp.setAttribute('class', 'trailpip'); tp.dataset.k = '';
+      const g = tp.querySelector('radialGradient'); g.id = 'trailGrad';
+      tp.querySelector('.body').setAttribute('fill', 'url(#trailGrad)');
+      trail.append(tp);
+    }
+    const onScroll = () => {
+      if (!tp) return;
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const p = clamp(max > 0 ? scrollY / max : 0);
+      trail.style.setProperty('--p', p);
+      trail.classList.toggle('show', scrollY > 300);
+      setPip(tp, p);
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // A day with Pip: the phone follows the story
+    const steps = [...document.querySelectorAll('.step')];
+    const shots = [...document.querySelectorAll('.shot')];
+    const show = (i) => { steps.forEach((s, k) => s.classList.toggle('on', k === i)); shots.forEach((s, k) => s.classList.toggle('on', k === i)); };
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) show(steps.indexOf(e.target)); }), { rootMargin: '-45% 0px -45% 0px' });
+    steps.forEach((s) => io.observe(s));
+    show(0);
+
+    // Lightbox
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    document.querySelectorAll('.zoom').forEach((b) => b.addEventListener('click', () => {
+      const img = b.querySelector('img');
+      if (!lb || !lbImg || !img) return;
+      lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lb.showModal();
+    }));
+    document.getElementById('closeLb')?.addEventListener('click', () => lb.close());
+    lb?.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+  }
+  init();
+  document.addEventListener('astro:page-load', init);
+</script>
+
+<style is:global>
+  .ps {
+    --bg: #fbfaf4; --card: #fff; --ink: #1f2430; --muted: #5a6070; --border: #d3d6df; --deep: #3f6b52;
+    --yellow: #f6e7b0; --sage: #b5d0bf; --mint: #d0e1d4; --coral: #f0b7ab; --amber: #efd3ac; --lavender: #d3c6ea;
+    --serif: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'Inter', system-ui, -apple-system, sans-serif;
+    /* Nudge these two if Pip doesn't sit neatly on the corner of the title */
+    --perch-x: -0.04em; --perch-y: -0.25em;
+    background: var(--bg); color: var(--ink); font: 17px/1.7 var(--sans); -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: clip;
+  }
+  .ps *, .ps *::before, .ps *::after { box-sizing: border-box; }
+  .ps .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .ps a { color: inherit; }
+  .ps :focus-visible { outline: 3px solid var(--deep); outline-offset: 3px; border-radius: 6px; }
+  .ps h1, .ps h2, .ps h3 { font-family: var(--serif); font-weight: 500; margin: 0; text-wrap: balance; }
+  .ps .wrap { max-width: 1080px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+  .ps .skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: #fff; padding: 10px 18px; border-radius: 999px; font: 600 14px var(--sans); }
+  .ps .skip:focus { left: 16px; }
+
+  .ps .bar { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; padding-bottom: 8px; }
+  .ps .back { display: inline-flex; gap: 6px; align-items: center; font: 500 13px var(--mono); text-decoration: none; padding: 8px 0; }
+  .ps .back:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+  /* Hero */
+  .ps .hero { padding-top: clamp(72px, 12vw, 150px); padding-bottom: 120px; }
+  .ps .title { font: 700 clamp(7rem, 25vw, 19rem)/.82 var(--serif); letter-spacing: -0.045em; margin: 0; padding-bottom: .17em; }
+  .ps .word { position: relative; display: inline-block; }
+  .ps .perch { position: absolute; width: .5em; right: var(--perch-x); top: var(--perch-y); overflow: visible; }
+  .ps .perch .bd { transform-origin: 100px 205px; transform: scale(1.05, .96); }
+  .ps .perch .lf { transform-origin: 100px 46px; transform: rotate(23.5deg); }
+  .ps .bob { animation: pbob 3.4s ease-in-out infinite alternate; }
+  .ps .hop { animation: phop .45s cubic-bezier(.3, 1.6, .5, 1); }
+  @keyframes pbob { to { transform: translateY(-3px); } }
+  @keyframes phop { 40% { transform: translateY(-.08em); } }
+  .ps .lead { font: 500 clamp(1.3rem, 2.4vw, 1.8rem)/1.4 var(--serif); max-width: 30ch; margin: 28px 0 40px; }
+  .ps .try-label { font: 500 13px var(--mono); color: var(--muted); margin: 0 0 12px; }
+  .ps .moods { display: flex; flex-wrap: wrap; gap: 10px; }
+  .ps .moods button { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 88px; font: 500 14px var(--sans); padding: 12px 12px 10px; border-radius: 22px; border: 1.5px solid var(--border); background: var(--card); color: var(--ink); cursor: pointer; transition: background .2s, border-color .2s, box-shadow .2s, transform .15s; }
+  .ps .moods button:hover { border-color: var(--ink); }
+  .ps .moods button[aria-pressed="true"] { border-color: var(--ink); background: #fff; box-shadow: 0 0 0 1px var(--ink), 0 10px 20px -12px rgba(31, 36, 48, .5); }
+  .ps .moods button:active { transform: scale(.97); }
+  .ps .mp { display: block; width: 48px; transition: transform .3s cubic-bezier(.3, 1.6, .5, 1); }
+  .ps .mp svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .ps .moods button[aria-pressed="true"] .mp { transform: translateY(-4px); }
+  .ps .mw { font-weight: 600; }
+  @media (max-width: 520px) { .ps .moods { gap: 8px; } .ps .moods button { min-width: 72px; padding: 10px 8px 8px; } .ps .mp { width: 40px; } }
+  .ps .say { font: italic 500 1.25rem/1.4 var(--serif); margin: 16px 0 36px; min-height: 1.8em; }
+  .ps .cta { display: inline-flex; align-items: center; background: var(--ink); color: #fff !important; font-weight: 600; text-decoration: none; padding: 14px 28px; border-radius: 999px; transition: transform .2s, background .2s; }
+  .ps .cta:hover { background: var(--deep); transform: translateY(-2px); }
+  .ps .meta { display: flex; flex-wrap: wrap; gap: 12px 48px; margin: 64px 0 0; padding-top: 24px; border-top: 1px solid var(--border); }
+  .ps .meta dt { font: 500 12px var(--mono); color: var(--muted); }
+  .ps .meta dd { margin: 2px 0 0; font-weight: 600; }
+
+  /* Status note */
+  .ps .status { margin-bottom: 140px; }
+  .ps .status-box { background: var(--yellow); border-radius: 28px; padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; align-items: center; }
+  .ps .status h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.15; max-width: 16ch; }
+  .ps .status p { margin: 0; color: #333a48; max-width: 52ch; }
+  @media (max-width: 860px) { .ps .status-box { grid-template-columns: 1fr; gap: 16px; } .ps .status { margin-bottom: 96px; } }
+
+  /* Chapters */
+  .ps .chapter { margin-bottom: 160px; }
+  .ps .chapter h2, .ps .bench h2 { font-size: clamp(2rem, 4.4vw, 3.5rem); line-height: 1.1; max-width: 20ch; margin-bottom: 32px; }
+  .ps .prose { max-width: 58ch; color: #333a48; }
+  .ps .prose p { margin: 0 0 16px; }
+  .ps .prose strong { color: var(--ink); }
+  .ps .gripes { margin-top: 40px; display: grid; gap: 8px; justify-items: start; }
+  .ps .gripes p { margin: 0; font: 500 clamp(1.4rem, 2.8vw, 2.1rem)/1.3 var(--serif); background: linear-gradient(transparent 58%, var(--c) 58%); }
+  .ps .meet { display: grid; grid-template-columns: 1.4fr 1fr; gap: 64px; align-items: center; }
+  .ps .meet h2 { max-width: 16ch; }
+  .ps .swatches { list-style: none; margin: 0; padding: 0; display: flex; gap: 20px; justify-content: center; }
+  .ps .swatches li { display: flex; flex-direction: column; align-items: center; font-weight: 600; font-size: 14px; text-align: center; }
+  .ps .swatches span { width: 76px; height: 76px; border-radius: 50%; margin-bottom: 10px; }
+  .ps .swatches small { font: 500 12px var(--mono); color: var(--muted); }
+  .ps .decisions { display: grid; }
+  .ps .decisions article { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: start; padding: 40px 0; border-top: 1px solid var(--border); }
+  .ps .decisions article:last-child { border-bottom: 1px solid var(--border); }
+  .ps .decisions h3 { font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.2; justify-self: start; background: linear-gradient(transparent 60%, var(--c) 60%); }
+  .ps .decisions p { margin: 0; color: #333a48; max-width: 46ch; }
+
+  /* A day with Pip */
+  .ps .day { display: grid; grid-template-columns: minmax(240px, 320px) 1fr; gap: clamp(32px, 7vw, 110px); align-items: start; margin-top: 24px; }
+  .ps .phone { position: sticky; top: 10vh; aspect-ratio: 393 / 852; width: 100%; max-height: 80vh; border-radius: 38px; border: 7px solid var(--ink); background: #15353b; overflow: hidden; box-shadow: 0 30px 60px -28px rgba(31, 36, 48, .55); }
+  .ps .shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .45s; }
+  .ps .shot.on { opacity: 1; }
+  .ps .step { min-height: 72vh; display: flex; flex-direction: column; justify-content: center; max-width: 44ch; }
+  .ps.js .step { opacity: .3; transition: opacity .35s; }
+  .ps.js .step.on { opacity: 1; }
+  .ps .when { font: 500 13px var(--mono); color: var(--deep); margin: 0 0 8px; display: flex; align-items: center; gap: 10px; }
+  .ps .when::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--deep); }
+  .ps .step h3 { font-size: clamp(1.7rem, 3vw, 2.4rem); line-height: 1.15; margin-bottom: 14px; }
+  .ps .step p:not(.when) { margin: 0; color: #333a48; }
+  .ps .mimg { display: none; }
+
+  /* Behind the scenes */
+  .ps .bench { background: var(--deep); color: var(--bg); padding: 120px 0; margin-bottom: 160px; }
+  .ps .acts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-bottom: 72px; }
+  .ps .acts h3 { font-size: 1.6rem; margin-bottom: 10px; }
+  .ps .acts p { margin: 0; color: var(--mint); }
+  .ps .fig { margin: 0 0 56px; }
+  .ps .fig:last-child { margin-bottom: 0; }
+  .ps .zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 16px; overflow: hidden; }
+  .ps .fig img { width: 100%; height: auto; display: block; background: var(--mint); min-height: 160px; }
+  .ps .fig figcaption { margin-top: 12px; font-size: 14px; color: var(--sage); }
+  .ps dialog { border: 0; border-radius: 16px; padding: 12px; max-width: min(1200px, 94vw); max-height: 94vh; background: var(--card); }
+  .ps dialog::backdrop { background: rgba(31, 36, 48, .7); }
+  .ps dialog img { max-width: 100%; max-height: 82vh; display: block; margin: 12px auto 0; }
+  .ps .close { font: 600 13px var(--mono); padding: 10px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
+
+  /* Finale */
+  .ps .finale { padding-bottom: 120px; }
+  .ps .finale-box { background: var(--mint); border-radius: 32px; padding: clamp(40px, 8vw, 96px); }
+  .ps .big { font: 700 clamp(2.6rem, 8vw, 6rem)/1 var(--serif); letter-spacing: -.03em; margin: 0 0 32px; }
+
+  /* Reading trail */
+  .ps .trail { position: fixed; right: 22px; top: 18vh; height: 60vh; width: 44px; opacity: 0; pointer-events: none; transition: opacity .3s; }
+  .ps .trail.show { opacity: 1; }
+  .ps .trail::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .ps .trailpip { position: absolute; left: 0; width: 44px; top: calc((100% - 50px) * var(--p, 0)); overflow: visible; }
+  .ps .trailpip .bd { transform-origin: 100px 205px; }
+  .ps .trailpip .lf { transform-origin: 100px 46px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ps .bob, .ps .hop { animation: none; }
+    .ps * { transition: none !important; }
+  }
+  @media (max-width: 860px) {
+    .ps .meet, .ps .decisions article, .ps .acts { grid-template-columns: 1fr; gap: 24px; }
+    .ps .day { grid-template-columns: 1fr; }
+    .ps .phone { display: none; }
+    .ps .step { min-height: 0; padding-bottom: 72px; }
+    .ps.js .step { opacity: 1; }
+    .ps .mimg { display: block; width: min(260px, 70%); margin-top: 24px; border-radius: 28px; border: 6px solid var(--ink); }
+    .ps .chapter { margin-bottom: 96px; }
+    .ps .swatches { justify-content: flex-start; }
+    .ps .trail { display: none; }
+  }
+</style>

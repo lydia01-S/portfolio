@@ -7,46 +7,45 @@ import h3 from '../../public/h3.png';
 import h4 from '../../public/h4.png';
 import h7 from '../../public/h7.png';
 import h8 from '../../public/h8.png';
-
-// TODO: state how each figure was measured (pilot, usability test, or projected target).
+ 
+// Every figure below comes from the survey of 12 students. The full results are on the UX research page.
 const metrics = [
-  { value: 75, prefix: "-", suffix: "%", label: "Task completion time", detail: "Average timetable lookup fell from 48s to 12s.", color: "coral" },
-  { value: 38, prefix: "+", suffix: "%", label: "Daily active engagement", detail: "Measured across the 1,200-student pilot.", color: "mint" },
-  { value: 0, text: "AA", label: "WCAG 2.1 compliant", detail: "Screen-reader and keyboard audit passed.", color: "sage" }
+  { value: 75, prefix: "", suffix: "%", label: "Find navigation most frustrating", detail: "9 of 12 students named navigation and menu structure.", color: "coral" },
+  { value: 83, prefix: "", suffix: "%", label: "Would use a built-in planner", detail: "10 of 12 students said yes, definitely.", color: "mint" },
+  { value: 58, prefix: "", suffix: "%", label: "Rate deadline reminders 5 out of 5", detail: "7 of 12 students.", color: "sage" }
 ];
-// TODO: say what you personally did and who you worked with.
+// TODO: confirm each line is true for you: your role, who you worked with, how long it took, and what you built.
 const metadata = [
   { label: "Role", value: "Lead UX/UI designer" },
   { label: "Timeline", value: "5-week design sprint" },
-  { label: "Scope", value: "iOS, Android and web app" },
+  { label: "Scope", value: "Mobile and web prototype" },
   { label: "Tools", value: "Figma, Miro, Photoshop" }
 ];
-// TODO: say how the figures above were measured, e.g. "Measured in a usability test with 12 students, March 2026." Shown only when filled in.
-const metricsNote = "";
-
-// Each screen is tied to a problem the research surfaced, then to the decision it led to.
+const metricsNote = "Source: a survey of 12 college students about how they use Moodle. The sample is small, so read these as directional. See the UX research page for every question.";
+ 
+// Each screen is tied to a survey finding, then to the decision it led to.
 const screens = [
-  { img: h3, title: "Deadlines first", insight: "Deadline alerts were buried under admin announcements.", decision: "The dashboard opens on priority module cards, ranked by urgency.", alt: "STU dashboard with high-contrast priority module cards" },
-  { img: h8, title: "Timetable in one tap", insight: "Finding a daily schedule took seven steps.", decision: "The schedule view shows today as time blocks, with calendar sync and conflict detection.", alt: "STU schedule view with today's lectures as time blocks" },
-  { img: h4, title: "Submit without hunting", insight: "Separate logins slowed down submissions and group work.", decision: "Each assignment opens a submission drawer with the brief alongside.", alt: "STU assignment view with a submission drawer and the brief" },
-  { img: h7, title: "Find the room", insight: "Students checked three websites just to find their classroom.", decision: "A campus map with live occupancy links each lecture to its room.", alt: "STU campus map with live room occupancy" }
+  { img: h3, title: "Deadlines first", insight: "8 of 11 students ranked a deadlines overview among the most important features, and 7 of 12 rated reminders 5 out of 5.", decision: "The dashboard opens on priority module cards, ranked by urgency.", alt: "STU dashboard with high-contrast priority module cards" },
+  { img: h8, title: "Timetable in one tap", insight: "5 of 12 found timetable access confusing, and 7 of 11 want a clear timetable.", decision: "The schedule view shows today as time blocks, with calendar sync and conflict detection.", alt: "STU schedule view with today's lectures as time blocks" },
+  { img: h4, title: "Submit without hunting", insight: "Submitting work is the most common use of Moodle (11 of 12), and 6 of 11 want easy submission.", decision: "Each assignment opens a submission drawer with the brief alongside.", alt: "STU assignment view with a submission drawer and the brief" },
+  { img: h7, title: "Find the room", insight: "The survey didn't ask about this. It is a design idea I would test next, not a research-backed decision.", decision: "A campus map with live occupancy links each lecture to its room.", alt: "STU campus map with live room occupancy" }
 ];
 const heroShots = [screens[1], screens[0], screens[2]];
-
+ 
 const nav = [
   ["context", "Context"], ["problem", "Problem"], ["comparison", "Before and after"],
   ["goals", "Goals"], ["solution", "Solution"], ["interface", "Interface"], ["methodology", "Methodology"], ["reflections", "Reflections"]
 ];
 ---
-
+ 
 <Layout title="STU: Next-Gen Student Platform — Case Study">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
+ 
   <div class="progress" aria-hidden="true"><div id="bar"></div></div>
   <a class="skip" href="#content">Skip to case study</a>
-
+ 
   <main class="cs" id="cs">
     <header class="hero">
       <div class="inner">
@@ -61,7 +60,7 @@ const nav = [
             <a href="/research">UX research</a>
           </nav>
         </div>
-
+ 
         <div class="hero-grid">
           <div>
             <p class="chips">
@@ -69,7 +68,7 @@ const nav = [
               <span class="chip" style="--c: var(--mint)" id="readTime">3 min read</span>
             </p>
             <h1>STU: a next-gen student platform</h1>
-            <p class="lead">Turning fragmented university portals into one mobile-first hub, built to cut cognitive load, speed up daily schedule checks and keep students engaged on web and mobile.</p>
+            <p class="lead">Turning fragmented university portals into one mobile-first hub, designed to cut cognitive load and speed up daily schedule checks on web and mobile.</p>
             <a class="cta" target="_blank" rel="noopener noreferrer"
               href="https://www.figma.com/proto/p9CXzhnuRkpQyuiRsOBexZ/Untitled?node-id=6-49197&p=f&t=0HX25CITAiz2uw3P-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=6%3A49197&show-proto-sidebar=1">
               Launch interactive prototype
@@ -81,13 +80,13 @@ const nav = [
             {metadata.map((m) => (<div><dt>{m.label}</dt><dd>{m.value}</dd></div>))}
           </dl>
         </div>
-
+ 
         <div class="devices" role="group" aria-label="Key STU screens">
           {heroShots.map((s) => (
             <figure class="device"><Image class="device-img" src={s.img} alt={s.alt} loading="eager" /></figure>
           ))}
         </div>
-
+ 
         <div class="kpis">
           {metrics.map((m) => (
             <div class="kpi" style={`--c: var(--${m.color})`}>
@@ -100,7 +99,7 @@ const nav = [
         {metricsNote && <p class="note">{metricsNote}</p>}
       </div>
     </header>
-
+ 
     <div class="layout">
       <aside class="toc-wrap">
         <nav class="toc" aria-label="On this page">
@@ -108,44 +107,44 @@ const nav = [
           {nav.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
         </nav>
       </aside>
-
+ 
       <div class="content" id="content">
         <section id="context" class="reveal">
           <span class="chip" style="--c: var(--sage)">01 Context</span>
           <div class="cols">
             <h2>STU is a mobile-first portal for modernising campus life.</h2>
             <div class="prose">
-              <p>STU brings fragmented academic workflows into one mobile and web platform. By syncing coursework, schedules and peer communication, it gives students one daily hub.</p>
-              <p>Working with engineers, I restructured the architecture around real-time updates and cleaner user flows, so the app stays fast and consistent.</p>
+              <p>STU brings fragmented academic workflows into one mobile and web platform. By putting coursework, deadlines and the timetable in one place, it gives students a single daily hub.</p>
+              <p>This is a college project. I surveyed 12 students about how they use Moodle, compared it with Canvas and Notion, and used what I found to shape the structure of the app. <a href="/research">See the research</a>.</p>
             </div>
           </div>
         </section>
-
+ 
         <section id="problem" class="reveal">
           <span class="chip" style="--c: var(--coral)">02 Problem</span>
           <div class="cols">
-            <h2>Disjointed legacy tools were hurting students’ productivity.</h2>
+            <h2>Students found Moodle hard to navigate, and tracked deadlines in several places.</h2>
             <div class="prose">
-              <p>Students juggled several disconnected admin tools, which delayed submissions and group work:</p>
+              <p>A survey of 12 students showed where the friction is:</p>
               <ul class="bullets">
-                <li>Slow pages and complex navigation on legacy portals</li>
-                <li>Constant context-switching across 5+ platforms</li>
-                <li>Deadline alerts buried under admin announcements</li>
+                <li>Navigation and menu structure was the most frustrating part for 9 of 12</li>
+                <li>6 of 12 rated how easy it is to find what they need as 1 or 2 out of 5</li>
+                <li>Deadlines were tracked in Moodle (5), a phone calendar (5), a notes app (1) and a spreadsheet (1)</li>
               </ul>
               <blockquote>
-                <p>“I have to check three different websites every morning just to find out which classroom my lecture is in.”</p>
-                <cite>2nd-year Computer Science student, discovery sprint</cite>
+                <p>“Frustrating in the sense that it takes too many steps to get where I need to be. And I cannot find what I am looking for.”</p>
+                <cite>Survey respondent, open-ended answer</cite>
               </blockquote>
             </div>
           </div>
         </section>
-
+ 
         <figure class="shot reveal">
           <div class="shot-bar" style="--c: var(--yellow)"><span>Figure 1: Heuristic analysis</span><span class="hint">Click to enlarge</span></div>
           <button class="zoom" type="button" aria-label="Enlarge figure 1"><Image class="shot-img" src={img1} alt="Heuristic analysis of legacy university portals, with issues marked on screenshots" loading="lazy" /></button>
           <figcaption>Initial heuristic analysis of legacy university portals and campus workflows.</figcaption>
         </figure>
-
+ 
         <section id="comparison" class="reveal">
           <span class="chip" style="--c: var(--yellow)">03 Before and after</span>
           <div class="compare">
@@ -154,56 +153,56 @@ const nav = [
               <button role="tab" id="tab-after" aria-selected="false" aria-controls="panel-after" class="t-after" tabindex="-1">STU redesign</button>
             </div>
             <div role="tabpanel" id="panel-before" aria-labelledby="tab-before" class="panel bad">
-              <h3>Legacy university portal</h3>
+              <h3>Legacy portal (Moodle)</h3>
               <ul>
-                <li>Seven-step drill-down to find a daily schedule</li>
-                <li>Unresponsive layouts that don’t work on mobile</li>
-                <li>Separate logins for materials, grades and notices</li>
+                <li>9 of 12 students found navigation the most frustrating part</li>
+                <li>6 of 12 rated finding what they need as 1 or 2 out of 5</li>
+                <li>Deadlines tracked across Moodle, phone calendars and notes apps</li>
               </ul>
               <Image class="panel-img" src={img1} alt="Heuristic analysis of the legacy portals with usability issues marked" loading="lazy" />
             </div>
             <div role="tabpanel" id="panel-after" aria-labelledby="tab-after" class="panel good" hidden>
               <h3>STU redesign</h3>
               <ul>
-                <li>Timetable and deadlines visible in one tap</li>
-                <li>Mobile-first design system built to WCAG AA</li>
-                <li>One activity feed with real-time push updates</li>
+                <li>Timetable and deadlines together on one dashboard</li>
+                <li>Planner and reminders built in: 10 of 12 would use a planner</li>
+                <li>Designed for accessibility, with high-contrast colours and large touch targets</li>
               </ul>
               <Image class="panel-img" src={h3} alt="STU dashboard showing today's priorities in one feed" loading="lazy" />
             </div>
           </div>
         </section>
-
+ 
         <section id="goals" class="reveal">
           <span class="chip" style="--c: var(--mint)">04 Goals</span>
           <div class="cols">
             <h2>A friction-free portal that balances student engagement with institutional efficiency.</h2>
             <div class="prose">
-              <p>Objectives for the five-week sprint:</p>
+              <p>Objectives for the project:</p>
               <ul class="bullets">
-                <li><strong>Simplify daily navigation:</strong> cut time-to-task for timetables and submissions.</li>
-                <li><strong>Lower cognitive fatigue:</strong> merge alerts into one priority-ranked feed.</li>
-                <li><strong>Ensure accessibility:</strong> a WCAG 2.1 AA design system across mobile and web.</li>
+                <li><strong>Simplify daily navigation:</strong> cut the steps to timetables, deadlines and submissions.</li>
+                <li><strong>Lower cognitive effort:</strong> bring deadlines and the timetable into one priority-ranked view.</li>
+                <li><strong>Design for accessibility:</strong> aim for WCAG 2.1 AA across mobile and web.</li>
               </ul>
             </div>
           </div>
         </section>
-
+ 
         <section id="solution" class="reveal">
           <span class="chip" style="--c: var(--lavender)">05 Solution</span>
           <div class="cols">
             <h2>A streamlined hub built around the action a student needs next.</h2>
             <div class="prose">
-              <p>I replaced bloated admin menus with direct task paths that put urgent actions first.</p>
+              <p>I replaced deep menus with direct task paths that put deadlines first.</p>
               <ul class="bullets">
-                <li>Assignments, schedule and peer channels in one view</li>
-                <li>AA colour contrast and touch-friendly target sizes</li>
-                <li>Urgency filters that reduce helpdesk enquiries</li>
+                <li>Assignments, timetable and deadlines in one view</li>
+                <li>Deadlines first: 8 of 11 students ranked a deadlines overview among the most important features</li>
+                <li>High-contrast colours and touch-friendly target sizes</li>
               </ul>
             </div>
           </div>
         </section>
-
+ 
         <section id="interface" class="reveal">
           <span class="chip" style="--c: var(--sage)">06 Interface</span>
           <h2>Every screen answers one student question.</h2>
@@ -223,20 +222,21 @@ const nav = [
           </div>
           <p class="more"><a href="/wireframe">See every screen and wireframe</a><a href="/stylesheet">Explore the design system</a></p>
         </section>
-
+ 
         <figure class="shot reveal">
           <div class="shot-bar" style="--c: var(--mint)"><span>Figure 2: Information architecture</span><span class="hint">Click to enlarge</span></div>
           <button class="zoom" type="button" aria-label="Enlarge figure 2"><Image class="shot-img" src={img2} alt="Information architecture map beside mobile schedule feed prototypes" loading="lazy" /></button>
           <figcaption>Information architecture map and mobile schedule feed prototypes.</figcaption>
         </figure>
-
+ 
         <section id="methodology" class="reveal">
           <span class="chip" style="--c: var(--sage)">07 Methodology</span>
           <div class="cols">
-            <h2>Five weeks across research, wireframing and a scalable UI system.</h2>
+            <h2>From survey and research to wireframes and a scalable UI system.</h2>
             <div class="prose">
+              <!-- TODO: confirm Strategy, Architecture and System match what you did, including the 80-component count. -->
               <ul class="bullets">
-                <li><strong>Discovery:</strong> heuristic audits and user interviews (n=24). <a href="/research">See the research</a></li>
+                <li><strong>Discovery:</strong> a survey of 12 students, competitive research on Moodle, Canvas and Notion, and a heuristic analysis. <a href="/research">See the research</a></li>
                 <li><strong>Strategy:</strong> affinity maps, empathy maps and core pathways</li>
                 <li><strong>Architecture:</strong> card sorting, user flows and wireframes</li>
                 <li><strong>System:</strong> an 80-component Figma library and interactive prototype</li>
@@ -244,22 +244,22 @@ const nav = [
             </div>
           </div>
         </section>
-
+ 
         <section id="reflections" class="reveal">
           <span class="chip" style="--c: var(--amber)">08 Reflections</span>
           <div class="cards">
-            <article style="--c: var(--mint)"><h3>Domain understanding</h3><p>Designing for students means fitting campus rhythms. Immersing myself in their workflows moved me from translating requirements to designing a daily hub.</p></article>
-            <article style="--c: var(--yellow)"><h3>System prioritisation</h3><p>A focused 80-component library kept development fast and design tokens consistent, rather than a bloated kit.</p></article>
-            <article style="--c: var(--lavender)"><h3>Reducing cognitive strain</h3><p>Consolidating tools is cognitive psychology at work. Fewer entry points let students spend less time in software and more on coursework.</p></article>
+            <article style="--c: var(--mint)"><h3>Domain understanding</h3><p>Hearing students describe Moodle in their own words moved me from translating requirements to designing a daily hub.</p></article>
+            <article style="--c: var(--yellow)"><h3>System prioritisation</h3><p>A focused component library kept design tokens consistent, rather than a bloated kit.</p></article>
+            <article style="--c: var(--lavender)"><h3>Reducing cognitive strain</h3><p>Fewer entry points should let students spend less time in software and more on coursework. I haven’t tested that yet, and it is the first thing I would check.</p></article>
           </div>
         </section>
       </div>
     </div>
-
+ 
     <button id="top" class="top" type="button" aria-label="Back to top">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
     </button>
-
+ 
     <dialog id="lightbox" aria-label="Enlarged figure">
       <button type="button" id="closeLb" class="close">Close</button>
       <img id="lbImg" alt="" />
