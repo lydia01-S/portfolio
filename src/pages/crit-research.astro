@@ -1,73 +1,125 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import BackToTop from '/src/components/BackToTop.astro';
 
-// !! TEMPLATE !! Everything in [square brackets] is a stand-in. Replace it with what you really did.
-// Set an array to [] and that whole section disappears, so only keep sections you have real evidence for.
-// Only use numbers and quotes you can back up, and label anything illustrative.
-// For the other project, duplicate this file and change the data. No script is needed.
-
+// Built from the Critter & Friends project documentation. Sections with an empty array are hidden.
+// TODO: add what you personally did, and the number and findings from the family and friends testing.
 const page = {
-  title: "[Project name] UX research",
-  lead: "[One sentence: what you set out to learn, and why it mattered.]",
-  back: { href: "/work", label: "Back to portfolio" },
+  title: "Critter & Friends: UX research",
+  lead: "We wanted to know how to make native Irish insects feel like friends to primary school children, without turning learning into homework. We researched the science and the children, then tested the live site with educators.",
+  back: { href: "/work", label: "Back to selected work" },
   tabs: [
-    { href: "/[case-study]", label: "Overview" },
-    { href: "/research", label: "UX research", current: true },
-    { href: "/[design-system]", label: "Design system" }
+    { href: "/critterandfriends", label: "Overview" },
+    { href: "/critter-research", label: "UX research", current: true }
   ],
-  role: "[Your role, and who you worked with]"
+  role: "Co-created with Thea Rummel for an MSc in Interactive Digital Media at Griffith College. Thea drew the sitemap, palette, mascot and UI; the scenes, cards and research were shared."
 };
 
 const summary = {
-  question: "[The main question you asked]",
-  did: "[What you did, in one line: methods and numbers]",
-  findings: ["[Key finding 1]", "[Key finding 2]", "[Key finding 3]"],
-  changed: "[What you changed in the design because of this]"
+  question: "How can a web experience make native Irish insects feel like friends to primary school children, and keep learning playful?",
+  did: "A literature review, a competitor audit, a museum visit to photograph specimens with the curator of entomology, two personas, and usability feedback from primary school educators plus family and friends.",
+  findings: [
+    "Children are motivated by curiosity and choice, so the site has a calm collection loop with no timers or leaderboards.",
+    "Catching threatened insects sent the wrong message, so the story changed to delivering birthday party invitations to them.",
+    "Educator testing found real problems: the tutorial froze if you clicked Continue early, buzzing insects looked like glitches, and saved progress didn't match the screen after a restart."
+  ],
+  changed: "The story became hospitality instead of capture, back navigation moved to a standard top corner button, the Pokédex became a collapsible drawer, and testing produced a fix list for the tutorial, saved state and mobile."
 };
 
 const goals = [
-  { question: "[A research question]", informs: "[The design decision it would inform]" }
+  { question: "How do people see insects, and how could a website change that?", informs: "The tone: friends, not specimens, with personified characters." },
+  { question: "Which native species and habitats should the site show, and why?", informs: "The species roster and the habitats they live in." },
+  { question: "What motivates children in digital learning, and what do different ages need?", informs: "The mechanics, and the interface rules: large targets, short text, no nested menus." },
+  { question: "What do existing tools get wrong?", informs: "The position: accurate local science, with play." },
+  { question: "Does the live site work for real users?", informs: "Fixes to the tutorial, navigation, saved state and mobile." }
 ];
 
 const methods = [
-  { method: "[e.g. Usability test]", who: "[Who took part]", n: "[How many]", when: "[When]", why: "[Why you chose it]" }
+  { method: "Literature review", who: "National Biodiversity Data Centre, NPWS Red Lists, the All-Ireland Pollinator Plan, and research on children, gamification and play", n: "Published sources", when: "During the project", why: "To ground the species, habitats and mechanics in evidence." },
+  { method: "Competitor audit and similar work", who: "Scientific databases, educational games, field-guide apps and WebGL nature experiences", n: "4 types of tool", when: "During the project", why: "To find the gap Critter & Friends could fill." },
+  { method: "Museum consultation", who: "Dr Aidan O'Hanlon, Curator of Entomology, National Museum of Ireland (Natural History)", n: "1 curator, 1 visit", when: "2026", why: "To photograph real specimens and check which species matter." },
+  { method: "Educator testing", who: "Primary school educators at the International School Westpfalz, Germany", n: "Educators at one school", when: "2026", why: "To see how the live site works for people who know how children use screens." },
+  // TODO: add the number of people and what they found, then add their findings to the testing section below.
+  { method: "Family and friends testing", who: "Family and friends", n: "Add number", when: "2026", why: "Quick, informal feedback on the live site." }
 ];
-const methodNote = "[Limits: small sample, proxies for real users, consent and ethics approach.]";
+const methodNote = "Limits: we haven't tested with children yet. Educator feedback came as written messages from a small group, and family and friends feedback was informal.";
 
-// Pattern: evidence, then insight, then implication. Add a real artefact (affinity map, journey map, audit) below.
+const personas = [
+  { name: "Ciara, 8", role: "Primary learner", bg: "Enjoys tablet games, visual storytelling and collecting digital rewards.", pain: "Gets bored by text-heavy educational sites and frustrated by multi-level menus or slow feedback.", need: "Big targets, hand-drawn visuals, narration and an encouraging collection loop." },
+  { name: "Liam, 27", role: "Design enthusiast and educator", bg: "A primary school teacher and creative front-end developer interested in environmental education.", pain: "Tired of outdated e-learning sites with stock photos and flat layouts.", need: "Polished 3D interaction, bespoke illustration and scientifically accurate content." }
+];
+const personaNote = "The personas are working models drawn from the research above.";
+
+const competitors = [
+  { name: "Scientific databases", how: "Accurate records of species, such as the National Biodiversity Data Centre portal.", gap: "The text-heavy layout and formal tone are too dry to keep children engaged.", differs: "Real Irish data, turned into character profiles and trading cards.", refs: [{ label: "Biodiversity Ireland", href: "https://biodiversityireland.ie/" }] },
+  { name: "Educational games", how: "Cartoon animals from around the world, with timers and high-score leaderboards.", gap: "They reward quick points over understanding local nature.", differs: "A calm collection loop with no timers or scores, using local species.", refs: [] },
+  { name: "Field-guide apps", how: "Species lists with photographs and dense text, such as the Natural History Museum's identification tools.", gap: "Static photos and long text feel dry to younger audiences.", differs: "Each species is an illustrated character in a scene you explore.", refs: [{ label: "Natural History Museum", href: "https://www.nhm.ac.uk/discover.html" }] },
+  { name: "Gamified and 3D nature experiences", how: "Playful apps like Toca Life, and WebGL nature experiences with beautiful 3D.", gap: "Often generic or imaginary bugs with no ecological context, and rarely local or child-friendly.", differs: "Accurate Irish ecology in custom 3D habitats, with personality-driven characters.", refs: [] }
+];
+const competitorNote = "Drawn from the literature review and similar-work research in the project documentation.";
+
 const findings = [
-  { evidence: "[A quote, observation or count]", insight: "[What it tells you]", implication: "[What it means for the design]" }
+  { evidence: "Our early plan was about collecting threatened species. Research on children and nature suggested that hunting or capturing endangered insects can teach ownership instead of respect.", insight: "The mechanic contradicted the message.", implication: "We rebuilt the story: the player delivers birthday party invitations to insect neighbours. Conservation actions became rewards inside the card bios and the finale." },
+  { evidence: "Self-determination theory says motivation grows with autonomy, competence and relatedness. Points and leaderboards tend to produce short-term compliance.", insight: "Exploring, collecting and caring about characters suits children better than scores.", implication: "A self-guided exploration loop, trading cards and a progress counter, with no timers or leaderboards." },
+  { evidence: "Guidance on children aged 3 to 12 says younger children rely on simple touch gestures and spatial metaphors, and that nested menus disorient them.", insight: "Different ages need different levels of interaction.", implication: "Full-screen spatial scenes, large targets, a 14pt minimum text size, scannable chunks, no scrolling or multi-level menus, and optional narration." },
+  { evidence: "Talking to the curator and photographing specimens pushed us towards ecologically important natives. The Hairy Wood Ant was added because of its vulnerable status in declining woodland.", insight: "Primary research changed the species list, not just the look.", implication: "The plan shrank from ten generic bugs to nine native Irish species, drawn with recognisable anatomy and softened features." }
 ];
 const artefacts = [
-  { src: "", alt: "[Describe the image]", caption: "[Affinity map, journey map, heuristic audit or card sort]" }
+  { src: "/critter/critter-specimens.jpg", alt: "The authors photographing preserved insect specimens at the museum, with two specimen photographs: a grasshopper and a diving beetle", caption: "Photographing specimens at the National Museum of Ireland." },
+  { src: "/critter/critter-concept-beetle.png", alt: "A line drawing of a diving beetle, an early character concept", caption: "An early concept sketch of the Great Diving Beetle." }
 ];
 
-// The bridge from research to interface. This is the key section for a UI role.
 const decisions = [
-  { finding: "[Finding]", decision: "[Design decision it led to]", img: "", alt: "[Describe the screen]" }
+  { finding: "Hunting threatened insects risked teaching ownership, not respect.", decision: "A birthday party story. You deliver invitations to insect neighbours, and the party scene is the finale.", img: "/critter/critter-party.jpg", alt: "The birthday party finale: the entomologist and insect guests around a table with a Happy Birthday banner" },
+  { finding: "Children need calm, immediate feedback, and no competitive pressure.", decision: "A trading card collection in a collapsible Pokédex drawer, and a progress counter in the corner.", img: "/critter/critter-cards-menu.png", alt: "The trading card drawer showing three unlocked insect cards" },
+  { finding: "Nested menus disorient young users, and targets must be large.", decision: "Full-screen scenes with edge-anchored controls: back at top left, information and audio at top right, the counter at bottom right.", img: "/critter/critter-woodland.jpg", alt: "The hand-drawn woodland scene with the back button, information button and a progress counter" },
+  { finding: "Real specimens showed what makes each insect recognisable.", decision: "Insects keep realistic anatomy, and every card pairs real facts with a character.", img: "/critter/critter-cards.png", alt: "All nine insect trading cards in a row" }
 ];
 
+const flowTitle = "From sitemap, to first concept, to finished scene.";
 const flow = [
-  { stage: "User flow or sitemap", note: "[What it showed]", img: "", alt: "" },
-  { stage: "Low-fidelity wireframe", note: "[What you changed next]", img: "", alt: "" },
-  { stage: "High-fidelity screen", note: "[Final result]", img: "", alt: "" }
+  { stage: "Sitemap", note: "A linear main route (Home, Marsh, Garden, House, Finale) with smaller scenes inside each, and a shared Information hub.", img: "/critter/critter-sitemap.png", alt: "Sitemap: Home, Marsh, Garden, House and Finale in a column, with Pond, Anthill, River, Bush, Sink and Fruitbowl branching off and an Information hub leading to About and Scientific Background" },
+  { stage: "First colour concept", note: "An early draft of the colours and style, before the palette was simplified.", img: "/critter/critter-concept-colour.jpg", alt: "An early colour concept of a cottage garden with a pond" },
+  { stage: "Finished scene", note: "The woodland scene as it ships, with hand-drawn shapes and a consistent line.", img: "/critter/critter-woodland.jpg", alt: "The finished woodland scene" }
 ];
 
+// "Next fix" means the fix is still to do. Change it to what you changed once you've done it.
 const testing = [
-  { tested: "[What you tested]", problem: "[What went wrong]", change: "[What you changed]" }
+  { tested: "The tutorial, with educators.", problem: "Clicking Continue before clicking the ladybug froze the tutorial: “If I clicked ‘continue’ before clicking on the ladybug, it’s frozen and I had to restart.”", change: "Make the tutorial work in any click order, and add a back button to dialogue boxes." },
+  { tested: "The micro-animations on clickable insects.", problem: "“Not sure if the lady bug is supposed to be ‘buzzing’ on this screen or it’s a glitch.” Motion meant to feel lively read as an error.", change: "Tune the animation so it signals clickable without looking broken." },
+  { tested: "Saved progress after a restart.", problem: "The ladybug no longer appeared because the page relied on the cache, and the progress boxes didn't show checkmarks for insects already collected.", change: "Add a reset, and draw the counter from the saved state." },
+  { tested: "Mobile and next-step guidance.", problem: "“I can’t click on anything else, so I wasn’t sure if I’m supposed to do next.” Clicks didn't respond on mobile viewports.", change: "Tighten click targets on mobile and add clearer next-step prompts after the tutorial." },
+  { tested: "An early back-button idea: dragging the cursor to the bottom of the screen.", problem: "It caused accidental exits, especially when younger users clicked low targets.", change: "Done: a standard back button in the top corner, with custom vector styling." },
+  { tested: "The hand-drawn style, with educators.", problem: "No problem. “The illustrations are super cute though. I love it.”", change: "Keep the single-brush illustration style across new scenes." }
 ];
 
 const a11y = [
-  { check: "[e.g. Text contrast]", method: "[e.g. axe, Lighthouse or manual]", result: "[What you found or fixed]" }
+  { check: "Narration", method: "Design review", result: "A text-to-speech toggle and paragraph-by-paragraph text reveals are built in." },
+  { check: "Text size and layout", method: "Design rules", result: "A 14pt minimum, short chunks of text, large targets, and no scrolling or nested menus." },
+  { check: "Keyboard navigation", method: "Reflection after testing", result: "Not in the first build. It is the first accessibility fix." },
+  { check: "Visible focus indicators", method: "Reflection after testing", result: "Missing on buttons and controls, so they need adding." },
+  { check: "Support for visually impaired users", method: "Reflection after testing", result: "Not fully accessible yet. Audio cues on hover, using real insect sounds, are planned." }
 ];
 
-const limits = ["[What the research couldn't tell you]"];
-const next = ["[What you would test next]"];
+const limits = [
+  "We haven't tested with children. Educators are a stand-in, and they gave feedback by message.",
+  "The testing sample was small and mostly from one school, plus informal family and friends feedback.",
+  "We didn't run a structured interview with the entomologist about how to talk to children about conservation.",
+  "Keyboard control and focus indicators weren't in the first build, so it isn't fully accessible."
+];
+const next = [
+  "Run structured usability testing with primary school children in a classroom.",
+  "Fix the tutorial freeze, add a back button in dialogue, and add a reset for saved progress.",
+  "Add keyboard controls, focus indicators and audio cues on hover.",
+  "Add a short quiz after each biome, and real insect sounds when you click a creature."
+];
 
 const sections = [
   { id: "summary", label: "Summary", show: true },
   { id: "goals", label: "Goals", show: goals.length > 0 },
   { id: "methods", label: "Methods", show: methods.length > 0 },
+  { id: "personas", label: "Personas", show: personas.length > 0 },
+  { id: "competitors", label: "Competitor audit", show: competitors.length > 0 },
   { id: "findings", label: "Findings", show: findings.length > 0 },
   { id: "decisions", label: "Decisions", show: decisions.length > 0 },
   { id: "flow", label: "Structure to interface", show: flow.length > 0 },
@@ -116,8 +168,8 @@ const sections = [
           <span class="chip" style="--c: var(--sage)">Summary</span>
           <dl class="summary">
             <div><dt>The question</dt><dd>{summary.question}</dd></div>
-            <div><dt>What I did</dt><dd>{summary.did}</dd></div>
-            <div><dt>What I found</dt><dd><ul class="bullets">{summary.findings.map((f) => <li>{f}</li>)}</ul></dd></div>
+            <div><dt>What we did</dt><dd>{summary.did}</dd></div>
+            <div><dt>What we found</dt><dd><ul class="bullets">{summary.findings.map((f) => <li>{f}</li>)}</ul></dd></div>
             <div><dt>What changed</dt><dd>{summary.changed}</dd></div>
           </dl>
         </section>
@@ -125,7 +177,7 @@ const sections = [
         {goals.length > 0 && (
           <section id="goals">
             <span class="chip" style="--c: var(--mint)">Goals</span>
-            <h2>What I needed to find out, and what each answer would decide.</h2>
+            <h2>What we needed to find out, and what each answer would decide.</h2>
             <ul class="rows">
               {goals.map((g) => <li><p class="q">{g.question}</p><p class="informs"><strong>Informs:</strong> {g.informs}</p></li>)}
             </ul>
@@ -135,7 +187,7 @@ const sections = [
         {methods.length > 0 && (
           <section id="methods">
             <span class="chip" style="--c: var(--lavender)">Methods</span>
-            <h2>How I gathered evidence, and from whom.</h2>
+            <h2>How we gathered evidence, and from whom.</h2>
             <div class="scroll" role="region" aria-label="Research methods table" tabindex="0">
               <table>
                 <caption class="sr">Research methods</caption>
@@ -147,10 +199,47 @@ const sections = [
           </section>
         )}
 
+        {personas.length > 0 && (
+          <section id="personas">
+            <span class="chip" style="--c: var(--amber)">Personas</span>
+            <h2>Two people we designed for.</h2>
+            <div class="cards">
+              {personas.map((p) => (
+                <article>
+                  <h3>{p.name}</h3><p class="role2">{p.role}</p>
+                  <p class="label">Background</p><p>{p.bg}</p>
+                  <p class="label">Pain points</p><p>{p.pain}</p>
+                  <p class="label">Needs</p><p>{p.need}</p>
+                </article>
+              ))}
+            </div>
+            {personaNote && <p class="note">{personaNote}</p>}
+          </section>
+        )}
+
+        {competitors.length > 0 && (
+          <section id="competitors">
+            <span class="chip" style="--c: var(--lavender)">Competitor audit</span>
+            <h2>Two extremes, and the gap between them.</h2>
+            <div class="cards comp">
+              {competitors.map((c) => (
+                <article>
+                  <h3>{c.name}</h3>
+                  <p class="label">How it works</p><p>{c.how}</p>
+                  <p class="label">Where it falls short</p><p>{c.gap}</p>
+                  <p class="label">How Critter &amp; Friends differs</p><p>{c.differs}</p>
+                  {c.refs.length > 0 && <p class="refs">{c.refs.map((r) => <a href={r.href} target="_blank" rel="noopener noreferrer">{r.label}<span class="sr"> (opens in a new tab)</span></a>)}</p>}
+                </article>
+              ))}
+            </div>
+            {competitorNote && <p class="note">{competitorNote}</p>}
+          </section>
+        )}
+
         {findings.length > 0 && (
           <section id="findings">
             <span class="chip" style="--c: var(--coral)">Findings</span>
-            <h2>What the evidence showed.</h2>
+            <h2>What the research showed.</h2>
             <div class="cards">
               {findings.map((f) => (
                 <article>
@@ -191,7 +280,7 @@ const sections = [
         {flow.length > 0 && (
           <section id="flow">
             <span class="chip" style="--c: var(--sage)">Structure to interface</span>
-            <h2>From flow, to wireframe, to finished screen.</h2>
+            <h2>{flowTitle}</h2>
             <ol class="flow">
               {flow.map((f) => (
                 <li>
@@ -206,13 +295,13 @@ const sections = [
         {testing.length > 0 && (
           <section id="testing">
             <span class="chip" style="--c: var(--mint)">Testing</span>
-            <h2>What went wrong, and what I changed.</h2>
+            <h2>What testing showed, and what to fix.</h2>
             <div class="cards">
               {testing.map((t) => (
                 <article>
                   <p class="label">Tested</p><p>{t.tested}</p>
-                  <p class="label">Problem</p><p>{t.problem}</p>
-                  <p class="label">Change</p><p>{t.change}</p>
+                  <p class="label">What happened</p><p>{t.problem}</p>
+                  <p class="label">Fix</p><p>{t.change}</p>
                 </article>
               ))}
             </div>
@@ -222,7 +311,7 @@ const sections = [
         {a11y.length > 0 && (
           <section id="accessibility">
             <span class="chip" style="--c: var(--lavender)">Accessibility</span>
-            <h2>What I checked, and how.</h2>
+            <h2>What is in place, and what is missing.</h2>
             <div class="scroll" role="region" aria-label="Accessibility checks table" tabindex="0">
               <table>
                 <caption class="sr">Accessibility checks</caption>
@@ -244,6 +333,8 @@ const sections = [
         )}
       </div>
     </div>
+
+    <BackToTop />
   </main>
 </Layout>
 
@@ -277,8 +368,8 @@ const sections = [
   .tabs-top a { border: 1px solid var(--border); }
   .tabs-top a[aria-current="page"], .tabs-top a[aria-current="page"]:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
   h1 { font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1.1; margin-bottom: 20px; }
-  .lead { font-size: 18px; color: #2d3340; max-width: 60ch; margin-bottom: 20px; }
-  .role { font-size: 14px; color: var(--muted); }
+  .lead { font-size: 18px; color: #2d3340; max-width: 62ch; margin-bottom: 20px; }
+  .role { font-size: 14px; color: var(--muted); max-width: 70ch; }
   .role span { font: 500 12px var(--mono); margin-right: 8px; color: var(--ink); }
 
   .layout { max-width: 1100px; margin: 0 auto; padding: 72px 24px 120px; display: grid; grid-template-columns: 200px 1fr; gap: 64px; align-items: start; }
@@ -311,11 +402,17 @@ const sections = [
   thead th { font: 500 12px var(--mono); color: var(--muted); background: var(--bg); }
   tbody th { font-weight: 600; }
   tr:last-child > * { border-bottom: 0; }
-  .note { font-size: 14px; color: var(--muted); margin-top: 14px; }
+  .note { font-size: 14px; color: var(--muted); margin-top: 14px; max-width: 70ch; }
 
   .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .cards.comp { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
   .cards article { background: var(--card); border: 1px solid var(--border); border-top: 6px solid var(--deep); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); }
-  .cards p:not(.label) { margin: 0; font-size: 15px; color: #333a48; }
+  .cards article h3 { font-size: 1.3rem; margin-bottom: 4px; }
+  .role2 { font: 500 12px var(--mono); color: var(--muted); margin-bottom: 8px; }
+  .cards p:not(.label):not(.refs):not(.role2) { margin: 0; font-size: 15px; color: #333a48; }
+  .refs { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }
+  .refs a { font: 500 12px var(--mono); text-decoration: none; padding: 6px 10px; border: 1px solid var(--border); border-radius: 999px; transition: background .2s; }
+  .refs a:hover { background: var(--mint); }
 
   .ph { display: grid; place-items: center; min-height: 160px; border: 2px dashed var(--border); border-radius: 12px; background: var(--card); font: 500 12px var(--mono); color: var(--muted); }
   img { max-width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--border); }
@@ -324,7 +421,7 @@ const sections = [
   figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; }
 
   .decisions { display: grid; gap: 20px; }
-  .decisions li { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
+  .decisions li { display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
   .decisions p:not(.label) { margin: 0; }
 
   .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }

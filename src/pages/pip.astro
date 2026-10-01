@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
+import ProjectNav from '../components/ProjectNav.astro';
+import BackToTop from '../components/BackToTop.astro';
 import flow from '../../public/pip_full_prototype_figma_view.png';
 import states from '../../public/pip_drag_animation_storyboard.png';
 import welcome from '../../public/pip-welcome.png';
@@ -71,11 +73,14 @@ const day = [
     <a class="skip" href="#story">Skip to the story</a>
 
     <header class="wrap bar">
-      <a href="/" class="back">
+      <a href="/work" class="back">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Back to portfolio
+        Back to selected work
       </a>
-      <a href="/pip-app" class="back">Live app</a>
+      <span class="bar-links">
+        <a href="/pip-system" class="back">Design system</a>
+        <a href="/pip-app" class="back">Live app</a>
+      </span>
     </header>
 
     <section class="wrap hero">
@@ -116,7 +121,7 @@ const day = [
       <section class="wrap status" aria-labelledby="statusH">
         <div class="status-box">
           <h2 id="statusH">A personal project, still in progress.</h2>
-          <p>Pip is something I’m making on my own, and I’m still working on it. The six screens and the live app are built. Things like extra states and testing with real people aren’t done yet.</p>
+          <p>Pip is something I’m making on my own, and I’m still working on it. The six screens and the live app are built. Things like extra states and testing with real people aren’t done yet, and I’ve been honest about that at the end of this page.</p>
         </div>
       </section>
       <section class="wrap chapter">
@@ -189,7 +194,7 @@ const day = [
           <h2>How it was made.</h2>
           <div class="acts">
             <div><h3>Reference</h3><p>I studied wellbeing app screens for tone and layout, then chose a different metaphor so the result wouldn’t be a copy.</p></div>
-            <div><h3>Figma</h3><p>Colour variables for light and dark, text styles and one Pip component with seven mood variants, connected with Smart animate.</p></div>
+            <div><h3>Figma</h3><p>Colour variables for light and dark, text styles and one Pip component with seven mood variants, connected with Smart animate. <a href="/pip-system">See the design system</a>.</p></div>
             <div><h3>Code</h3><p>Figma moves between steps, so I built the drag and the breathing in code to feel the real motion.</p></div>
           </div>
           <figure class="fig">
@@ -221,6 +226,9 @@ const day = [
         </div>
       </section>
     </div>
+
+    <ProjectNav current="pip" />
+    <BackToTop />
 
     <aside class="trail" id="trail" aria-hidden="true"></aside>
 
@@ -349,6 +357,7 @@ const day = [
   .ps .bar { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; padding-bottom: 8px; }
   .ps .back { display: inline-flex; gap: 6px; align-items: center; font: 500 13px var(--mono); text-decoration: none; padding: 8px 0; }
   .ps .back:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .ps .bar-links { display: flex; gap: 24px; }
 
   /* Hero */
   .ps .hero { padding-top: clamp(72px, 12vw, 150px); padding-bottom: 120px; }

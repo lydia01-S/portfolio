@@ -1,0 +1,378 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BackToTop from '/src/components/BackToTop.astro';
+
+// Everything on this page is computed from the token values below, so the numbers can't drift from the swatches.
+const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const toHex = (a) => '#' + a.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
+const mix = (a, b, k) => toHex(hx(a).map((v, i) => v + (hx(b)[i] - v) * k));
+const lum = (h) => { const [r, g, b] = hx(h).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+
+const light = { bg: '#e6ede4', fg: '#0e2a2f', mute: '#4f6b6d', card: '#f6f9f3', line: '#b8c9c0', lineStrong: '#718a84', dusk: '#8a7bd8', glass: '#4fb9a1', amber: '#f0a92e' };
+const dark = { bg: '#0e2a2f', fg: '#e6ede4', mute: '#9db8b4', card: '#16383d', line: '#2c5459', lineStrong: '#5f8b8c', dusk: '#a597f0', glass: '#7fd8c3', amber: '#ffc15e' };
+const INK = '#0e2a2f';
+
+const moodBase = [["Dusk", "dusk", "Low"], ["Sea glass", "glass", "Steady"], ["Amber", "amber", "High"]];
+const neutrals = [
+  ["bg", "Page background", "bg"], ["card", "Cards and sheets", "card"], ["fg", "Text and primary buttons", "fg"],
+  ["mute", "Secondary text", "mute"], ["line", "Decorative dividers", "line"], ["line-strong", "Control outlines", "lineStrong"]
+];
+const parts = [["Leaf stem", "#3f7a52"], ["Leaf", "#6fae7f"], ["Cheeks", "#ff8fa3"], ["Face", "#0e2a2f"]];
+
+const names = ["Drained", "Low", "Flat", "Steady", "Light", "Good", "Glowing"];
+const moodColour = (t, l) => (l < 0.5 ? mix(t.dusk, t.glass, l * 2) : mix(t.glass, t.amber, (l - 0.5) * 2));
+const steps = names.map((name, i) => {
+  const l = i / 6, curve = (l - 0.5) * 40;
+  return {
+    name, l: l.toFixed(2), light: moodColour(light, l), dark: moodColour(dark, l),
+    width: (1.1 - l * 0.1).toFixed(2), height: (0.86 + l * 0.2).toFixed(2), leaf: Math.round(55 - l * 63), cheeks: (0.12 + 0.4 * l).toFixed(2),
+    face: l < 0.25 ? "Sad: slanted brows, frown" : l > 0.78 ? "Happy: arched eyes, open smile" : curve < -1 ? "Open eyes, slight frown" : curve > 1 ? "Open eyes, slight smile" : "Open eyes, straight mouth"
+  };
+});
+
+const type = [
+  { token: "display", sample: "Glowing", spec: "40 / 1, ExtraBold, -0.035em", style: "font:800 40px/1 var(--bf);letter-spacing:-.035em" },
+  { token: "heading", sample: "How was today, overall?", spec: "34 / 1.02, ExtraBold, -0.03em", style: "font:800 34px/1.02 var(--bf);letter-spacing:-.03em" },
+  { token: "figure", sample: "7.5", spec: "72 / 0.9, ExtraBold, -0.05em", style: "font:800 72px/.9 var(--bf);letter-spacing:-.05em" },
+  { token: "cue", sample: "Breathe in", spec: "30 / 1.25, ExtraBold, -0.03em", style: "font:800 30px/1.25 var(--bf);letter-spacing:-.03em" },
+  { token: "button", sample: "Save check-in", spec: "17, SemiBold", style: "font:600 17px/1.3 var(--bf)" },
+  { token: "body", sample: "Check-ins are stored on this device.", spec: "15 / 1.45, Regular", style: "font:400 15px/1.45 var(--bf)" },
+  { token: "hint", sample: "Drag Pip up or down", spec: "13 / 1.3, Regular", style: "font:400 13px/1.3 var(--bf)" }
+];
+
+const shape = [
+  ["radius-chip", "14px", "Choice chips"], ["radius-row", "18px", "Buttons and dose rows"], ["radius-card", "20px", "Detail cards"], ["radius-phone", "44px", "Device frame"],
+  ["target-choice", "48px", "Choice chip height"], ["target-round", "52px", "Plus and minus buttons"], ["target-button", "58px", "Primary button height"],
+  ["gap-tight", "4px", "Days in the week view"], ["gap-default", "10px", "Rows and chips"], ["gap-loose", "22px", "Between groups"],
+  ["screen-padding", "30px 26px", "Inside the phone frame"]
+];
+
+const rules = [
+  ["Pair every mood with a word and a face.", "Colour is never the only signal."],
+  ["Use the three colours only for low, steady and high.", "No red or green for status."],
+  ["Pip changes shape only along the mood scale.", "Never stretch, rotate or recolour it."],
+  ["One Pip leads each screen.", "Small Pips are data or progress, never decoration."],
+  ["Keep Pip at least 40px wide.", "Below that the face stops being readable."],
+  ["Motion answers a touch.", "A spring of about 0.55 s on change and a slow idle bob. Everything still works with reduced motion."],
+  ["Missed means quieter, never alarming.", "No red warnings, streaks or scores to lose."],
+  ["Controls are at least 44px, with strong outlines and a visible focus ring.", "Voice stays short, kind and plain."]
+];
+
+const checks = [
+  { name: "Text on page", note: "Primary text on the page background", need: 4.5, fn: (t) => ratio(t.fg, t.bg) },
+  { name: "Secondary text on page", note: "Secondary text on the page background", need: 4.5, fn: (t) => ratio(t.mute, t.bg) },
+  { name: "Secondary text on card", note: "Secondary text on a card", need: 4.5, fn: (t) => ratio(t.mute, t.card) },
+  { name: "Button label", note: "Label on the primary button", need: 4.5, fn: (t) => ratio(t.bg, t.fg) },
+  { name: "Saved button", note: "Dark label on sea glass", need: 4.5, fn: (t) => ratio(INK, t.glass) },
+  { name: "Pip's face on its body", note: "Lowest of the seven moods", need: 3, fn: (t) => Math.min(...names.map((n, i) => ratio(INK, moodColour(t, i / 6)))) },
+  { name: "Pip's body on the page", note: "Lowest of the seven moods", need: 3, fn: (t) => Math.min(...names.map((n, i) => ratio(moodColour(t, i / 6), t.bg))) },
+  { name: "Control outline, old", note: "The divider colour on the page", need: 3, fn: (t) => ratio(t.line, t.bg) },
+  { name: "Control outline, new", note: "The strong outline on the page", need: 3, fn: (t) => ratio(t.lineStrong, t.bg) },
+  { name: "Control outline on a card, new", note: "The strong outline on a card", need: 3, fn: (t) => ratio(t.lineStrong, t.card) }
+];
+const rows = checks.map((c) => { const l = c.fn(light), d = c.fn(dark); return { ...c, l, d, ok: l >= c.need && d >= c.need }; });
+
+const sections = [
+  ["overview", "Overview"], ["colour", "Colour"], ["type", "Type"], ["shape", "Shape and spacing"],
+  ["component", "The Pip component"], ["rules", "Usage rules"], ["contrast", "Contrast"], ["gaps", "Not covered yet"]
+];
+---
+
+<Layout title="Pip design system">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet" />
+
+  <a class="skip" href="#content">Skip to the system</a>
+
+  <main class="ds">
+    <header class="hero">
+      <div class="inner">
+        <div class="topbar">
+          <a href="/work" class="back">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Back to selected work
+          </a>
+          <nav class="tabs-top" aria-label="Project pages">
+            <a href="/pip">Case study</a>
+            <a href="/pip-system" aria-current="page">Design system</a>
+            <a href="/pip-app">Live app</a>
+          </nav>
+        </div>
+        <p class="chips"><span class="chip" style="--c: var(--yellow)">Design system</span></p>
+        <h1>Pip design system</h1>
+        <p class="lead">The colours, type, shapes and rules behind Pip, written so another designer or developer could build a new screen without guessing.</p>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc-wrap">
+        <nav class="toc" aria-label="On this page">
+          <p class="toc-title">On this page</p>
+          {sections.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
+        </nav>
+      </aside>
+
+      <div class="content" id="content">
+        <section id="overview">
+          <span class="chip" style="--c: var(--sage)">Overview</span>
+          <h2>One character, three colours and one typeface.</h2>
+          <div class="prose">
+            <p>Pip’s mood runs on a single scale from 0 to 1, in seven steps. Colour, body shape, leaf angle and face are all worked out from that one number, so a new mood never needs a new drawing.</p>
+            <p>The values here come from the live app. Where a token has changed because of the contrast checks, this page says so.</p>
+          </div>
+        </section>
+
+        <section id="colour">
+          <span class="chip" style="--c: var(--mint)">Colour</span>
+          <h2>Three colours that mean low, steady and high.</h2>
+          <ul class="base">
+            {moodBase.map(([name, key, role]) => (
+              <li>
+                <span class="big" style={`background:${light[key]}`}></span>
+                <p class="nm">{name}</p><p class="role">{role}</p>
+                <p class="hexes"><code>{light[key]}</code> light<br /><code>{dark[key]}</code> dark</p>
+              </li>
+            ))}
+          </ul>
+
+          <h3>The mood scale</h3>
+          <p class="note">Each step blends between the three base colours. Light theme on top, dark theme below.</p>
+          <ol class="scale" aria-label="Mood colours, light theme">{steps.map((s) => <li style={`background:${s.light}`}><span class="sr">{s.name}: {s.light}</span></li>)}</ol>
+          <ol class="scale" aria-label="Mood colours, dark theme">{steps.map((s) => <li style={`background:${s.dark}`}><span class="sr">{s.name}: {s.dark}</span></li>)}</ol>
+          <ol class="scale-names" aria-hidden="true">{steps.map((s) => <li>{s.name}</li>)}</ol>
+
+          <h3>Interface colours</h3>
+          <div class="scroll" role="region" aria-label="Interface colour tokens" tabindex="0">
+            <table>
+              <caption class="sr">Interface colour tokens</caption>
+              <thead><tr><th scope="col">Token</th><th scope="col">Used for</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+              <tbody>
+                {neutrals.map(([token, use, key]) => (
+                  <tr>
+                    <th scope="row"><code>{token}</code></th><td>{use}</td>
+                    <td><span class="sw" style={`background:${light[key]}`}></span><code>{light[key]}</code></td>
+                    <td><span class="sw" style={`background:${dark[key]}`}></span><code>{dark[key]}</code></td>
+                  </tr>
+                ))}
+                {parts.map(([token, hex]) => (
+                  <tr>
+                    <th scope="row"><code>{token.toLowerCase().replace(' ', '-')}</code></th><td>Pip’s {token.toLowerCase()}, same in both themes</td>
+                    <td colspan="2"><span class="sw" style={`background:${hex}`}></span><code>{hex}</code></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="type">
+          <span class="chip" style="--c: var(--lavender)">Type</span>
+          <h2>Bricolage Grotesque, in two weights that do all the work.</h2>
+          <ul class="type">
+            {type.map((t) => (
+              <li>
+                <p class="sample" style={t.style}>{t.sample}</p>
+                <p class="spec"><code>{t.token}</code> {t.spec}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section id="shape">
+          <span class="chip" style="--c: var(--yellow)">Shape and spacing</span>
+          <h2>Round shapes, large targets, one rhythm.</h2>
+          <div class="scroll" role="region" aria-label="Shape and spacing tokens" tabindex="0">
+            <table>
+              <caption class="sr">Shape and spacing tokens</caption>
+              <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Used for</th></tr></thead>
+              <tbody>{shape.map(([t, v, u]) => <tr><th scope="row"><code>{t}</code></th><td>{v}</td><td>{u}</td></tr>)}</tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="component">
+          <span class="chip" style="--c: var(--coral)">The Pip component</span>
+          <h2>One component with seven moods.</h2>
+          <div class="prose">
+            <p>Pip has three properties. <code>mood</code> has seven values from Drained to Glowing. <code>eyes</code> is open or closed (closed for sleep and breathing). <code>size</code> is small (about 44px, for the week view), medium (about 100px, next to a title) or large (about 230px, the lead character).</p>
+          </div>
+          <figure>
+            <img src="/pip-variants.png" alt="Seven Pip variants in a row from Drained to Glowing, with a colour swatch under each" loading="lazy" />
+            <figcaption>The seven variants. Only the mood changes between them.</figcaption>
+          </figure>
+          <figure>
+            <img src="/pip-anatomy.png" alt="Diagram of Pip with labels for the leaf, body, mouth and eyes, feet, cheeks, highlight and shadow" loading="lazy" />
+            <figcaption>Anatomy. Each part is derived from the mood level.</figcaption>
+          </figure>
+          <div class="scroll" role="region" aria-label="Mood variant properties" tabindex="0">
+            <table>
+              <caption class="sr">Mood variant properties</caption>
+              <thead><tr><th scope="col">Variant</th><th scope="col">Level</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">Width</th><th scope="col">Height</th><th scope="col">Leaf</th><th scope="col">Cheeks</th><th scope="col">Face</th></tr></thead>
+              <tbody>
+                {steps.map((s) => (
+                  <tr>
+                    <th scope="row">{s.name}</th><td>{s.l}</td>
+                    <td><span class="sw" style={`background:${s.light}`}></span><code>{s.light}</code></td>
+                    <td><span class="sw" style={`background:${s.dark}`}></span><code>{s.dark}</code></td>
+                    <td>{s.width}</td><td>{s.height}</td><td>{s.leaf}°</td><td>{s.cheeks}</td><td>{s.face}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="note">Width and height are scale factors from the resting shape. The leaf angle is its rotation from upright, so a bigger number means a droopier leaf. Cheeks is opacity.</p>
+        </section>
+
+        <section id="rules">
+          <span class="chip" style="--c: var(--amber)">Usage rules</span>
+          <h2>What to do, and what to leave alone.</h2>
+          <figure><img src="/pip-rule-word.png" alt="Do: a glowing Pip with its word. Don't: a plain amber circle with no face or word" loading="lazy" /></figure>
+          <figure><img src="/pip-rule-warning.png" alt="Do: a calm dose row with a small quiet Pip. Don't: a red row with a warning triangle and the words Magnesium missed" loading="lazy" /></figure>
+          <figure><img src="/pip-rule-proportion.png" alt="Do: Pip in its normal shape. Don't: Pip stretched wide and coloured pink" loading="lazy" /></figure>
+          <ol class="rules">
+            {rules.map(([rule, why]) => <li><p class="rule">{rule}</p><p class="why">{why}</p></li>)}
+          </ol>
+        </section>
+
+        <section id="contrast">
+          <span class="chip" style="--c: var(--sage)">Contrast</span>
+          <h2>Checked against WCAG 2.1, and what I changed.</h2>
+          <p class="note top-note">Text needs 4.5:1. Graphics and control outlines need 3:1.</p>
+          <div class="scroll" role="region" aria-label="Contrast ratios" tabindex="0">
+            <table>
+              <caption class="sr">Contrast ratios for key colour pairs</caption>
+              <thead><tr><th scope="col">Pair</th><th scope="col">Needs</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">Result</th></tr></thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr>
+                    <th scope="row">{r.name}<span class="sub">{r.note}</span></th>
+                    <td>{r.need}:1</td><td>{r.l.toFixed(2)}:1</td><td>{r.d.toFixed(2)}:1</td>
+                    <td><span class={r.ok ? "tag ok" : "tag warn"}>{r.ok ? "Passes" : "Below target"}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div class="prose after">
+            <p>The audit found two things. The old divider colour was too faint to mark the edge of a button or row, in both themes, so I added a stronger <code>line-strong</code> token that passes.</p>
+            <p>Pip’s body against the page falls below 3:1 for the lighter moods in the light theme. The mood is always also given by the face and the word, so the body is never the only cue, but it is worth knowing.</p>
+          </div>
+        </section>
+
+        <section id="gaps">
+          <span class="chip" style="--c: var(--yellow)">Not covered yet</span>
+          <h2>What this page doesn’t include.</h2>
+          <ul class="bullets">
+            <li>The live app still uses the old, fainter outline. Switching its controls to <code>line-strong</code> is the next change.</li>
+            <li>Empty, error and missed-day states.</li>
+            <li>Tablet and desktop layouts. Pip is designed mobile-first, and the larger layouts are still to do.</li>
+            <li>Component documentation for the chips, rows and buttons beyond their sizes.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <BackToTop />
+  </main>
+</Layout>
+
+<style>
+  .ds {
+    --bg: #fbfaf4; --card: #fff; --ink: #1f2430; --muted: #5a6070; --border: #d3d6df;
+    --deep: #3f6b52; --shadow: 0 8px 28px rgba(31, 36, 48, .08);
+    --yellow: #f6e7b0; --sage: #b5d0bf; --mint: #d0e1d4; --coral: #f0b7ab; --amber: #efd3ac; --lavender: #d3c6ea;
+    --serif: 'Bodoni Moda', Georgia, serif; --mono: 'JetBrains Mono', ui-monospace, monospace; --bf: 'Bricolage Grotesque', system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); font: 16px/1.65 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  .ds :focus-visible { outline: 3px solid var(--deep); outline-offset: 3px; border-radius: 6px; }
+  .ds a { color: inherit; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: #fff; color: var(--ink); padding: 10px 18px; border-radius: 999px; font: 600 14px 'Inter', sans-serif; }
+  .skip:focus { left: 16px; }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; text-wrap: balance; }
+  ul, ol { list-style: none; margin: 0; padding: 0; }
+  p { margin: 0 0 10px; }
+  code { font: 500 12px var(--mono); }
+
+  .chip { display: inline-block; font: 500 12px/1 var(--mono); background: var(--c); padding: 7px 12px; border-radius: 999px; margin-bottom: 16px; }
+  .chips { margin: 0 0 16px; }
+  .inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .hero { border-bottom: 1px solid var(--border); padding: 24px 0 56px; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 20px; margin-bottom: 48px; border-bottom: 1px solid var(--border); }
+  .back, .tabs-top a { font: 500 13px var(--mono); text-decoration: none; padding: 8px 12px; border-radius: 999px; transition: background .2s; }
+  .back { display: inline-flex; gap: 6px; align-items: center; padding-left: 0; }
+  .back:hover, .tabs-top a:hover { background: var(--mint); }
+  .tabs-top { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tabs-top a { border: 1px solid var(--border); }
+  .tabs-top a[aria-current="page"], .tabs-top a[aria-current="page"]:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+  h1 { font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1.1; margin-bottom: 20px; }
+  .lead { font-size: 18px; color: #2d3340; max-width: 60ch; }
+
+  .layout { max-width: 1100px; margin: 0 auto; padding: 72px 24px 120px; display: grid; grid-template-columns: 200px 1fr; gap: 64px; align-items: start; }
+  .toc-wrap { position: sticky; top: 32px; }
+  .toc { display: flex; flex-direction: column; }
+  .toc-title { font: 500 12px var(--mono); color: var(--muted); margin: 0 0 8px; }
+  .toc a { font-size: 14px; text-decoration: none; color: var(--muted); padding: 7px 0 7px 14px; border-left: 2px solid var(--border); }
+  .toc a:hover { color: var(--ink); border-left-color: var(--deep); }
+
+  section { margin-bottom: 96px; scroll-margin-top: 32px; }
+  h2 { font-size: clamp(1.5rem, 2.2vw, 2rem); line-height: 1.25; margin-bottom: 24px; max-width: 28ch; }
+  h3 { font-size: 1.3rem; margin: 40px 0 8px; }
+  .prose { max-width: 62ch; color: #333a48; }
+  .prose.after { margin-top: 20px; }
+  .note { font-size: 14px; color: var(--muted); margin: 8px 0 16px; max-width: 62ch; }
+  .top-note { margin-top: 0; }
+  .bullets li { position: relative; padding-left: 22px; margin-bottom: 10px; max-width: 62ch; }
+  .bullets li::before { content: ""; position: absolute; left: 0; top: .7em; width: 8px; height: 8px; border-radius: 2px; background: var(--deep); }
+
+  .base { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .base li { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
+  .big { display: block; height: 84px; border-radius: 12px; margin-bottom: 14px; }
+  .nm { font-weight: 600; margin: 0; }
+  .role { color: var(--muted); font-size: 14px; margin: 0 0 8px; }
+  .hexes { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.8; }
+  .scale { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 6px; }
+  .scale li { height: 44px; border-radius: 10px; border: 1px solid rgba(31, 36, 48, .12); }
+  .scale-names { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; font: 500 12px var(--mono); color: var(--muted); text-align: center; margin-top: 4px; }
+
+  .scroll { overflow-x: auto; background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px; }
+  th, td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th { font: 500 12px var(--mono); color: var(--muted); background: var(--bg); }
+  tbody th { font-weight: 600; }
+  tr:last-child > * { border-bottom: 0; }
+  .sw { display: inline-block; width: 16px; height: 16px; border-radius: 4px; border: 1px solid rgba(31, 36, 48, .2); vertical-align: -3px; margin-right: 8px; }
+  .sub { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
+  .tag { display: inline-block; font: 500 12px var(--mono); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  .tag.ok { background: var(--mint); }
+  .tag.warn { background: var(--coral); }
+
+  .type li { padding: 22px 0; border-top: 1px solid var(--border); }
+  .type li:last-child { border-bottom: 1px solid var(--border); }
+  .sample { margin: 0 0 8px; color: var(--ink); }
+  .spec { font-size: 13px; color: var(--muted); margin: 0; }
+
+  figure { margin: 32px 0 0; }
+  figure img { max-width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid var(--border); }
+  figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .scroll + .note, figure + .scroll { margin-top: 32px; }
+
+  .rules { margin-top: 40px; display: grid; gap: 0; }
+  .rules li { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 18px 0; border-top: 1px solid var(--border); }
+  .rules li:last-child { border-bottom: 1px solid var(--border); }
+  .rule { font-weight: 600; margin: 0; }
+  .why { color: #333a48; margin: 0; }
+
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; gap: 0; padding-top: 48px; }
+    .toc-wrap { position: sticky; top: 0; z-index: 20; margin: 0 -24px 32px; padding: 8px 24px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .toc-title { display: none; }
+    .toc { flex-direction: row; overflow-x: auto; gap: 6px; }
+    .toc a { white-space: nowrap; border: 1px solid var(--border); border-radius: 999px; padding: 8px 14px; }
+    .base { grid-template-columns: 1fr; }
+    .rules li { grid-template-columns: 1fr; gap: 6px; }
+    section { margin-bottom: 64px; }
+  }
+</style>

@@ -1,13 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
+import ProjectNav from '../components/ProjectNav.astro';
 import img1 from '../../public/img1.png';
 import img2 from '../../public/img2.png';
 import h3 from '../../public/h3.png';
 import h4 from '../../public/h4.png';
 import h7 from '../../public/h7.png';
 import h8 from '../../public/h8.png';
- 
+
 // Every figure below comes from the survey of 12 students. The full results are on the UX research page.
 const metrics = [
   { value: 75, prefix: "", suffix: "%", label: "Find navigation most frustrating", detail: "9 of 12 students named navigation and menu structure.", color: "coral" },
@@ -22,7 +23,7 @@ const metadata = [
   { label: "Tools", value: "Figma, Miro, Photoshop" }
 ];
 const metricsNote = "Source: a survey of 12 college students about how they use Moodle. The sample is small, so read these as directional. See the UX research page for every question.";
- 
+
 // Each screen is tied to a survey finding, then to the decision it led to.
 const screens = [
   { img: h3, title: "Deadlines first", insight: "8 of 11 students ranked a deadlines overview among the most important features, and 7 of 12 rated reminders 5 out of 5.", decision: "The dashboard opens on priority module cards, ranked by urgency.", alt: "STU dashboard with high-contrast priority module cards" },
@@ -31,28 +32,28 @@ const screens = [
   { img: h7, title: "Find the room", insight: "The survey didn't ask about this. It is a design idea I would test next, not a research-backed decision.", decision: "A campus map with live occupancy links each lecture to its room.", alt: "STU campus map with live room occupancy" }
 ];
 const heroShots = [screens[1], screens[0], screens[2]];
- 
+
 const nav = [
   ["context", "Context"], ["problem", "Problem"], ["comparison", "Before and after"],
   ["goals", "Goals"], ["solution", "Solution"], ["interface", "Interface"], ["methodology", "Methodology"], ["reflections", "Reflections"]
 ];
 ---
- 
+
 <Layout title="STU: Next-Gen Student Platform — Case Study">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
- 
+
   <div class="progress" aria-hidden="true"><div id="bar"></div></div>
   <a class="skip" href="#content">Skip to case study</a>
- 
+
   <main class="cs" id="cs">
     <header class="hero">
       <div class="inner">
         <div class="topbar">
-          <a href="/" class="back">
+          <a href="/work" class="back">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Back to portfolio
+            Back to selected work
           </a>
           <nav class="tabs-top" aria-label="Project pages">
             <a href="/stylesheet">Design system</a>
@@ -60,7 +61,7 @@ const nav = [
             <a href="/research">UX research</a>
           </nav>
         </div>
- 
+
         <div class="hero-grid">
           <div>
             <p class="chips">
@@ -80,13 +81,13 @@ const nav = [
             {metadata.map((m) => (<div><dt>{m.label}</dt><dd>{m.value}</dd></div>))}
           </dl>
         </div>
- 
+
         <div class="devices" role="group" aria-label="Key STU screens">
           {heroShots.map((s) => (
             <figure class="device"><Image class="device-img" src={s.img} alt={s.alt} loading="eager" /></figure>
           ))}
         </div>
- 
+
         <div class="kpis">
           {metrics.map((m) => (
             <div class="kpi" style={`--c: var(--${m.color})`}>
@@ -99,7 +100,7 @@ const nav = [
         {metricsNote && <p class="note">{metricsNote}</p>}
       </div>
     </header>
- 
+
     <div class="layout">
       <aside class="toc-wrap">
         <nav class="toc" aria-label="On this page">
@@ -107,7 +108,7 @@ const nav = [
           {nav.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
         </nav>
       </aside>
- 
+
       <div class="content" id="content">
         <section id="context" class="reveal">
           <span class="chip" style="--c: var(--sage)">01 Context</span>
@@ -119,7 +120,7 @@ const nav = [
             </div>
           </div>
         </section>
- 
+
         <section id="problem" class="reveal">
           <span class="chip" style="--c: var(--coral)">02 Problem</span>
           <div class="cols">
@@ -138,13 +139,13 @@ const nav = [
             </div>
           </div>
         </section>
- 
+
         <figure class="shot reveal">
           <div class="shot-bar" style="--c: var(--yellow)"><span>Figure 1: Heuristic analysis</span><span class="hint">Click to enlarge</span></div>
           <button class="zoom" type="button" aria-label="Enlarge figure 1"><Image class="shot-img" src={img1} alt="Heuristic analysis of legacy university portals, with issues marked on screenshots" loading="lazy" /></button>
           <figcaption>Initial heuristic analysis of legacy university portals and campus workflows.</figcaption>
         </figure>
- 
+
         <section id="comparison" class="reveal">
           <span class="chip" style="--c: var(--yellow)">03 Before and after</span>
           <div class="compare">
@@ -172,7 +173,7 @@ const nav = [
             </div>
           </div>
         </section>
- 
+
         <section id="goals" class="reveal">
           <span class="chip" style="--c: var(--mint)">04 Goals</span>
           <div class="cols">
@@ -187,7 +188,7 @@ const nav = [
             </div>
           </div>
         </section>
- 
+
         <section id="solution" class="reveal">
           <span class="chip" style="--c: var(--lavender)">05 Solution</span>
           <div class="cols">
@@ -202,7 +203,7 @@ const nav = [
             </div>
           </div>
         </section>
- 
+
         <section id="interface" class="reveal">
           <span class="chip" style="--c: var(--sage)">06 Interface</span>
           <h2>Every screen answers one student question.</h2>
@@ -222,13 +223,13 @@ const nav = [
           </div>
           <p class="more"><a href="/wireframe">See every screen and wireframe</a><a href="/stylesheet">Explore the design system</a></p>
         </section>
- 
+
         <figure class="shot reveal">
           <div class="shot-bar" style="--c: var(--mint)"><span>Figure 2: Information architecture</span><span class="hint">Click to enlarge</span></div>
           <button class="zoom" type="button" aria-label="Enlarge figure 2"><Image class="shot-img" src={img2} alt="Information architecture map beside mobile schedule feed prototypes" loading="lazy" /></button>
           <figcaption>Information architecture map and mobile schedule feed prototypes.</figcaption>
         </figure>
- 
+
         <section id="methodology" class="reveal">
           <span class="chip" style="--c: var(--sage)">07 Methodology</span>
           <div class="cols">
@@ -244,7 +245,7 @@ const nav = [
             </div>
           </div>
         </section>
- 
+
         <section id="reflections" class="reveal">
           <span class="chip" style="--c: var(--amber)">08 Reflections</span>
           <div class="cards">
@@ -255,11 +256,13 @@ const nav = [
         </section>
       </div>
     </div>
- 
+
+    <ProjectNav current="stu" />
+
     <button id="top" class="top" type="button" aria-label="Back to top">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
     </button>
- 
+
     <dialog id="lightbox" aria-label="Enlarged figure">
       <button type="button" id="closeLb" class="close">Close</button>
       <img id="lbImg" alt="" />

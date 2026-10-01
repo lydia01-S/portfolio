@@ -1,0 +1,48 @@
+---
+// The order here is the order of the Selected Work page, and of the previous/next links.
+// Change a route here if a page lives somewhere else.
+const projects = [
+  { slug: "stu", href: "/stu", title: "STU: Online Student Platform" },
+  { slug: "pip", href: "/pip", title: "Pip: A Wellbeing Companion" },
+  { slug: "critter", href: "/critterandfriends", title: "Critter & Friends" }
+];
+
+interface Props { current: string }
+const { current } = Astro.props;
+const i = projects.findIndex((p) => p.slug === current);
+const prev = i > 0 ? projects[i - 1] : null;
+const next = i >= 0 && i < projects.length - 1 ? projects[i + 1] : null;
+---
+
+<nav class="pn" aria-label="More projects">
+  <a class="pn-link" href={prev ? prev.href : "/work"} rel={prev ? "prev" : undefined}>
+    <span class="pn-dir">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {prev ? "Previous project" : "All projects"}
+    </span>
+    <span class="pn-name">{prev ? prev.title : "Back to selected work"}</span>
+  </a>
+  <a class="pn-link pn-next" href={next ? next.href : "/work"} rel={next ? "next" : undefined}>
+    <span class="pn-dir">
+      {next ? "Next project" : "All projects"}
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4l6 4-6 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="pn-name">{next ? next.title : "Back to selected work"}</span>
+  </a>
+</nav>
+
+<style>
+  .pn { max-width: 1100px; margin: 0 auto; padding: 0 24px 96px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .pn-link {
+    display: flex; flex-direction: column; gap: 8px; min-height: 44px; padding: 24px 26px;
+    background: #fff; color: #1f2430; text-decoration: none; border: 1px solid #d3d6df; border-radius: 16px;
+    box-shadow: 0 8px 28px rgba(31, 36, 48, .08); transition: transform .2s, border-color .2s, background .2s;
+  }
+  .pn-link:hover { transform: translateY(-3px); border-color: #1f2430; background: #d0e1d4; }
+  .pn-link:focus-visible { outline: 3px solid #3f6b52; outline-offset: 3px; }
+  .pn-next { text-align: right; align-items: flex-end; }
+  .pn-dir { display: inline-flex; align-items: center; gap: 6px; font: 500 12px 'JetBrains Mono', ui-monospace, monospace; color: #5a6070; }
+  .pn-name { font: 500 clamp(1.2rem, 2.2vw, 1.6rem)/1.2 'Bodoni Moda', Georgia, serif; }
+  @media (max-width: 640px) { .pn { grid-template-columns: 1fr; } .pn-next { text-align: left; align-items: flex-start; } }
+  @media (prefers-reduced-motion: reduce) { .pn-link { transition: none; } }
+</style>
