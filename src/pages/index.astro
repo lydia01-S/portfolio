@@ -1,73 +1,96 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/hero.astro';
-import ProjectCard from '../components/projectcard.astro';
+import BackToTop from '../components/BackToTop.astro';
 
+// Selected Work: all four projects, in the same order as the Selected Work page.
+// fit: "contain" shows the whole image (good for phone screens); "cover" fills the frame.
 const projects = [
   {
     slug: "/stu",               // Leads to src/pages/stu.astro
     title: "STU: An online student platform",
-    category: "UX/UI prototype",
+    summary: "A research-led student app that puts deadlines, the timetable and coursework in one place.",
+    category: "UX/UI case study",
     year: "2025",
     imageSrc: "/3.png",
+    fit: "contain",
     cardBg: "#dbe4d9",           // Muted Sage Green
-    rotation: "-1.8deg",
+    rotation: "-1deg",
+    offsetY: "0px"
+  },
+  {
+    slug: "/pip",               // Leads to src/pages/pip.astro
+    title: "Pip: A wellbeing companion",
+    summary: "A character-led wellbeing app, with its own design system and a live build in code.",
+    category: "UI/UX case study",
+    year: "2026",
+    imageSrc: "/pip_drag_animation_storyboard.png",
+    fit: "contain",
+    cardBg: "#d6e7e1",           // Sea Glass
+    rotation: "1.2deg",
+    offsetY: "60px"
+  },
+  {
+    slug: "/garagego",          // Leads to src/pages/garagego.astro
+    title: "GarageGo: An admin portal",
+    summary: "An admin dashboard designed so that dense data is quick to scan and hard to misread.",
+    category: "UI design",
+    year: "2026",
+    imageSrc: "/garagego/dashboard.png",
+    fit: "cover",
+    cardBg: "#dde3ee",           // Cool Slate
+    rotation: "0.8deg",
     offsetY: "0px"
   },
   {
     slug: "/critterandfriends", // Leads to src/pages/critterandfriends.astro
-    title: "Critter & Friends': An interactive game",
+    title: "Critter & Friends: An interactive game",
+    summary: "A web game about native Irish insects for children aged 5 to 8, tested with educators.",
     category: "Web Design, UX/UI",
     year: "2026",
     imageSrc: "/critterandfriends.png",
+    fit: "cover",
     cardBg: "#e8cfc4",           // Warm Terracotta / Clay
-    rotation: "2.2deg",
+    rotation: "-1.2deg",
     offsetY: "60px"
   }
 ];
+const projectCount = String(projects.length).padStart(2, '0');
 
 // Content tabs data for the interactive statement section
 const statementTabs = [
   {
     id: "identity",
     label: "WHAT I LIKE",
-    handwritten: "what i like",
-    color: "#0038FF", // Add blue color property here
-    text: "Using color, typography and thoughtful design that just feels right to use."
+    text: "Using colour, typography and thoughtful design that just feels right to use."
   },
   {
     id: "focus",
     label: "WHAT I CARE ABOUT",
-    handwritten: "what i care about",
-    color: "#0038FF",
     text: "I want to design digital interfaces that improve how people learn, work & interact online."
   },
   {
     id: "philosophy",
     label: "WHAT I BELIEVE",
-    handwritten: "what i believe",
-    color: "#0038FF",
     text: "Design should feel warm, accessible, lightweight and fun for everyone."
   },
   {
     id: "stack",
     label: "WHAT I BUILD WITH",
-    handwritten: "what i build with",
-    color: "#0038FF",
     text: "HTML, CSS, Astro, Next.js, Figma, Adobe Creative Cloud."
   }
 ];
 ---
 
 <Layout title="Lydia Stewart — Portfolio">
-  <div class="ho-canvas">
+  <main class="ho-canvas" id="main">
     <!-- Full Screen Hero Fold -->
     <section class="hero-wrapper">
       <Hero year="2026" />
       
       <!-- Scroll Down Indicator -->
       <a href="#intro" class="scroll-indicator">
-        <span>* SCROLL TO EXPLORE (2026)</span>
+        <span>* SCROLL TO EXPLORE</span>
         <div class="line"></div>
       </a>
     </section>
@@ -77,7 +100,7 @@ const statementTabs = [
       <div class="intro-content">
         <span class="mono-meta-tag">* INTRODUCTION</span>
         <h2 class="intro-heading">
-          Hi, I'm Lydia — an Interactive Digital Media graduate passionate about web development and UI/UX design. 
+          Hi, I'm Lydia — an Interactive Digital Media graduate, I design interfaces and build them myself, from Figma to code. 
         </h2>
       </div>
     </section>
@@ -88,8 +111,11 @@ const statementTabs = [
       <nav class="tab-nav" aria-label="Interactive Statements">
         {statementTabs.map((tab, idx) => (
           <button 
+            type="button"
             class={`tab-btn ${idx === 0 ? 'active' : ''}`} 
             data-tab-target={tab.id}
+            aria-controls={`tab-${tab.id}`}
+            aria-pressed={idx === 0 ? 'true' : 'false'}
           >
             {tab.label}
           </button>
@@ -97,15 +123,13 @@ const statementTabs = [
       </nav>
 
       <!-- Dynamic Center Text Display -->
-      <div class="statement-display-container">
+      <div class="statement-display-container" aria-live="polite">
         {statementTabs.map((tab, idx) => (
           <div 
             class={`tab-content-panel ${idx === 0 ? 'active' : ''}`} 
             id={`tab-${tab.id}`}
+            aria-hidden={idx === 0 ? 'false' : 'true'}
           >
-            <!-- Cursive Script Accent -->
-            <span class="handwritten-accent">{tab.handwritten}</span>
-            
             <!-- Serif Center Statement -->
             <h3 class="statement-text">{tab.text}</h3>
           </div>
@@ -120,86 +144,104 @@ const statementTabs = [
           <span class="mono-meta-tag">* INDEXED PROJECT ARCHIVE</span>
           <h2 class="section-title">Selected Work</h2>
         </div>
-        <span class="project-count">( 02 )</span>
+        <span class="project-count" aria-label={`${projects.length} projects`}>( {projectCount} )</span>
       </div>
 
       <p class="section-description">
-        A curated collection of branding, digital art direction and designs.
+        Four projects, each showing a different side of how I work: research, design systems, data and play.
       </p>
       
       <!-- Asymmetrical / Skewed Projects Grid -->
-      <div class="projects-ho-grid">
+      <ul class="projects-ho-grid">
         {projects.map((project) => (
-          <div 
+          <li
             class="ho-card-wrapper"
             style={`--card-bg: ${project.cardBg}; --card-rot: ${project.rotation}; --card-offset: ${project.offsetY};`}
           >
             <a href={project.slug} class="card-link">
-              <ProjectCard 
-                slug={project.slug}
-                title={project.title}
-                category={project.category}
-                year={project.year}
-                imageSrc={project.imageSrc}
-              />
+              <span class={`card-thumb ${project.fit === 'contain' ? 'contain' : ''}`}>
+                <img src={project.imageSrc} alt="" loading="lazy" />
+              </span>
+              <!-- Category and year on their own line, so the year never runs into the title -->
+              <span class="card-meta">
+                <span>{project.category}</span>
+                <span>{project.year}</span>
+              </span>
+              <span class="card-title">{project.title}</span>
+              <span class="card-summary">{project.summary}</span>
+              <span class="card-cta" aria-hidden="true">View project →</span>
             </a>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
+
+      <p class="all-work"><a href="/work" class="all-work-link">See all projects</a></p>
     </section>
-  </div>
+  </main>
+
+  <BackToTop />
 </Layout>
 
 <script>
   function initPageAnimations() {
-    // 1. Dynamic Scroll Velocity Tilt for Project Cards (Hooked into Layout's Lenis instance)
-    const checkLenis = setInterval(() => {
-      const lenis = (window as any).lenisInstance;
-      if (!lenis) return;
-      clearInterval(checkLenis);
+    const root = document.querySelector<HTMLElement>('.ho-canvas');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
 
-      const cards = document.querySelectorAll<HTMLElement>('.ho-card-wrapper');
+    // 1. Dynamic Scroll Velocity Tilt for Project Cards (Hooked into Layout's Lenis instance).
+    // Skipped on phones, where the cards sit straight in one column.
+    if (matchMedia('(min-width: 769px)').matches) {
+      const checkLenis = setInterval(() => {
+        const lenis = (window as any).lenisInstance;
+        if (!lenis) return;
+        clearInterval(checkLenis);
 
-      lenis.on('scroll', (e: { velocity: number }) => {
-        // Clamp velocity so distortion stays subtle and balanced
-        const velocity = Math.max(-12, Math.min(12, e.velocity));
-        const skew = velocity * 0.45;
+        const cards = document.querySelectorAll<HTMLElement>('.ho-card-wrapper');
 
-        cards.forEach((card) => {
-          card.style.setProperty('--scroll-skew', `${skew}deg`);
+        lenis.on('scroll', (e: { velocity: number }) => {
+          // Clamp velocity so distortion stays subtle and balanced
+          const velocity = Math.max(-12, Math.min(12, e.velocity));
+          const skew = velocity * 0.45;
+
+          cards.forEach((card) => {
+            card.style.setProperty('--scroll-skew', `${skew}deg`);
+          });
         });
-      });
-    }, 50);
+      }, 50);
+      // Stop looking after 2 seconds (Lenis is switched off for reduced motion)
+      setTimeout(() => clearInterval(checkLenis), 2000);
+    }
 
     // 2. Interactive Statement Tab Switching
-    const buttons = document.querySelectorAll('.tab-btn');
-    const panels = document.querySelectorAll('.tab-content-panel');
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+    const panels = document.querySelectorAll<HTMLElement>('.tab-content-panel');
 
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const targetId = btn.getAttribute('data-tab-target');
 
-        buttons.forEach((b) => b.classList.remove('active'));
-        panels.forEach((p) => p.classList.remove('active'));
+        buttons.forEach((b) => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+        panels.forEach((p) => { p.classList.remove('active'); p.setAttribute('aria-hidden', 'true'); });
 
         btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
         const activePanel = document.getElementById(`tab-${targetId}`);
         if (activePanel) {
           activePanel.classList.add('active');
+          activePanel.setAttribute('aria-hidden', 'false');
         }
       });
     });
 
     // 3. Scroll Reveal Observer
-    const observerCallback: IntersectionObserverCallback = (entries) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
         }
       });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, {
+    }, {
       threshold: 0.1,
       rootMargin: '0px 0px -50px 0px'
     });
@@ -207,21 +249,14 @@ const statementTabs = [
     document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
   }
 
-  // Handle standard page loads & Astro View Transitions
-  document.addEventListener('DOMContentLoaded', initPageAnimations);
+  // astro:page-load fires on the first load and after every page change
   document.addEventListener('astro:page-load', initPageAnimations);
 </script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
 
-  html {
-    scroll-behavior: auto !important;
-    background-color: #fcfcee;
-  }
-
   .ho-canvas {
-    background-color: #fcfcee;
     color: #111111;
     padding: 0 24px;
     min-height: 100vh;
@@ -240,6 +275,7 @@ const statementTabs = [
   /* --- Hero Wrapper --- */
   .hero-wrapper {
     min-height: 90vh;
+    min-height: 90svh; /* the real screen height on phones, ignoring the browser bars */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -301,14 +337,9 @@ const statementTabs = [
     max-width: 850px;
   }
 
-  .handwritten-text {
-  font-family: 'YourHandwrittenFont', cursive;
-  color: #0038FF; /* Strategic Brutalist / Electric Blue */
-}
-
   .intro-heading {
     font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+    font-size: clamp(1.9rem, 4.2vw, 3.4rem);
     font-weight: 400;
     line-height: 1.15;
     letter-spacing: -0.02em;
@@ -345,9 +376,10 @@ const statementTabs = [
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.08em;
-    color: #666;
+    color: #555;
     cursor: pointer;
-    padding: 6px 12px;
+    min-height: 44px; /* a comfortable tap target */
+    padding: 0 12px;
     transition: all 0.25s ease;
     text-transform: uppercase;
   }
@@ -364,20 +396,17 @@ const statementTabs = [
     box-shadow: 2px 2px 0px #111;
   }
 
+  /* All four statements share one grid cell, so the box is always as tall as the longest one.
+     Nothing can spill over the next section, whatever the screen width. */
   .statement-display-container {
-    position: relative;
+    display: grid;
     width: 100%;
     max-width: 880px;
-    min-height: 260px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     text-align: center;
   }
 
   .tab-content-panel {
-    position: absolute;
-    inset: 0;
+    grid-area: 1 / 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -395,31 +424,15 @@ const statementTabs = [
     pointer-events: auto;
   }
 
-  .handwritten-accent {
-    font-family: 'Caveat', cursive;
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    color: #1d4ed8;
-    position: absolute;
-    top: -24px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-4deg);
-    z-index: 1;
-    pointer-events: none;
-    line-height: 1;
-    white-space: nowrap;
-    opacity: 0.22;
-  }
-
   .statement-text {
     font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-size: clamp(1.6rem, 4vw, 3rem);
     font-weight: 400;
     line-height: 1.25;
     color: #111111;
-    position: relative;
-    z-index: 2;
     max-width: 740px;
     margin: 0;
+    text-wrap: balance;
   }
 
   /* --- Scroll Reveal Animations --- */
@@ -449,6 +462,7 @@ const statementTabs = [
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    gap: 16px;
     border-bottom: 1px solid #111;
     padding-bottom: 16px;
     margin-bottom: 24px;
@@ -466,6 +480,7 @@ const statementTabs = [
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
     color: #111;
+    white-space: nowrap;
   }
 
   .section-description {
@@ -478,16 +493,18 @@ const statementTabs = [
 
   /* --- Asymmetrical Cards Grid --- */
   .projects-ho-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 60px; /* room for the lower cards' offset */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 48px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 56px 48px;
     align-items: start;
   }
 
   .ho-card-wrapper {
     background-color: var(--card-bg, #ffffff);
     border: 1px solid #111;
-    padding: 24px;
     border-radius: 4px;
     
     --scroll-skew: 0deg;
@@ -502,7 +519,9 @@ const statementTabs = [
                 box-shadow 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .ho-card-wrapper:hover {
+  /* Keyboard users get the same lift as mouse users */
+  .ho-card-wrapper:hover,
+  .ho-card-wrapper:focus-within {
     transform: translateY(calc(var(--card-offset) - 12px)) 
                rotate(0deg) 
                scale(1.02) !important;
@@ -515,44 +534,193 @@ const statementTabs = [
   .card-link {
     text-decoration: none;
     color: inherit;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
   }
 
+  .card-link:focus-visible {
+    outline: 3px solid #1d4ed8;
+    outline-offset: -4px;
+  }
+
+  .card-thumb {
+    display: block;
+    aspect-ratio: 4 / 3;
+    margin-bottom: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(17, 17, 17, 0.15);
+    border-radius: 2px;
+    background: #fff;
+  }
+
+  .card-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left top;
+  }
+
+  /* Phone screens show in full instead of being cropped */
+  .card-thumb.contain {
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .card-thumb.contain img {
+    object-fit: contain;
+    object-position: center;
+    padding: 14px;
+    box-sizing: border-box;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #3d3d3d;
+  }
+
+  .card-title {
+    font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+    line-height: 1.2;
+  }
+
+  .card-summary {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #2e2e2e;
+  }
+
+  .card-cta {
+    margin-top: 4px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .all-work {
+    margin: 72px 0 0;
+    text-align: center;
+  }
+
+  .all-work-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 26px;
+    border: 1px solid #111;
+    border-radius: 999px;
+    color: #111;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .all-work-link:hover {
+    background-color: rgba(17, 17, 17, 0.06);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-wrapper,
+    .scroll-indicator .line { animation: none; }
+    .reveal-on-scroll,
+    .tab-content-panel { transition: none; transform: none; }
+    .reveal-on-scroll { opacity: 1; }
+    .ho-card-wrapper,
+    .ho-card-wrapper:hover,
+    .ho-card-wrapper:focus-within {
+      transition: none;
+      transform: none !important;
+    }
+  }
+
+  /* --- Tablets and phones --- */
   @media (max-width: 768px) {
+    /* The Layout already pads the page on phones, so no extra side padding here */
+    .ho-canvas {
+      padding: 0;
+    }
+
+    .hero-wrapper {
+      min-height: 80vh;
+      min-height: 80svh;
+      padding-bottom: 32px;
+    }
+
     .intro-section {
-      padding: 100px 0 60px;
+      padding: 64px 0 40px;
     }
 
     .interactive-statement-section {
-      padding: 80px 0 90px;
+      padding: 48px 0 72px;
     }
 
     .work-section {
-      padding: 80px 0;
+      padding: 64px 0;
     }
 
+    /* Tabs: two neat rows of two, each easy to tap */
     .tab-nav {
-      gap: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
       margin-bottom: 40px;
     }
 
     .tab-btn {
-      font-size: 10px;
-      padding: 4px 8px;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      padding: 0 8px;
+      border-color: rgba(0, 0, 0, 0.2);
     }
 
-    .statement-display-container {
-      min-height: 240px;
+    .section-description {
+      margin-bottom: 40px;
     }
 
+    /* Cards: one straight column, no tilt or offset */
     .projects-ho-grid {
       grid-template-columns: 1fr;
-      gap: 32px;
+      gap: 28px;
+      padding-bottom: 0;
     }
 
-    .ho-card-wrapper {
+    .ho-card-wrapper,
+    .ho-card-wrapper:hover,
+    .ho-card-wrapper:focus-within {
       transform: none !important;
       box-shadow: 4px 4px 0px #111 !important;
+    }
+
+    .card-link {
+      padding: 18px;
+    }
+
+    .card-summary {
+      font-size: 15px;
+    }
+
+    .all-work {
+      margin-top: 48px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .card-meta {
+      flex-direction: column;
+      gap: 2px;
     }
   }
 </style>

@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import BackToTop from '../components/BackToTop.astro';
 
 interface Project {
   title: string;
@@ -9,6 +10,9 @@ interface Project {
   imageSrc: string;
   slug: string;
   tags: string[];
+  fit?: 'cover' | 'contain';   // cover fills the box and crops; contain shows the whole image
+  position?: string;           // which part of the image stays in view, e.g. 'left top'
+  bg?: string;                 // background colour behind a contained image
 }
 
 const projects: Project[] = [
@@ -16,37 +20,40 @@ const projects: Project[] = [
     title: "STU: Online Student Platform",
     category: "UX/UI Case Study",
     year: "2025",
-    description: "An integrated platform helping students organize coursework, manage schedules, and track deadlines seamlessly.",
+    description: "A research-led student app that puts deadlines, the timetable and coursework in one place.",
     imageSrc: "/3.png",
     slug: "/stu",
-    tags: ["UX/UI", "Research", "Figma", "Survey"]
+    tags: ["Research", "Survey", "Figma"]
   },
   {
     title: "Pip: A Wellbeing Companion",
-    category: "UI/UX Case Study",
+    category: "UX/UI Case Study",
     year: "2026",
-    description: "A small character-led wellbeing app. Move Pip to say how your day went, then log sleep and doses, breathe and review your week.",
-    imageSrc: "/pip-preview.png",
+    description: "A character-led wellbeing app, with its own design system and a live build in code.",
+    imageSrc: "/pip_drag_animation_storyboard.png",
     slug: "/pip",
-    tags: ["UI/UX", "Figma", "Prototyping"]
+    tags: ["UX/UI", "Design System", "Figma", "Code"],
+    fit: "contain",
+    bg: "#d6e7e1"
+  },
+  {
+    title: "GarageGo: Admin Portal",
+    category: "UI Design",
+    year: "2026",
+    description: "An admin dashboard designed so that dense data is quick to scan and hard to misread.",
+    imageSrc: "/garagego/dashboard.png",
+    slug: "/garagego",
+    tags: ["UI Design", "Data Display", "Figma"],
+    position: "left top"
   },
   {
     title: "Critter & Friends",
-    category: "Web Design & Game Design",
+    category: "Web Design, UX/UI",
     year: "2026",
-    description: "An interactive, browser-based web application with playful micro-interactions and custom illustrations.",
+    description: "A web game about native Irish insects for children aged 5 to 8, tested with educators.",
     imageSrc: "/critterandfriends.png",
     slug: "/critterandfriends",
-    tags: ["Web Dev", "UI/UX", "Illustration", "Usability Testing"]
-  },
-  {
-    title: "UX Research & Strategy",
-    category: "Design System & Strategy",
-    year: "2026",
-    description: "A comprehensive exploration of user personas, affinity mapping, wireframes, and design components.",
-    imageSrc: "",
-    slug: "", // Unlinked project
-    tags: ["User Flow", "Personas", "IA"]
+    tags: ["UX/UI", "Illustration", "Usability Testing", "Code"]
   }
 ];
 ---
@@ -102,8 +109,13 @@ const projects: Project[] = [
                 <!-- Right Column: Thumbnail -->
                 <div class="project-media">
                   {project.imageSrc ? (
-                    <div class="thumbnail-wrapper">
-                      <img src={project.imageSrc} alt={`Preview of ${project.title}`} class="thumbnail-img" />
+                    <div class="thumbnail-wrapper" style={project.bg ? `background:${project.bg}` : undefined}>
+                      <img
+                        src={project.imageSrc}
+                        alt={`Preview of ${project.title}`}
+                        class={`thumbnail-img ${project.fit === 'contain' ? 'is-contain' : ''}`}
+                        style={`object-fit:${project.fit ?? 'cover'};object-position:${project.position ?? 'center'}`}
+                      />
                     </div>
                   ) : (
                     <div class="thumbnail-wrapper thumbnail-placeholder">
@@ -119,6 +131,9 @@ const projects: Project[] = [
       </div>
     </section>
 
+       
+
+    <BackToTop />
   </main>
 </Layout>
 
@@ -142,7 +157,11 @@ const projects: Project[] = [
 
   document.addEventListener('DOMContentLoaded', initScrollReveal);
   document.addEventListener('astro:page-load', initScrollReveal);
+
+  
 </script>
+
+
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,700;0,900;1,400&family=Inter:wght@400;500;600;700&display=swap');
@@ -350,10 +369,17 @@ const projects: Project[] = [
   }
 
   .thumbnail-img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.4s ease;
+  }
+
+  /* A contained image gets breathing room so it doesn't touch the edges */
+  .thumbnail-img.is-contain {
+    padding: 14px;
+    box-sizing: border-box;
   }
 
   .project-row-link:not(.is-disabled):hover .thumbnail-img {
@@ -376,5 +402,12 @@ const projects: Project[] = [
       width: 100%;
       height: 200px;
     }
+  }
+
+   @media (max-width: 768px) {
+    .work-page { padding: 32px 0 64px; }
+    .page-title { font-size: clamp(2.6rem, 14vw, 3.5rem); }
+    .project-title { display: block; }
+    .arrow-icon { margin-left: 6px; }
   }
 </style>

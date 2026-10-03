@@ -7,13 +7,14 @@ import { ClientRouter } from 'astro:transitions';
 interface Props {
   title?: string;
   hideNav?: boolean; // Toggle site header/footer for standalone layouts
+  bg?: string;       // Page background colour. Leave it out to use the site's parchment.
 }
 
-const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
+const { title = "Lydia Stewart — Portfolio", hideNav = false, bg = "#fcfcee" } = Astro.props;
 ---
 
-<!xhtml>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" style={`--page-bg: ${bg}`}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,15 +33,24 @@ const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
       <div id="page-wrapper">
         <Header />
         <slot />
-   
+        <Footer />
       </div>
     )}
 
     <!-- 2. Global Lenis Initialization Script -->
     <script>
       function initSmoothScroll() {
-        const LenisGlobal = (window as any).Lenis;
+        const w = window as any;
+        const LenisGlobal = w.Lenis;
         if (!LenisGlobal) return;
+
+        // Only ever run one Lenis at a time. Without this, every page change
+        // (and the first load, which fires both events below) starts another one.
+        if (w.lenisInstance) { w.lenisInstance.destroy(); w.lenisInstance = null; }
+        if (w.lenisFrame) { cancelAnimationFrame(w.lenisFrame); w.lenisFrame = null; }
+
+        // People who ask for reduced motion get normal scrolling.
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
         const lenis = new LenisGlobal({
           duration: 1.2,
@@ -53,18 +63,17 @@ const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
         });
 
         // Expose instance so index.astro can hook into scroll events
-        (window as any).lenisInstance = lenis;
+        w.lenisInstance = lenis;
 
         function raf(time: number) {
           lenis.raf(time);
-          requestAnimationFrame(raf);
+          w.lenisFrame = requestAnimationFrame(raf);
         }
 
-        requestAnimationFrame(raf);
+        w.lenisFrame = requestAnimationFrame(raf);
       }
 
-      // Initialize on load & Astro View Transitions navigation
-      document.addEventListener('DOMContentLoaded', initSmoothScroll);
+      // astro:page-load fires on the first load and after every page change
       document.addEventListener('astro:page-load', initSmoothScroll);
     </script>
   </body>
@@ -77,14 +86,14 @@ const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
     scroll-behavior: auto !important;
   }
 
-  :global(:focus-visible) { outline: 3px solid #3730a3; outline-offset: 3px; }
+  :focus-visible { outline: 3px solid #3730a3; outline-offset: 3px; }
 
-@media (prefers-reduced-motion: reduce) {
-  .scroll-reveal { opacity: 1; transform: none; transition: none; }
-  .scroll-progress-bar, .scroll-top-btn, .cta-primary { transition: none; }
-}
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-reveal { opacity: 1; transform: none; transition: none; }
+    .scroll-progress-bar, .scroll-top-btn, .cta-primary { transition: none; }
+  }
 
-  html.lenis, 
+  html.lenis,
   html.lenis body {
     height: auto;
   }
@@ -109,13 +118,22 @@ const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
   html, body {
     min-height: 100%;
     font-family: 'Bodoni Moda', 'Playfair Display', serif;
+    overflow-x: clip; /* nothing can make the page scroll sideways on a phone */
+    -webkit-text-size-adjust: 100%; /* stops iPhones enlarging text when you turn the phone */
+    text-size-adjust: 100%;
+  }
+  img, video, svg { max-width: 100%; }
+
+  /* The page background comes from the bg prop, so each page can choose its own.
+     It's set on html too, so overscroll on Mac and phones shows the same colour. */
+  html {
+    background-color: var(--page-bg, #fcfcee);
   }
 
   body {
     margin: 0;
-    background-color: #fcfcee; /* Warm parchment base */
+    background-color: var(--page-bg, #fcfcee);
     color: #111111;
-    overflow-x: hidden;
   }
 
   #page-wrapper {
@@ -123,13 +141,14 @@ const { title = "Lydia Stewart — Portfolio", hideNav = false } = Astro.props;
     flex-direction: column;
     justify-content: space-between;
     min-height: 100vh;
+    min-height: 100svh; /* the real screen height on phones, ignoring the browser bars */
     padding: 40px 60px;
-    background-color: #fcfcee
+    background-color: var(--page-bg, #fcfcee);
   }
 
   @media (max-width: 768px) {
     #page-wrapper {
-      padding: 24px;
+      padding: 20px;
     }
   }
 </style>

@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
+import PipTabs from '../components/PipTabs.astro';
 import ProjectNav from '../components/ProjectNav.astro';
 import BackToTop from '../components/BackToTop.astro';
 import flow from '../../public/pip_full_prototype_figma_view.png';
@@ -12,10 +13,10 @@ import doses from '../../public/pip-doses.png';
 import breathe from '../../public/pip-breathe.png';
 import week from '../../public/pip-week.png';
 
-// TODO: confirm these four lines are accurate for how you worked.
+
 const meta = [
   ["Role", "UI designer, solo"],
-  ["Type", "Personal project, in progress"],
+  ["Timeline", "Personal project, in progress"],
   ["Scope", "Mobile app, six screens"],
   ["Tools", "Figma, HTML, CSS, JavaScript"]
 ];
@@ -32,11 +33,11 @@ const moods = [
 ];
 
 // A small Pip for each mood button, drawn at build time so it shows without JavaScript.
-const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-const mix = (a, b, k) => '#' + hx(a).map((v, i) => Math.round(v + (hx(b)[i] - v) * k).toString(16).padStart(2, '0')).join('');
+const hx = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const mix = (a: string, b: string, k: number) => '#' + hx(a).map((v, i) => Math.round(v + (hx(b)[i] - v) * k).toString(16).padStart(2, '0')).join('');
 const INK = '#0e2a2f';
-const col = (l) => (l < 0.5 ? mix('#8a7bd8', '#4fb9a1', l * 2) : mix('#4fb9a1', '#f0a92e', (l - 0.5) * 2));
-const miniPip = (i) => {
+const col = (l: number) => (l < 0.5 ? mix('#8a7bd8', '#4fb9a1', l * 2) : mix('#4fb9a1', '#f0a92e', (l - 0.5) * 2));
+const miniPip = (i: number) => {
   const l = i / 6, c = col(l), foot = mix(c, INK, 0.3);
   const st = `stroke="${INK}" stroke-width="8" stroke-linecap="round" fill="none"`;
   let f;
@@ -53,18 +54,18 @@ const miniPip = (i) => {
   return `<svg viewBox="0 0 200 230" aria-hidden="true" focusable="false"><g transform="translate(100 205) scale(${(1.1 - l * 0.1).toFixed(3)} ${(0.86 + l * 0.2).toFixed(3)}) translate(-100 -205)"><ellipse cx="68" cy="205" rx="20" ry="9" fill="${foot}"/><ellipse cx="132" cy="205" rx="20" ry="9" fill="${foot}"/><path d="M100 40C150 40 177 85 177 132C177 178 146 205 100 205C54 205 23 178 23 132C23 85 50 40 100 40Z" fill="${c}"/><ellipse cx="74" cy="84" rx="40" ry="26" fill="#fff" opacity=".28" transform="rotate(-18 74 84)"/><g transform="rotate(${(55 - l * 63).toFixed(1)} 100 46)"><path d="M100 46C100 32 101 22 105 12" stroke="#3f7a52" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M105 16C122 2 144 8 148 26C130 32 113 28 105 16Z" fill="#6fae7f"/></g><circle cx="58" cy="140" r="9" fill="#ff8fa3" opacity="${cheek}"/><circle cx="142" cy="140" r="9" fill="#ff8fa3" opacity="${cheek}"/>${f}</g></svg>`;
 };
 
-// A day with Pip. The times are illustrative.
+// A day with Pip. The times are only examples.
 const day = [
-  { img: welcome, when: "First launch", title: "A first hello", text: "Pip introduces itself in three short slides, shows the one gesture the app is built on and promises the data stays on the device. The last button says what happens next: Start my first check-in.", alt: "Pip welcome screen with the character and a Next button" },
-  { img: sleep, when: "7:30 am", title: "How long did you sleep?", text: "Sleep is the one place a precise number matters, so it gets a big figure and thumb-sized buttons. Pip's eyes are closed, and its body fills out with more rest.", alt: "Pip sleep screen with a large hours figure and plus and minus buttons" },
-  { img: doses, when: "12:30 pm", title: "Doses, without the guilt", text: "Each dose taken makes Pip a little happier. A missed dose is a quieter Pip, never a red warning.", alt: "Pip doses screen with a checklist and a small Pip" },
-  { img: mood, when: "4:00 pm", title: "How is the day going?", text: "There is no slider. You move Pip. The body squashes and stretches, the leaf droops or lifts, and the colour warms from dusk to amber.", alt: "Pip mood screen with the character in a steady state and a Save button" },
-  { img: breathe, when: "9:00 pm", title: "Slow down together", text: "Breathing reuses Pip instead of inventing a new component. It grows on the in-breath and settles on the out-breath, with the cue in large type above.", alt: "Pip breathe screen with a larger Pip and the cue Breathe in" },
+  { img: welcome, when: "First launch", title: "A first hello", text: "Pip introduces itself in three short slides, shows the one gesture the app is built on and promises the data stays on the device. The last button says exactly what happens next: Start my first check-in.", alt: "Pip welcome screen with the character and a Next button" },
+  { img: sleep, when: "7:30 am", title: "How long did you sleep?", text: "Sleep is the one place an exact number matters, so it gets a big figure and thumb-sized buttons. Pip's eyes are closed, and its body fills out with more rest.", alt: "Pip sleep screen with a large hours figure and plus and minus buttons" },
+  { img: doses, when: "12:30 pm", title: "Doses, without the guilt", text: "Each dose you take makes Pip a little happier. A missed dose means a quieter Pip, never a red warning.", alt: "Pip doses screen with a checklist and a small Pip" },
+  { img: mood, when: "4:00 pm", title: "How is the day going?", text: "There's no slider. You move Pip. Its body squashes and stretches, the leaf droops or lifts, and the colour warms from dusk to amber.", alt: "Pip mood screen with the character in a steady state and a Save button" },
+  { img: breathe, when: "9:00 pm", title: "Slow down together", text: "The breathing screen reuses Pip rather than adding something new. It grows as you breathe in and settles as you breathe out, with the cue in large type above.", alt: "Pip breathe screen with a larger Pip and the cue Breathe in" },
   { img: week, when: "Sunday", title: "Look back on the week", text: "One plain sentence leads, then seven small Pips let you tap any day for the detail. The figures here are sample data.", alt: "Pip week screen with seven small characters and a day detail card" }
 ];
 ---
 
-<Layout title="Pip: a wellbeing companion — Case Study">
+<Layout title="Pip: a wellbeing companion" bg="#fbfaf4">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -73,17 +74,16 @@ const day = [
     <a class="skip" href="#story">Skip to the story</a>
 
     <header class="wrap bar">
-      <a href="/work" class="back">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Back to selected work
-      </a>
-      <span class="bar-links">
-        <a href="/pip-system" class="back">Design system</a>
-        <a href="/pip-app" class="back">Live app</a>
-      </span>
+      <PipTabs current="overview" />
     </header>
 
     <section class="wrap hero">
+      <div class="hero-grid">
+      <div class="hero-main">
+      <p class="kicker">
+        <span class="pill" style="--c: var(--yellow)">Case study</span>
+        <span class="pill" style="--c: var(--mint)" id="readTime">4 min read</span>
+      </p>
       <h1 class="title">
         <span class="word">Pip<svg class="perch" id="heroPip" viewBox="0 0 200 230" role="img" aria-label="Pip, a small round character with a leaf on its head">
           <defs><radialGradient id="heroGrad" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop class="ga" offset=".4" stop-color="#4fb9a1"/><stop class="gb" offset="1" stop-color="#419a88"/></radialGradient></defs>
@@ -95,7 +95,7 @@ const day = [
           </g></g>
         </svg></span><span class="sr">: a wellbeing companion</span>
       </h1>
-      <p class="lead">A small wellbeing companion, six screens and one question: how was your day?</p>
+      <p class="lead">A small wellbeing companion with six screens and one question: how was your day?</p>
 
       <div class="try">
         <p id="tryLabel" class="try-label">Tell Pip how your day is going.</p>
@@ -110,29 +110,31 @@ const day = [
         <p class="say" id="say" aria-live="polite">{moods[3][1]}</p>
       </div>
 
-      <a class="cta" href="/pip-app">Meet Pip in the live app</a>
+      <a class="cta" href="/pip-app" data-astro-reload>Try Pip in the live app</a>
+      </div>
 
-      <dl class="meta">
+      <dl class="specs" aria-label="Project overview">
         {meta.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
+      </div>
     </section>
 
     <div id="story">
       <section class="wrap status" aria-labelledby="statusH">
         <div class="status-box">
           <h2 id="statusH">A personal project, still in progress.</h2>
-          <p>Pip is something I’m making on my own, and I’m still working on it. The six screens and the live app are built. Things like extra states and testing with real people aren’t done yet, and I’ve been honest about that at the end of this page.</p>
+          <p>Pip is something I'm making on my own. The six screens and the live app are built. Extra states and testing with real people aren't done yet, and I've listed what's left at the end of this page.</p>
         </div>
       </section>
       <section class="wrap chapter">
         <h2>Every wellbeing app asks how your day was.</h2>
         <div class="prose">
-          <p>Most of them answer with a slider and a row of faces. It works, but it can feel like paperwork, and you only see the result after you save. I wanted to find out what would happen if the answer was a character you could move.</p>
-          <p>Three things stood out in the reference screens I studied:</p>
+          <p>Most of them answer with a slider and a row of faces. It works, but it can feel like filling in a form, and you only see the result after you save. I wanted to find out what would happen if the answer was a character you could move.</p>
+          <p>Three things stood out in the apps I studied:</p>
         </div>
         <div class="gripes">
           <p style="--c: var(--lavender)">A slider makes the answer abstract.</p>
-          <p style="--c: var(--yellow)">Feedback arrives after the fact.</p>
+          <p style="--c: var(--yellow)">Feedback only arrives after you save.</p>
           <p style="--c: var(--coral)">Missed entries often turn into warnings.</p>
         </div>
       </section>
@@ -141,8 +143,8 @@ const day = [
         <div>
           <h2>Pip is a small round character with a leaf on its head.</h2>
           <div class="prose">
-            <p>The leaf lifts when the day goes well and droops when it doesn’t. The body stretches up on good days and settles down on heavy ones, and the colour warms from dusk through sea glass to amber.</p>
-            <p>The soft, character-led style started with references like Tiimo. The character, the metaphor and the system are my own.</p>
+            <p>The leaf lifts when the day goes well and droops when it doesn't. The body stretches up on good days and settles down on heavy ones, and the colour warms from dusk through sea glass to amber.</p>
+            <p>The soft, character-led style started with apps like Tiimo. The character, the idea of moving it and the design system are my own.</p>
           </div>
         </div>
         <ul class="swatches" aria-label="What Pip's colours mean">
@@ -157,11 +159,11 @@ const day = [
         <div class="decisions">
           <article>
             <h3 style="--c: var(--mint)">The control is the feedback.</h3>
-            <p>You never choose a number and wait to be told what it means. Moving Pip changes its body, leaf, face and colour as you go, and screen readers and arrow keys get the same result.</p>
+            <p>You never pick a number and wait to be told what it means. Moving Pip changes its body, leaf, face and colour as you go, and screen readers and arrow keys get the same result.</p>
           </article>
           <article>
             <h3 style="--c: var(--yellow)">Numbers only where they help.</h3>
-            <p>Mood is a feeling, so it has no figure. Sleep is a quantity, so it gets a large one. Each screen asks one question and has one obvious action.</p>
+            <p>Mood is a feeling, so it has no number. Sleep is an amount, so it gets a large one. Each screen asks one question and has one obvious action.</p>
           </article>
           <article>
             <h3 style="--c: var(--lavender)">Progress without pressure.</h3>
@@ -193,13 +195,13 @@ const day = [
         <div class="wrap">
           <h2>How it was made.</h2>
           <div class="acts">
-            <div><h3>Reference</h3><p>I studied wellbeing app screens for tone and layout, then chose a different metaphor so the result wouldn’t be a copy.</p></div>
-            <div><h3>Figma</h3><p>Colour variables for light and dark, text styles and one Pip component with seven mood variants, connected with Smart animate. <a href="/pip-system">See the design system</a>.</p></div>
-            <div><h3>Code</h3><p>Figma moves between steps, so I built the drag and the breathing in code to feel the real motion.</p></div>
+            <div><h3>Reference</h3><p>I studied wellbeing apps for tone and layout, then chose a different idea so the result wouldn't be a copy.</p></div>
+            <div><h3>Figma</h3><p>Colour variables for light and dark, text styles, and one Pip component with seven mood variants, connected with Smart animate. <a href="/pip-system">See the design system</a>.</p></div>
+            <div><h3>Code</h3><p>Figma prototypes jump between states, so I built the drag and the breathing in code to get the real motion right. <a href="/pip-app" data-astro-reload>Try the live app</a>.</p></div>
           </div>
           <figure class="fig">
             <button class="zoom" type="button" aria-label="Enlarge figure 1"><Image src={flow} alt="Figma canvas showing the Pip screens connected by prototype arrows" loading="lazy" /></button>
-            <figcaption>The connected frames in Figma, from welcome to week.</figcaption>
+            <figcaption>The connected screens in Figma, from welcome to week.</figcaption>
           </figure>
           <figure class="fig">
             <button class="zoom" type="button" aria-label="Enlarge figure 2"><Image src={states} alt="Seven Pip frames from drained to glowing, with a handle rising on a track" loading="lazy" /></button>
@@ -209,20 +211,20 @@ const day = [
       </section>
 
       <section class="wrap chapter">
-        <h2>What Pip hasn’t answered yet.</h2>
+        <h2>What Pip hasn't answered yet.</h2>
         <div class="prose">
           <!-- TODO: edit this in your own voice, or replace it with real results once you've tested. -->
-          <p>Pip is a concept and hasn’t been tested with people. If I kept going, I would start here:</p>
+          <p>Pip is a concept and hasn't been tested with people yet. If I kept going, I'd start here:</p>
           <p><strong>Test with five people.</strong> Does moving a character feel natural, or is a mascot too much for some adults?</p>
           <p><strong>Design the missing states.</strong> Empty, missed-day and error screens, plus a first-time permission moment.</p>
-          <p><strong>Rethink doses.</strong> A quieter Pip is gentle, but a missed medication may need a clearer prompt.</p>
+          <p><strong>Rethink doses.</strong> A quieter Pip is gentle, but a missed medication may need a clearer reminder.</p>
         </div>
       </section>
 
       <section class="wrap finale">
         <div class="finale-box">
           <p class="big">How was your day?</p>
-          <a class="cta" href="/pip-app">Ask Pip in the live app</a>
+          <a class="cta" href="/pip-app" data-astro-reload>Ask Pip in the live app</a>
         </div>
       </section>
     </div>
@@ -251,6 +253,16 @@ const day = [
     const mix = (a, b, k) => '#' + hx(a).map((v, i) => Math.round(v + (hx(b)[i] - v) * k).toString(16).padStart(2, '0')).join('');
     const INK = '#0e2a2f';
     const col = (l) => (l < 0.5 ? mix('#8a7bd8', '#4fb9a1', l * 2) : mix('#4fb9a1', '#f0a92e', (l - 0.5) * 2));
+
+    // Reading time: counts the words in the page's main text (tables of values are left out)
+    const rt = document.getElementById('readTime');
+    const area = document.getElementById('story');
+    if (rt && area) {
+      const copy = area.cloneNode(true);
+      copy.querySelectorAll('table, svg, script, style').forEach((n) => n.remove());
+      const words = (copy.textContent || '').trim().split(/\s+/).length;
+      rt.textContent = `${Math.max(1, Math.ceil(words / 200))} min read`;
+    }
 
     const face = (l) => {
       const st = `stroke="${INK}" stroke-width="5" stroke-linecap="round" fill="none"`;
@@ -338,6 +350,7 @@ const day = [
   .ps {
     --bg: #fbfaf4; --card: #fff; --ink: #1f2430; --muted: #5a6070; --border: #d3d6df; --deep: #3f6b52;
     --yellow: #f6e7b0; --sage: #b5d0bf; --mint: #d0e1d4; --coral: #f0b7ab; --amber: #efd3ac; --lavender: #d3c6ea;
+    --on-deep: #e4ede6; /* light text on the dark green section: 5.1:1 */
     --serif: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
     --mono: 'JetBrains Mono', ui-monospace, monospace;
     --sans: 'Inter', system-ui, -apple-system, sans-serif;
@@ -345,6 +358,9 @@ const day = [
     --perch-x: -0.04em; --perch-y: -0.25em;
     background: var(--bg); color: var(--ink); font: 17px/1.7 var(--sans); -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: clip;
   }
+
+  
+
   .ps *, .ps *::before, .ps *::after { box-sizing: border-box; }
   .ps .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .ps a { color: inherit; }
@@ -353,14 +369,12 @@ const day = [
   .ps .wrap { max-width: 1080px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
   .ps .skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: #fff; padding: 10px 18px; border-radius: 999px; font: 600 14px var(--sans); }
   .ps .skip:focus { left: 16px; }
-
-  .ps .bar { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; padding-bottom: 8px; }
-  .ps .back { display: inline-flex; gap: 6px; align-items: center; font: 500 13px var(--mono); text-decoration: none; padding: 8px 0; }
-  .ps .back:hover { text-decoration: underline; text-underline-offset: 4px; }
-  .ps .bar-links { display: flex; gap: 24px; }
+  .ps .bar { padding-top: 24px; }
 
   /* Hero */
-  .ps .hero { padding-top: clamp(72px, 12vw, 150px); padding-bottom: 120px; }
+  .ps .hero { padding-top: clamp(48px, 9vw, 110px); padding-bottom: 120px; }
+  .ps .kicker { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 clamp(24px, 4vw, 40px); }
+  .ps .pill { display: inline-block; font: 500 12px/1 var(--mono); background: var(--c); color: var(--ink); padding: 7px 12px; border-radius: 999px; }
   .ps .title { font: 700 clamp(7rem, 25vw, 19rem)/.82 var(--serif); letter-spacing: -0.045em; margin: 0; padding-bottom: .17em; }
   .ps .word { position: relative; display: inline-block; }
   .ps .perch { position: absolute; width: .5em; right: var(--perch-x); top: var(--perch-y); overflow: visible; }
@@ -372,8 +386,8 @@ const day = [
   @keyframes phop { 40% { transform: translateY(-.08em); } }
   .ps .lead { font: 500 clamp(1.3rem, 2.4vw, 1.8rem)/1.4 var(--serif); max-width: 30ch; margin: 28px 0 40px; }
   .ps .try-label { font: 500 13px var(--mono); color: var(--muted); margin: 0 0 12px; }
-  .ps .moods { display: flex; flex-wrap: wrap; gap: 10px; }
-  .ps .moods button { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 88px; font: 500 14px var(--sans); padding: 12px 12px 10px; border-radius: 22px; border: 1.5px solid var(--border); background: var(--card); color: var(--ink); cursor: pointer; transition: background .2s, border-color .2s, box-shadow .2s, transform .15s; }
+    .ps .moods { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+  .ps .moods button { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; font: 500 14px var(--sans); padding: 12px 4px 10px; border-radius: 22px; border: 1.5px solid #868c9a; background: var(--card); color: var(--ink); cursor: pointer; transition: background .2s, border-color .2s, box-shadow .2s, transform .15s; } border-radius: 22px; border: 1.5px solid #868c9a; background: var(--card); color: var(--ink); cursor: pointer; transition: background .2s, border-color .2s, box-shadow .2s, transform .15s; }
   .ps .moods button:hover { border-color: var(--ink); }
   .ps .moods button[aria-pressed="true"] { border-color: var(--ink); background: #fff; box-shadow: 0 0 0 1px var(--ink), 0 10px 20px -12px rgba(31, 36, 48, .5); }
   .ps .moods button:active { transform: scale(.97); }
@@ -383,11 +397,14 @@ const day = [
   .ps .mw { font-weight: 600; }
   @media (max-width: 520px) { .ps .moods { gap: 8px; } .ps .moods button { min-width: 72px; padding: 10px 8px 8px; } .ps .mp { width: 40px; } }
   .ps .say { font: italic 500 1.25rem/1.4 var(--serif); margin: 16px 0 36px; min-height: 1.8em; }
-  .ps .cta { display: inline-flex; align-items: center; background: var(--ink); color: #fff !important; font-weight: 600; text-decoration: none; padding: 14px 28px; border-radius: 999px; transition: transform .2s, background .2s; }
+  .ps .cta { display: inline-flex; align-items: center; min-height: 48px; background: var(--ink); color: #fff !important; font-weight: 600; text-decoration: none; padding: 0 28px; border-radius: 999px; transition: transform .2s, background .2s; }
   .ps .cta:hover { background: var(--deep); transform: translateY(-2px); }
-  .ps .meta { display: flex; flex-wrap: wrap; gap: 12px 48px; margin: 64px 0 0; padding-top: 24px; border-top: 1px solid var(--border); }
-  .ps .meta dt { font: 500 12px var(--mono); color: var(--muted); }
-  .ps .meta dd { margin: 2px 0 0; font-weight: 600; }
+  /* Project card, the same as on STU and Critter & Friends */
+  .ps .hero-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr); gap: 64px; align-items: start; }
+  .ps .specs { margin: 56px 0 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 8px 28px rgba(31, 36, 48, .08); padding: 24px; display: grid; gap: 16px; }
+  .ps .specs dt { font: 500 12px var(--mono); color: var(--muted); }
+  .ps .specs dd { margin: 2px 0 0; font-weight: 600; line-height: 1.45; }
+  @media (max-width: 960px) { .ps .hero-grid { grid-template-columns: 1fr; gap: 40px; } .ps .specs { margin-top: 0; } }
 
   /* Status note */
   .ps .status { margin-bottom: 140px; }
@@ -430,20 +447,22 @@ const day = [
   .ps .step p:not(.when) { margin: 0; color: #333a48; }
   .ps .mimg { display: none; }
 
-  /* Behind the scenes */
+  /* How it was made */
   .ps .bench { background: var(--deep); color: var(--bg); padding: 120px 0; margin-bottom: 160px; }
+  .ps .bench :focus-visible { outline-color: var(--on-deep); }
   .ps .acts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-bottom: 72px; }
   .ps .acts h3 { font-size: 1.6rem; margin-bottom: 10px; }
-  .ps .acts p { margin: 0; color: var(--mint); }
+  .ps .acts p { margin: 0; color: var(--on-deep); }
+  .ps .acts a { text-underline-offset: 3px; }
   .ps .fig { margin: 0 0 56px; }
   .ps .fig:last-child { margin-bottom: 0; }
   .ps .zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 16px; overflow: hidden; }
   .ps .fig img { width: 100%; height: auto; display: block; background: var(--mint); min-height: 160px; }
-  .ps .fig figcaption { margin-top: 12px; font-size: 14px; color: var(--sage); }
+  .ps .fig figcaption { margin-top: 12px; font-size: 14px; color: var(--on-deep); }
   .ps dialog { border: 0; border-radius: 16px; padding: 12px; max-width: min(1200px, 94vw); max-height: 94vh; background: var(--card); }
   .ps dialog::backdrop { background: rgba(31, 36, 48, .7); }
   .ps dialog img { max-width: 100%; max-height: 82vh; display: block; margin: 12px auto 0; }
-  .ps .close { font: 600 13px var(--mono); padding: 10px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
+  .ps .close { font: 600 13px var(--mono); min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
 
   /* Finale */
   .ps .finale { padding-bottom: 120px; }

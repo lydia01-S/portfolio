@@ -1,10 +1,10 @@
-
 ---
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
-import { ClientRouter } from 'astro:transitions';
- 
-// High-fidelity imports
+
+import StuTabs from '../components/StuTabs.astro';
+
+// High-fidelity screens
 import h1 from '../../public/hr1.png';
 import h3 from '../../public/h3.png';
 import h4 from '../../public/h4.png';
@@ -12,8 +12,8 @@ import h6 from '../../public/h6.png';
 import h7 from '../../public/h7.png';
 import h8 from '../../public/h8.png';
 import h12 from '../../public/h12.png';
- 
-// Low-fidelity imports
+
+// Low-fidelity wireframes
 import w1 from '../../public/w1.png';
 import w3 from '../../public/w3.png';
 import w4 from '../../public/w4.png';
@@ -21,165 +21,158 @@ import w6 from '../../public/w6.png';
 import w7 from '../../public/w7.png';
 import w9 from '../../public/w9.png';
 import w12 from '../../public/w12.png';
- 
+
 import sitemapImg from '../../public/sitemap.png';
- 
+
+// Captions describe what each screen does. Keep them true to the prototype.
 const wireframeFlows = [
   {
-    category: "Academic and coursework",
+    category: "Coursework",
     lowRes: [
-      { img: w1, title: "Login entry", caption: "Standard SSO login flow" },
-      { img: w3, title: "Dashboard", caption: "Active modules and alerts at a glance" },
-      { img: w4, title: "Assignment view", caption: "Priority deadlines and submission status" },
-      { img: w6, title: "Grades overview", caption: "Filterable grade breakdown by module" }
+      { img: w1, title: "Log in", caption: "College login as the single way in" },
+      { img: w3, title: "Home", caption: "Modules and alerts at a glance" },
+      { img: w4, title: "Assignment", caption: "Deadline, brief and submission status" },
+      { img: w6, title: "Grades", caption: "Grades by module, with filters" }
     ],
     highRes: [
-      { img: h1, title: "Login entry", caption: "Brand-aligned authentication state" },
-      { img: h3, title: "Dashboard", caption: "High-contrast priority module cards" },
-      { img: h4, title: "Assignment view", caption: "Submission drawer and brief" },
-      { img: h6, title: "Grades overview", caption: "Visual progress indicators" }
+      { img: h1, title: "Log in", caption: "Login screen in the STU brand" },
+      { img: h3, title: "Home", caption: "Module cards ranked by what's due first" },
+      { img: h4, title: "Assignment", caption: "Submission drawer with the brief beside it" },
+      { img: h6, title: "Grades", caption: "Progress shown as bars, not just numbers" }
     ]
   },
   {
-    category: "Personal workspace",
+    category: "Timetable and campus",
     lowRes: [
-      { img: w7, title: "Campus map", caption: "Interactive spatial selection" },
-      { img: w9, title: "Schedule view", caption: "Daily time-block mapping" },
-      { img: w12, title: "Location detail", caption: "Building utilities and room status" }
+      { img: w7, title: "Campus map", caption: "Choose a building on the map" },
+      { img: w9, title: "Schedule", caption: "Today laid out as time blocks" },
+      { img: w12, title: "Room details", caption: "What's in each room and whether it's free" }
     ],
     highRes: [
-      { img: h7, title: "Campus map", caption: "Vector map with live occupancy" },
-      { img: h8, title: "Schedule view", caption: "Calendar sync and conflict detection" },
-      { img: h12, title: "Location detail", caption: "Equipment booking" }
+      { img: h7, title: "Campus map", caption: "Vector map linked to the timetable" },
+      { img: h8, title: "Schedule", caption: "Today's lectures as time blocks" },
+      { img: h12, title: "Room details", caption: "Room information and equipment booking" }
     ]
   }
 ];
- 
+
 type Flow = typeof wireframeFlows[number];
 const modes = [
   { id: 'hifi', prefix: 'High-fidelity screen', pick: (f: Flow) => f.highRes },
   { id: 'lofi', prefix: 'Low-fidelity wireframe', pick: (f: Flow) => f.lowRes }
 ];
- 
+
 const principles = [
-  { title: "Visual hierarchy", text: "Critical deadlines, course announcements and campus updates sit above the fold to keep cognitive load low.", color: "mint" },
-  { title: "Frictionless navigation", text: "A persistent tab bar and contextual back buttons mean students never lose their place.", color: "yellow" },
-  { title: "Component consistency", text: "Standard inputs, accordion filters and utility cards keep every screen aligned to the design system.", color: "lavender" }
+  { title: "Most important first", text: "Deadlines and today's timetable sit at the top of the screen, so students see what matters without scrolling.", color: "mint" },
+  { title: "Never lose your place", text: "A tab bar stays at the bottom of every screen, and a back button sits in the same corner every time.", color: "yellow" },
+  { title: "One set of parts", text: "Every screen is built from the same buttons, cards and filters, so once you've learned one screen you know them all.", color: "lavender" }
 ];
 ---
- 
-<Layout title="STU: Information Architecture & Wireframes">
-  <ClientRouter />
+
+<Layout title="STU: information architecture and wireframes" bg="#fbfaf4">
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
- 
+
   <div class="progress" aria-hidden="true"><div id="bar"></div></div>
- 
+  <a class="skip" href="#content">Skip to wireframes</a>
+
   <main class="wf" id="wf" data-view="hifi">
     <div class="container">
- 
+
       <header class="wf-header reveal">
-        <div class="topbar">
-          <a href="/stu" class="back">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Back to STU case study
-          </a>
-          <nav class="tabs-top" aria-label="Project pages">
-            <a href="/stu">Overview</a>
-            <a href="/stylesheet">Design system</a>
-            <a href="/wireframe" aria-current="page">IA and wireframes</a>
-            <a href="/research">UX research</a>
-          </nav>
-        </div>
- 
+        <StuTabs current="wireframes" />
+
         <div class="hero">
-          <p class="chips">
-            <span class="chip" style="--c: var(--lavender)">UX architecture v1.5</span>
-            <span class="chip" style="--c: var(--mint)">Mobile first</span>
-          </p>
+        <p class="chips">
+  <span class="chip" style="--c: var(--lavender)">Information architecture</span>
+
+  <span class="chip" style="--c: var(--yellow)" id="readTime">3 min read</span>
+</p>
           <h1>Information architecture and wireframes</h1>
           <p class="lead">
-            Structured, mobile-first wireframing that connects coursework tools with campus services. Clear component hierarchies and persistent navigation keep the mental model simple, and each low-fidelity concept was refined into a high-fidelity interaction flow.
+            The research showed students struggle to find things, so I started with structure. I mapped every screen into one shallow site map, sketched each one as a low-fidelity wireframe, and then turned them into finished screens. Use the switch below to compare the two.
           </p>
         </div>
       </header>
- 
-      <section class="card principles reveal" aria-labelledby="principles-title">
-        <div class="card-header">
-          <div>
-            <h2 id="principles-title">Core UX principles</h2>
-            <p class="desc">Usability heuristics guiding the mobile interactions.</p>
-          </div>
-          <span class="chip" style="--c: var(--sage)">Heuristics</span>
-        </div>
-        <div class="grid3">
-          {principles.map((p) => (
-            <div class="principle" style={`--c: var(--${p.color})`}>
-              <h3>{p.title}</h3>
-              <p>{p.text}</p>
+
+      <div id="content">
+        <section class="card principles reveal" aria-labelledby="principles-title">
+          <div class="card-header">
+            <div>
+              <h2 id="principles-title">Three rules for every screen</h2>
+              <p class="desc">The usability principles I designed every screen around.</p>
             </div>
-          ))}
-        </div>
-      </section>
- 
-      <section class="sitemap reveal" aria-labelledby="sitemap-title">
-        <span class="chip" style="--c: var(--amber)">Information architecture</span>
-        <h2 class="section-title" id="sitemap-title">System site map</h2>
-        <p class="desc section-desc">One hub mapping direct paths from high-priority academic tasks to student services. Select the diagram to enlarge it.</p>
-        <div class="card sitemap-card">
-          <button type="button" class="zoom" aria-label="Enlarge site map diagram">
-            <Image src={sitemapImg} alt="STU site map: the home hub linking to coursework, schedule, campus map, grades and student services" class="sitemap-img" loading="lazy" />
-          </button>
-        </div>
-      </section>
- 
-      <section class="flows reveal" aria-labelledby="flows-title">
-        <div class="heading-row">
-          <div>
-            <span class="chip" style="--c: var(--yellow)">Interaction design</span>
-            <h2 class="section-title" id="flows-title">Screen flows and key states</h2>
+            <span class="chip" style="--c: var(--sage)">Principles</span>
           </div>
-          <div class="view-toggle" role="group" aria-label="Fidelity view">
-            <button type="button" class="toggle-btn" data-mode="hifi" aria-pressed="true">High-fidelity</button>
-            <button type="button" class="toggle-btn" data-mode="lofi" aria-pressed="false">Low-fidelity</button>
-          </div>
-        </div>
-        <p class="sr" role="status" id="viewStatus"></p>
- 
-        {wireframeFlows.map((flow) => (
-          <div class="flow-group">
-            <h3 class="flow-title">{flow.category}</h3>
-            {modes.map((m) => (
-              <div class={`screens view-${m.id}`}>
-                {m.pick(flow).map((s) => (
-                  <figure class={`screen ${m.id}`}>
-                    <button type="button" class="zoom frame" aria-label={`Enlarge ${s.title.toLowerCase()}`}>
-                      <Image src={s.img} alt={`${m.prefix}: ${s.title}. ${s.caption}.`} class="screen-img" loading="lazy" />
-                    </button>
-                    <figcaption><strong>{s.title}</strong><span>{s.caption}</span></figcaption>
-                  </figure>
-                ))}
+          <div class="grid3">
+            {principles.map((p) => (
+              <div class="principle" style={`--c: var(--${p.color})`}>
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
               </div>
             ))}
           </div>
-        ))}
-      </section>
+        </section>
+
+        <section class="sitemap reveal" aria-labelledby="sitemap-title">
+          <span class="chip" style="--c: var(--amber)">Site map</span>
+          <h2 class="section-title" id="sitemap-title">One home screen, short paths out</h2>
+          <p class="desc section-desc">Everything branches from the home screen, so the tasks students do most are never more than a tap or two away. Select the diagram to enlarge it.</p>
+          <div class="card sitemap-card">
+            <button type="button" class="zoom" aria-label="Enlarge site map diagram">
+              <Image src={sitemapImg} alt="STU site map: the home screen linking to coursework, schedule, campus map, grades and student services" class="sitemap-img" loading="lazy" />
+            </button>
+          </div>
+        </section>
+
+        <section class="flows reveal" aria-labelledby="flows-title">
+          <div class="heading-row">
+            <div>
+              <span class="chip" style="--c: var(--yellow)">Screens</span>
+              <h2 class="section-title" id="flows-title">From wireframe to finished screen</h2>
+            </div>
+            <div class="view-toggle" role="group" aria-label="Show screens as">
+              <button type="button" class="toggle-btn" data-mode="hifi" aria-pressed="true">Finished</button>
+              <button type="button" class="toggle-btn" data-mode="lofi" aria-pressed="false">Wireframes</button>
+            </div>
+          </div>
+          <p class="sr" role="status" id="viewStatus"></p>
+
+          {wireframeFlows.map((flow) => (
+            <div class="flow-group">
+              <h3 class="flow-title">{flow.category}</h3>
+              {modes.map((m) => (
+                <div class={`screens view-${m.id}`}>
+                  {m.pick(flow).map((s) => (
+                    <figure class={`screen ${m.id}`}>
+                      <button type="button" class="zoom frame" aria-label={`Enlarge ${s.title.toLowerCase()}`}>
+                        <Image src={s.img} alt={`${m.prefix}: ${s.title}. ${s.caption}.`} class="screen-img" loading="lazy" />
+                      </button>
+                      <figcaption><strong>{s.title}</strong><span>{s.caption}</span></figcaption>
+                    </figure>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ))}
+        </section>
+      </div>
       <p class="end"><a class="end-link" href="/stu">Back to the STU case study</a></p>
     </div>
- 
+
     <button type="button" id="top" class="top" aria-label="Back to top">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
     </button>
- 
+
     <dialog id="lightbox" aria-label="Enlarged image">
       <button type="button" id="closeLb" class="close">Close</button>
       <img id="lbImg" alt="" />
     </dialog>
   </main>
-
 </Layout>
- 
+
 <script>
   function init() {
     const root = document.getElementById('wf');
@@ -187,7 +180,7 @@ const principles = [
     root.dataset.ready = '1';
     root.classList.add('js');
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
- 
+
     // Progress bar and back to top
     const bar = document.getElementById('bar');
     const top = document.getElementById('top');
@@ -199,23 +192,23 @@ const principles = [
     addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     top?.addEventListener('click', () => scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' }));
- 
+
     // Reveal on scroll
     const reveal = new IntersectionObserver((es) => es.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add('visible'); reveal.unobserve(e.target); }
     }), { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach((el) => reveal.observe(el));
- 
-    // Fidelity toggle
+
+    // Finished / wireframe switch
     const buttons = [...document.querySelectorAll<HTMLButtonElement>('.toggle-btn')];
     const status = document.getElementById('viewStatus');
     buttons.forEach((b) => b.addEventListener('click', () => {
       const mode = b.dataset.mode!;
       root.dataset.view = mode;
       buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-      if (status) status.textContent = mode === 'hifi' ? 'Showing high-fidelity screens' : 'Showing low-fidelity wireframes';
+      if (status) status.textContent = mode === 'hifi' ? 'Showing finished screens' : 'Showing wireframes';
     }));
- 
+
     // Lightbox
     const lb = document.getElementById('lightbox') as HTMLDialogElement | null;
     const lbImg = document.getElementById('lbImg') as HTMLImageElement | null;
@@ -230,7 +223,7 @@ const principles = [
   init();
   document.addEventListener('astro:page-load', init);
 </script>
- 
+
 <style>
   .wf {
     --bg: #fbfaf4; --card: #fff; --ink: #1f2430; --muted: #5a6070; --border: #d3d6df;
@@ -240,33 +233,28 @@ const principles = [
     --mono: 'JetBrains Mono', ui-monospace, monospace;
     --sans: 'Inter', system-ui, -apple-system, sans-serif;
     background: var(--bg); color: var(--ink); font: 16px/1.65 var(--sans); -webkit-font-smoothing: antialiased;
-    min-height: 100vh; padding: 32px 24px 120px;
+    min-height: 100vh; padding: 24px 24px 120px;
   }
   .container { max-width: 1240px; margin: 0 auto; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .wf a { color: inherit; }
   .wf :focus-visible, .top:focus-visible { outline: 3px solid var(--deep); outline-offset: 3px; border-radius: 8px; }
+  .skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: #fff; color: #1f2430; padding: 10px 18px; border-radius: 999px; font: 600 14px 'Inter', sans-serif; }
+  .skip:focus { left: 16px; }
   .progress { position: fixed; inset: 0 0 auto 0; height: 4px; z-index: 50; pointer-events: none; }
   #bar { height: 100%; width: 0; background: var(--deep); }
   h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; text-wrap: balance; }
   p { margin: 0; }
- 
+
   .chip { display: inline-block; font: 500 12px/1 var(--mono); background: var(--c); color: var(--ink); padding: 7px 12px; border-radius: 999px; white-space: nowrap; }
   .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
- 
+
   /* Header */
   .wf-header { margin-bottom: 40px; }
-  .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 20px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
-  .back, .tabs-top a { font: 500 13px var(--mono); text-decoration: none; padding: 8px 14px; border-radius: 999px; transition: background .2s; }
-  .back { display: inline-flex; gap: 6px; align-items: center; padding-left: 0; }
-  .back:hover, .tabs-top a:hover { background: var(--mint); }
-  .tabs-top { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tabs-top a { border: 1px solid var(--border); }
-  .tabs-top a[aria-current] { background: var(--ink); border-color: var(--ink); color: #fff; }
   .hero { background: var(--card); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); padding: 48px; }
   h1 { font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1.08; margin-bottom: 18px; }
   .lead { font-size: 18px; line-height: 1.6; color: #2d3340; max-width: 66ch; }
- 
+
   /* Cards and principles */
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); padding: 36px; }
   .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
@@ -274,11 +262,10 @@ const principles = [
   .desc { font-size: 14px; color: var(--muted); }
   .principles { margin-bottom: 64px; }
   .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .principle { background: var(--bg); border: 1px solid var(--border); border-top: 6px solid var(--c); border-radius: 16px; padding: 22px; transition: transform .2s; }
-  .principle:hover { transform: translateY(-3px); }
+  .principle { background: var(--bg); border: 1px solid var(--border); border-top: 6px solid var(--c); border-radius: 16px; padding: 22px; }
   .principle h3 { font-size: 1.2rem; margin-bottom: 8px; }
   .principle p { font-size: 15px; color: #333a48; }
- 
+
   /* Sitemap */
   .sitemap { margin-bottom: 72px; }
   .section-title { font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.15; margin: 14px 0 8px; }
@@ -286,7 +273,7 @@ const principles = [
   .sitemap-card { padding: 20px; }
   .zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 12px; }
   .sitemap-img { width: 100%; height: auto; display: block; border-radius: 12px; object-fit: contain; }
- 
+
   /* Flows */
   .heading-row { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; margin-bottom: 36px; }
   .heading-row .section-title { margin-bottom: 0; }
@@ -296,11 +283,10 @@ const principles = [
   .toggle-btn[aria-pressed="true"] { background: var(--ink); color: #fff; }
   .flow-group { margin-bottom: 56px; }
   .flow-title { font-size: 1.5rem; padding-bottom: 10px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
-  .screens { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+  .screens { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; animation: fade .35s; }
   [data-view="hifi"] .view-lofi, [data-view="lofi"] .view-hifi { display: none; }
-  .screens:not([hidden]) { animation: fade .35s; }
   @keyframes fade { from { opacity: 0; } }
- 
+
   .screen { margin: 0; display: flex; flex-direction: column; gap: 12px; }
   .frame { padding: 6px; background: var(--card); border: 1px solid var(--border); border-radius: 26px; box-shadow: 0 6px 18px rgba(31, 36, 48, .06); transition: transform .25s, box-shadow .25s, border-color .25s; }
   .frame:hover { transform: translateY(-4px); border-color: var(--ink); box-shadow: var(--shadow); }
@@ -309,25 +295,29 @@ const principles = [
   figcaption { display: flex; flex-direction: column; gap: 2px; }
   figcaption strong { font-size: 14px; }
   figcaption span { font-size: 13px; line-height: 1.45; color: var(--muted); }
- 
+
   dialog { border: 0; border-radius: 16px; padding: 12px; max-width: min(1200px, 94vw); max-height: 94vh; background: var(--card); }
   dialog::backdrop { background: rgba(31, 36, 48, .7); }
   dialog img { max-width: 100%; max-height: 82vh; display: block; margin: 12px auto 0; }
-  .close { font: 600 13px var(--mono); padding: 10px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
- 
+  .close { font: 600 13px var(--mono); min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; }
+
   .end { margin-top: 72px; text-align: center; }
-  .end-link { display: inline-block; font: 600 13px var(--mono); text-decoration: none; padding: 14px 24px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); transition: background .2s; }
+  .end-link { display: inline-flex; align-items: center; min-height: 48px; font: 600 13px var(--mono); text-decoration: none; padding: 0 24px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); transition: background .2s; }
   .end-link:hover { background: var(--mint); }
-  .top { position: fixed; right: 24px; bottom: 24px; width: 46px; height: 46px; display: grid; place-items: center; background: var(--ink); color: #fff; border: 0; border-radius: 50%; box-shadow: var(--shadow); cursor: pointer; opacity: 0; visibility: hidden; z-index: 90; transition: opacity .2s, visibility .2s, transform .2s, background .2s; }
+  .top { position: fixed; right: 24px; bottom: 24px; width: 48px; height: 48px; display: grid; place-items: center; background: var(--ink); color: #fff; border: 0; border-radius: 50%; box-shadow: var(--shadow); cursor: pointer; opacity: 0; visibility: hidden; z-index: 90; transition: opacity .2s, visibility .2s, transform .2s, background .2s; }
   .top.show { opacity: 1; visibility: visible; }
   .top:hover { background: var(--deep); transform: translateY(-2px); }
- 
+
   @media (prefers-reduced-motion: no-preference) {
     .js .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
     .js .reveal.visible { opacity: 1; transform: none; }
   }
-  @media (prefers-reduced-motion: reduce) { .screens:not([hidden]) { animation: none; } }
- 
+  @media (prefers-reduced-motion: reduce) {
+    .screens { animation: none; }
+    .frame, .top { transition: none; }
+    .frame:hover { transform: none; }
+  }
+
   @media (max-width: 900px) {
     .hero { padding: 28px 22px; }
     .card { padding: 24px; }
@@ -336,4 +326,12 @@ const principles = [
     .screens { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   }
   @media (max-width: 500px) { .screens { grid-template-columns: 1fr; } }
+
+   @media (max-width: 768px) {
+    .wf { padding: 0 0 72px; }
+    .hero { padding: 24px 18px; }
+    .card { padding: 20px; }
+    .view-toggle { width: 100%; }
+    .toggle-btn { flex: 1; }
+  }
 </style>

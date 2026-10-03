@@ -1,27 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import BackToTop from '/src/components/BackToTop.astro';
+import BackToTop from '../components/BackToTop.astro';
+import PipTabs from '../components/PipTabs.astro';
 
-// Everything on this page is computed from the token values below, so the numbers can't drift from the swatches.
-const hx = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-const toHex = (a) => '#' + a.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
-const mix = (a, b, k) => toHex(hx(a).map((v, i) => v + (hx(b)[i] - v) * k));
-const lum = (h) => { const [r, g, b] = hx(h).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
-const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+// Everything on this page is worked out from the token values below, so the numbers can't drift from the swatches.
+const hx = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const toHex = (a: number[]) => '#' + a.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
+const mix = (a: string, b: string, k: number) => toHex(hx(a).map((v, i) => v + (hx(b)[i] - v) * k));
+const lum = (h: string) => { const [r, g, b] = hx(h).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+const ratio = (a: string, b: string) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
 
-const light = { bg: '#e6ede4', fg: '#0e2a2f', mute: '#4f6b6d', card: '#f6f9f3', line: '#b8c9c0', lineStrong: '#718a84', dusk: '#8a7bd8', glass: '#4fb9a1', amber: '#f0a92e' };
-const dark = { bg: '#0e2a2f', fg: '#e6ede4', mute: '#9db8b4', card: '#16383d', line: '#2c5459', lineStrong: '#5f8b8c', dusk: '#a597f0', glass: '#7fd8c3', amber: '#ffc15e' };
+type Theme = { bg: string; fg: string; mute: string; card: string; line: string; lineStrong: string; dusk: string; glass: string; amber: string };
+const light: Theme = { bg: '#e6ede4', fg: '#0e2a2f', mute: '#4f6b6d', card: '#f6f9f3', line: '#b8c9c0', lineStrong: '#718a84', dusk: '#8a7bd8', glass: '#4fb9a1', amber: '#f0a92e' };
+const dark: Theme = { bg: '#0e2a2f', fg: '#e6ede4', mute: '#9db8b4', card: '#16383d', line: '#2c5459', lineStrong: '#5f8b8c', dusk: '#a597f0', glass: '#7fd8c3', amber: '#ffc15e' };
 const INK = '#0e2a2f';
 
-const moodBase = [["Dusk", "dusk", "Low"], ["Sea glass", "glass", "Steady"], ["Amber", "amber", "High"]];
-const neutrals = [
+const moodBase: [string, keyof Theme, string][] = [["Dusk", "dusk", "Low"], ["Sea glass", "glass", "Steady"], ["Amber", "amber", "High"]];
+const neutrals: [string, string, keyof Theme][] = [
   ["bg", "Page background", "bg"], ["card", "Cards and sheets", "card"], ["fg", "Text and primary buttons", "fg"],
   ["mute", "Secondary text", "mute"], ["line", "Decorative dividers", "line"], ["line-strong", "Control outlines", "lineStrong"]
 ];
 const parts = [["Leaf stem", "#3f7a52"], ["Leaf", "#6fae7f"], ["Cheeks", "#ff8fa3"], ["Face", "#0e2a2f"]];
 
 const names = ["Drained", "Low", "Flat", "Steady", "Light", "Good", "Glowing"];
-const moodColour = (t, l) => (l < 0.5 ? mix(t.dusk, t.glass, l * 2) : mix(t.glass, t.amber, (l - 0.5) * 2));
+const moodColour = (t: Theme, l: number) => (l < 0.5 ? mix(t.dusk, t.glass, l * 2) : mix(t.glass, t.amber, (l - 0.5) * 2));
 const steps = names.map((name, i) => {
   const l = i / 6, curve = (l - 0.5) * 40;
   return {
@@ -54,22 +56,22 @@ const rules = [
   ["Pip changes shape only along the mood scale.", "Never stretch, rotate or recolour it."],
   ["One Pip leads each screen.", "Small Pips are data or progress, never decoration."],
   ["Keep Pip at least 40px wide.", "Below that the face stops being readable."],
-  ["Motion answers a touch.", "A spring of about 0.55 s on change and a slow idle bob. Everything still works with reduced motion."],
+  ["Motion answers a touch.", "A spring of about 0.55 seconds on change and a slow idle bob. Everything still works with reduced motion."],
   ["Missed means quieter, never alarming.", "No red warnings, streaks or scores to lose."],
-  ["Controls are at least 44px, with strong outlines and a visible focus ring.", "Voice stays short, kind and plain."]
+  ["Controls are at least 44px, with strong outlines and a visible focus ring.", "The voice stays short, kind and plain."]
 ];
 
 const checks = [
-  { name: "Text on page", note: "Primary text on the page background", need: 4.5, fn: (t) => ratio(t.fg, t.bg) },
-  { name: "Secondary text on page", note: "Secondary text on the page background", need: 4.5, fn: (t) => ratio(t.mute, t.bg) },
-  { name: "Secondary text on card", note: "Secondary text on a card", need: 4.5, fn: (t) => ratio(t.mute, t.card) },
-  { name: "Button label", note: "Label on the primary button", need: 4.5, fn: (t) => ratio(t.bg, t.fg) },
-  { name: "Saved button", note: "Dark label on sea glass", need: 4.5, fn: (t) => ratio(INK, t.glass) },
-  { name: "Pip's face on its body", note: "Lowest of the seven moods", need: 3, fn: (t) => Math.min(...names.map((n, i) => ratio(INK, moodColour(t, i / 6)))) },
-  { name: "Pip's body on the page", note: "Lowest of the seven moods", need: 3, fn: (t) => Math.min(...names.map((n, i) => ratio(moodColour(t, i / 6), t.bg))) },
-  { name: "Control outline, old", note: "The divider colour on the page", need: 3, fn: (t) => ratio(t.line, t.bg) },
-  { name: "Control outline, new", note: "The strong outline on the page", need: 3, fn: (t) => ratio(t.lineStrong, t.bg) },
-  { name: "Control outline on a card, new", note: "The strong outline on a card", need: 3, fn: (t) => ratio(t.lineStrong, t.card) }
+  { name: "Text on page", note: "Primary text on the page background", need: 4.5, fn: (t: Theme) => ratio(t.fg, t.bg) },
+  { name: "Secondary text on page", note: "Secondary text on the page background", need: 4.5, fn: (t: Theme) => ratio(t.mute, t.bg) },
+  { name: "Secondary text on card", note: "Secondary text on a card", need: 4.5, fn: (t: Theme) => ratio(t.mute, t.card) },
+  { name: "Button label", note: "Label on the primary button", need: 4.5, fn: (t: Theme) => ratio(t.bg, t.fg) },
+  { name: "Saved button", note: "Dark label on sea glass", need: 4.5, fn: (t: Theme) => ratio(INK, t.glass) },
+  { name: "Pip's face on its body", note: "Lowest of the seven moods", need: 3, fn: (t: Theme) => Math.min(...names.map((_, i) => ratio(INK, moodColour(t, i / 6)))) },
+  { name: "Pip's body on the page", note: "Lowest of the seven moods", need: 3, fn: (t: Theme) => Math.min(...names.map((_, i) => ratio(moodColour(t, i / 6), t.bg))) },
+  { name: "Control outline, before", note: "The old divider colour on the page", need: 3, fn: (t: Theme) => ratio(t.line, t.bg) },
+  { name: "Control outline, now", note: "The strong outline on the page", need: 3, fn: (t: Theme) => ratio(t.lineStrong, t.bg) },
+  { name: "Control outline on a card, now", note: "The strong outline on a card", need: 3, fn: (t: Theme) => ratio(t.lineStrong, t.card) }
 ];
 const rows = checks.map((c) => { const l = c.fn(light), d = c.fn(dark); return { ...c, l, d, ok: l >= c.need && d >= c.need }; });
 
@@ -79,7 +81,7 @@ const sections = [
 ];
 ---
 
-<Layout title="Pip design system">
+<Layout title="Pip: design system" bg="#fbfaf4">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet" />
@@ -89,18 +91,11 @@ const sections = [
   <main class="ds">
     <header class="hero">
       <div class="inner">
-        <div class="topbar">
-          <a href="/work" class="back">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Back to selected work
-          </a>
-          <nav class="tabs-top" aria-label="Project pages">
-            <a href="/pip">Case study</a>
-            <a href="/pip-system" aria-current="page">Design system</a>
-            <a href="/pip-app">Live app</a>
-          </nav>
-        </div>
-        <p class="chips"><span class="chip" style="--c: var(--yellow)">Design system</span></p>
+        <PipTabs current="system" />
+        <p class="chips">
+          <span class="chip" style="--c: var(--yellow)">Design system</span>
+          <span class="chip" style="--c: var(--mint)" id="readTime">4 min read</span>
+        </p>
         <h1>Pip design system</h1>
         <p class="lead">The colours, type, shapes and rules behind Pip, written so another designer or developer could build a new screen without guessing.</p>
       </div>
@@ -119,8 +114,8 @@ const sections = [
           <span class="chip" style="--c: var(--sage)">Overview</span>
           <h2>One character, three colours and one typeface.</h2>
           <div class="prose">
-            <p>Pip’s mood runs on a single scale from 0 to 1, in seven steps. Colour, body shape, leaf angle and face are all worked out from that one number, so a new mood never needs a new drawing.</p>
-            <p>The values here come from the live app. Where a token has changed because of the contrast checks, this page says so.</p>
+            <p>Pip's mood runs on a single scale from 0 to 1, in seven steps. Colour, body shape, leaf angle and face are all worked out from that one number, so a new mood never needs a new drawing.</p>
+            <p>The values here come from the live app. Where a token changed because of the contrast checks, this page says so.</p>
           </div>
         </section>
 
@@ -158,7 +153,7 @@ const sections = [
                 ))}
                 {parts.map(([token, hex]) => (
                   <tr>
-                    <th scope="row"><code>{token.toLowerCase().replace(' ', '-')}</code></th><td>Pip’s {token.toLowerCase()}, same in both themes</td>
+                    <th scope="row"><code>{token.toLowerCase().replace(' ', '-')}</code></th><td>Pip's {token.toLowerCase()}, the same in both themes</td>
                     <td colspan="2"><span class="sw" style={`background:${hex}`}></span><code>{hex}</code></td>
                   </tr>
                 ))}
@@ -196,15 +191,15 @@ const sections = [
           <span class="chip" style="--c: var(--coral)">The Pip component</span>
           <h2>One component with seven moods.</h2>
           <div class="prose">
-            <p>Pip has three properties. <code>mood</code> has seven values from Drained to Glowing. <code>eyes</code> is open or closed (closed for sleep and breathing). <code>size</code> is small (about 44px, for the week view), medium (about 100px, next to a title) or large (about 230px, the lead character).</p>
+            <p>Pip has three properties. <code>mood</code> has seven values, from Drained to Glowing. <code>eyes</code> is open or closed (closed for sleep and breathing). <code>size</code> is small (about 44px, for the week view), medium (about 100px, next to a title) or large (about 230px, the lead character).</p>
           </div>
           <figure>
-            <img src="/pip-variants.png" alt="Seven Pip variants in a row from Drained to Glowing, with a colour swatch under each" loading="lazy" />
+            <img src="/pip_drag_animation_storyboard.png" alt="Seven Pip variants in a row from Drained to Glowing, with a colour swatch under each" loading="lazy" />
             <figcaption>The seven variants. Only the mood changes between them.</figcaption>
           </figure>
           <figure>
             <img src="/pip-anatomy.png" alt="Diagram of Pip with labels for the leaf, body, mouth and eyes, feet, cheeks, highlight and shadow" loading="lazy" />
-            <figcaption>Anatomy. Each part is derived from the mood level.</figcaption>
+            <figcaption>Anatomy. Each part is worked out from the mood level.</figcaption>
           </figure>
           <div class="scroll" role="region" aria-label="Mood variant properties" tabindex="0">
             <table>
@@ -256,19 +251,18 @@ const sections = [
             </table>
           </div>
           <div class="prose after">
-            <p>The audit found two things. The old divider colour was too faint to mark the edge of a button or row, in both themes, so I added a stronger <code>line-strong</code> token that passes.</p>
-            <p>Pip’s body against the page falls below 3:1 for the lighter moods in the light theme. The mood is always also given by the face and the word, so the body is never the only cue, but it is worth knowing.</p>
+            <p>The audit found two things. The old divider colour was too faint to mark the edge of a button or row in either theme, so I added a stronger <code>line-strong</code> token. It passes, and every control in the live app now uses it.</p>
+            <p>Pip's body against the page falls below 3:1 for the lighter moods in the light theme. The mood is always shown by the face and the word as well, so the body is never the only cue, but it's worth knowing.</p>
           </div>
         </section>
 
         <section id="gaps">
           <span class="chip" style="--c: var(--yellow)">Not covered yet</span>
-          <h2>What this page doesn’t include.</h2>
+          <h2>What this page doesn't include.</h2>
           <ul class="bullets">
-            <li>The live app still uses the old, fainter outline. Switching its controls to <code>line-strong</code> is the next change.</li>
             <li>Empty, error and missed-day states.</li>
-            <li>Tablet and desktop layouts. Pip is designed mobile-first, and the larger layouts are still to do.</li>
-            <li>Component documentation for the chips, rows and buttons beyond their sizes.</li>
+            <li>Tablet and desktop layouts. Pip is designed for phones first, and the larger layouts are still to do.</li>
+            <li>Full documentation for the chips, rows and buttons beyond their sizes.</li>
           </ul>
         </section>
       </div>
@@ -277,6 +271,22 @@ const sections = [
     <BackToTop />
   </main>
 </Layout>
+
+<script>
+  function initReadTime() {
+    // Reading time: counts the words in the page's main text (tables of values are left out)
+    const rt = document.getElementById('readTime');
+    const area = document.getElementById('content');
+    if (rt && area) {
+      const copy = area.cloneNode(true) as HTMLElement;
+      copy.querySelectorAll('table, svg, script, style').forEach((n) => n.remove());
+      const words = (copy.textContent || '').trim().split(/\s+/).length;
+      rt.textContent = `${Math.max(1, Math.ceil(words / 200))} min read`;
+    }
+  }
+  initReadTime();
+  document.addEventListener('astro:page-load', initReadTime);
+</script>
 
 <style>
   .ds {
@@ -297,16 +307,10 @@ const sections = [
   code { font: 500 12px var(--mono); }
 
   .chip { display: inline-block; font: 500 12px/1 var(--mono); background: var(--c); padding: 7px 12px; border-radius: 999px; margin-bottom: 16px; }
-  .chips { margin: 0 0 16px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+  .chips .chip { margin: 0; }
   .inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
   .hero { border-bottom: 1px solid var(--border); padding: 24px 0 56px; }
-  .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 20px; margin-bottom: 48px; border-bottom: 1px solid var(--border); }
-  .back, .tabs-top a { font: 500 13px var(--mono); text-decoration: none; padding: 8px 12px; border-radius: 999px; transition: background .2s; }
-  .back { display: inline-flex; gap: 6px; align-items: center; padding-left: 0; }
-  .back:hover, .tabs-top a:hover { background: var(--mint); }
-  .tabs-top { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tabs-top a { border: 1px solid var(--border); }
-  .tabs-top a[aria-current="page"], .tabs-top a[aria-current="page"]:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
   h1 { font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1.1; margin-bottom: 20px; }
   .lead { font-size: 18px; color: #2d3340; max-width: 60ch; }
 

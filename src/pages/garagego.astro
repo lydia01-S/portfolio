@@ -1,0 +1,378 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import ProjectNav from '../components/ProjectNav.astro';
+import BackToTop from '../components/BackToTop.astro';
+
+// Export each screen from Figma at 2x (no laptop frame) and save it in public/garagego/ with these names.
+import dashboard from '../../public/garagego/dashboard.png';
+import ledger from '../../public/garagego/ledger.png';
+import bookings from '../../public/garagego/bookings.png';
+import garages from '../../public/garagego/garages.png';
+import complaints from '../../public/garagego/complaints.png';
+import emergency from '../../public/garagego/emergency.png';
+
+const prototype = "https://www.figma.com/proto/gwxQNGabJbm3sXPeetsn60/GarageGo?node-id=1-53008&t=JHZ83C7cHyPTK0jl-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1";
+
+// The project card, in the same order as the STU page. TODO: add the length, e.g. "2-week college exercise".
+const meta = [
+  ["Role", "UI designer, solo"],
+  ["Timeline", "Short college exercise"],
+  ["Scope", "12 desktop screens, one shared layout"],
+  ["Tools", "Figma"]
+];
+
+const principles = [
+  {
+    id: "overview",
+    title: "Overview first, details on demand",
+    body: [
+      "Every page follows the same order: a row of summary cards, then a list you can filter, then the detail for a single record. It's Ben Shneiderman's mantra for showing information, \"overview first, zoom and filter, then details on demand\", and it means an admin can tell whether anything is wrong before they've scrolled at all.",
+      "Each summary card does one job: one number, one label and one comparison. The trend chips use an arrow and a percentage, so the direction is clear without relying on green or red."
+    ],
+    points: ["Summary cards, then table, then detail, on every page", "One number per card, with its comparison beside it", "Trend direction shown by arrow and number, not colour alone"],
+    img: dashboard,
+    alt: "Dashboard with four summary cards for users, bookings, revenue and rating above a revenue chart and booking funnel"
+  },
+  {
+    id: "tables",
+    title: "Tables built for scanning, not reading",
+    body: [
+      "Admins don't read a ledger row by row. They scan down a column looking for the one figure that's wrong. So text is left-aligned and amounts are right-aligned, which keeps the decimal points in line and makes an unusually large figure stand out.",
+      "The currency appears once in the column header rather than in every cell. Money in and money out have a + or − sign as well as a colour. Every table also shows how many records it holds, so admins know how much sits behind the first page."
+    ],
+    points: ["Text left-aligned, numbers right-aligned", "Units in the header, not repeated in every cell", "Signs as well as colour for money in and out", "Record count beside the pagination"],
+    img: ledger,
+    alt: "Financial ledger with summary cards above a transactions table whose amounts are right-aligned and signed"
+  },
+  {
+    id: "status",
+    title: "Status in words, not just colour",
+    body: [
+      "Bookings, payments and garages all have a status, and a status pill is the quickest way to scan for one. Each pill has a word in it, because around one in twelve men has some form of colour blindness, and WCAG 1.4.1 says colour should never be the only way information is shown.",
+      "The colours mean the same thing on every screen: green for done, amber for waiting and red for needs attention. Once an admin has learned that on one page, they can read every other page."
+    ],
+    points: ["Every pill has a label", "One meaning per colour, across the whole product", "The same pill shape everywhere, so status is easy to find in a row"],
+    img: bookings,
+    alt: "Bookings table where each row has a payment pill and a status pill with a word in each"
+  },
+  {
+    id: "filters",
+    title: "Filters that show where the work is",
+    body: [
+      "The tabs above each table show a count, like Pending (5) or Suspended (2). An admin can see where work is waiting before clicking anything, and an empty tab doesn't waste a click.",
+      "Filters sit directly above the table they change, each with a visible label rather than placeholder text that disappears once you start typing. One Reset filters link means nobody gets stuck looking at an empty table and wondering why."
+    ],
+    points: ["Counts on tabs", "A visible label on every filter", "Filters placed next to the results they change", "One-click reset"],
+    img: garages,
+    alt: "Garage management table with tabs showing counts and labelled filters above it"
+  },
+  {
+    id: "context",
+    title: "Detail without losing your place",
+    body: [
+      "Disputes need a lot of information at once: the evidence, the conversation between customer and garage, and the decision. Rather than three separate pages, the Complaints screen shows them side by side under the case list, so the admin can check a photo against a claim without jumping back and forth.",
+      "The decision is a set of radio buttons with the refund amount written into each option, so the admin sees what a choice means before they make it."
+    ],
+    points: ["Evidence, conversation and decision on one screen", "The case list stays visible above the detail", "What each choice means, written into the option"],
+    img: complaints,
+    alt: "Complaints screen with a case list above three panels for evidence, correspondence and the resolution"
+  },
+  {
+    id: "urgency",
+    title: "The loudest treatment is saved for urgency",
+    body: [
+      "A dashboard where everything is bold is a dashboard where nothing stands out. Strong red is kept for things that need someone to act, so an active emergency is the most noticeable thing on its screen.",
+      "The Emergency page puts the number of active alerts first, then shows the map and the incident list side by side. The admin can see where an incident is and how long it has been waiting at the same time."
+    ],
+    points: ["Red reserved for things that need action", "The active count placed first on the page", "Map and incident list side by side"],
+    img: emergency,
+    alt: "Emergency responses screen with the active SOS count, a live map and a list of critical incidents"
+  }
+];
+
+// The visual language. TODO: check each line matches your Figma file, especially the typeface.
+const visual = [
+  ["Type", "One sans-serif typeface in a few clear sizes and weights. Page titles are large, labels are small capitals, and numbers in tables get the most weight, because they're what admins look for."],
+  ["Colour", "A calm navy sidebar and white workspace, with one blue for actions like Export and Add. Green, amber and red are kept for status only, so they never compete with buttons."],
+  ["Layout", "A fixed sidebar, then the same header on every page: title and subtitle on the left, actions on the right. Cards and tables share one grid and one spacing scale."]
+];
+
+// The components behind the twelve screens. TODO: keep only the ones you built as Figma components.
+const components = ["Summary card", "Status pill", "Table row", "Tabs with counts", "Filter bar", "Side panel", "Buttons", "Sidebar navigation"];
+
+const lead = "A short college exercise in showing large amounts of data clearly. I designed an admin portal for a garage booking platform and focused on one thing: making the data quick to scan and hard to misread. Its admins would oversee bookings, payments, emergencies and disputes, often under time pressure, so they need to spot what matters in seconds.";
+
+const intro = [
+  "Admin dashboards tend to grow by addition: every new feature gets a new chart, a new colour and a new badge, until the screen is full and nothing stands out. The people using them are often scanning under time pressure, whether that's spotting a failed payout or reaching a stranded driver.",
+  "Instead of adding more, I started from what an admin needs to notice first on each page and removed anything that competed with it. The six principles below are the rules I designed to, each shown on the screen where it matters most."
+];
+
+const consistency = [
+  "Every page shares the same sidebar, the same header and the same order of summary, list and detail. Consistency isn't only about looking tidy. An admin who has learned one page has learned them all, so their attention goes on the data instead of on working out where things are.",
+  "The screens are built from a small set of reusable parts in Figma, so a change to a status pill or a table row carries through every page. It's also how a developer would build it, which makes the handover simpler."
+];
+
+
+const changed = "My first version used placeholder names and mixed two currencies. Once I filled every screen with realistic, consistent data, problems I hadn't noticed showed up straight away: figures wrapping onto two lines, names cut off in narrow columns, and a card that looked balanced only because its numbers were short. I now design with real-looking content from the start, because the data is the interface.";
+
+const takeaway = "Good data design is mostly about restraint: deciding what matters most and giving it room. Alongside Critter & Friends, GarageGo shows I can design for very different people, from five-year-olds learning to read to admins scanning dense data, and shape the interface around them.";
+
+const next = [
+  ["Tablet layout", "Admins won't always be at a desk. I'd start with the Emergency screen on a tablet, where the map and incident list would stack instead of sitting side by side."],
+  ["Tabular numbers", "Turn on tabular figures in the tables so every digit is the same width and columns of money line up exactly."],
+  ["Sticky headers", "Keep column headers in view on long tables, and freeze the ID column when a table scrolls sideways."],
+  ["Empty, loading and error states", "Design what each table shows with no results, while loading and when something fails, so the layout never just goes blank."],
+  ["Keyboard use", "Visible focus states and arrow-key movement through rows, for admins who work fastest without a mouse."],
+  ["Testing with real admins", "Watch two or three people find a failed payout or an open SOS, and time how long it takes."]
+];
+
+// Reading time, counted from all the text on the page at about 200 words a minute.
+const allText = [
+  lead, ...intro,
+  ...principles.flatMap((p) => [p.title, ...p.body, ...p.points]),
+  ...visual.flat(), ...consistency, changed, ...next.flat(), takeaway
+].join(' ');
+const readTime = Math.max(1, Math.ceil(allText.split(/\s+/).length / 200));
+---
+
+<Layout title="GarageGo: an admin portal designed for scanning" bg="#fafafa">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+
+  <a class="skip" href="#content">Skip to content</a>
+
+  <main class="gg" id="gg">
+    <div class="wrap">
+      <nav class="topbar" aria-label="Portfolio">
+        <a href="/work" class="back">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back to portfolio
+        </a>
+      </nav>
+
+      <header class="hero">
+        <div class="hero-grid">
+          <div>
+            <p class="chips">
+              <span class="chip type">UI design</span>
+              <span class="chip read">{readTime} min read</span>
+            </p>
+            <h1>GarageGo admin portal</h1>
+            <p class="lead">{lead}</p>
+            <div class="actions">
+              <a class="btn primary" href={prototype} target="_blank" rel="noopener noreferrer">
+                View the prototype in Figma
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3.5 10.5l7-7m0 0H4.67m5.83 0v5.83" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="sr">(opens in a new tab)</span>
+              </a>
+            </div>
+          </div>
+          <dl class="specs" aria-label="Project overview">
+            {meta.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+          </dl>
+        </div>
+      </header>
+
+      <div class="content" id="content">
+        <section class="intro">
+          <h2>The problem with admin tools</h2>
+          <div class="prose">{intro.map((t) => <p>{t}</p>)}</div>
+        </section>
+
+        <ol class="principles">
+          {principles.map((p, i) => (
+            <li class="principle" id={p.id}>
+              <div class="text">
+                <p class="num">{String(i + 1).padStart(2, '0')}</p>
+                <h2>{p.title}</h2>
+                <div class="prose">{p.body.map((b) => <p>{b}</p>)}</div>
+                <ul class="points">{p.points.map((pt) => <li>{pt}</li>)}</ul>
+              </div>
+              <button class="zoom" type="button" aria-label={`Enlarge screen: ${p.title}`}>
+                <Image class="shot" src={p.img} alt={p.alt} loading="lazy" widths={[800, 1400]} sizes="(max-width: 960px) 100vw, 720px" />
+              </button>
+            </li>
+          ))}
+        </ol>
+
+        <section class="visual">
+          <h2>A quiet visual language</h2>
+          <p class="sub">In a tool people use all day, the interface should step back so the data can come forward.</p>
+          <dl class="visual-grid">
+            {visual.map(([t, d]) => <div><dt>{t}</dt><dd>{d}</dd></div>)}
+          </dl>
+        </section>
+
+        <section class="consistency">
+          <h2>One layout, one set of parts, twelve screens</h2>
+          <div class="prose">{consistency.map((t) => <p>{t}</p>)}</div>
+          <ul class="parts" aria-label="Reusable components">
+            {components.map((c) => <li>{c}</li>)}
+          </ul>
+        </section>
+
+        {changed && (
+          <section class="changed">
+            <h2>What I changed along the way</h2>
+            <div class="prose"><p>{changed}</p></div>
+          </section>
+        )}
+
+        <section class="next">
+          <h2>What I'd do next</h2>
+          <p class="sub">The prototype is a walkthrough of the layouts, because this project is about how data is shown. Before handing it to developers, I'd design these too.</p>
+          <dl class="next-grid">
+            {next.map(([t, d]) => <div><dt>{t}</dt><dd>{d}</dd></div>)}
+          </dl>
+        </section>
+
+        <section class="takeaway">
+          <h2>What this project shows</h2>
+          <div class="prose"><p>{takeaway}</p></div>
+        </section>
+
+        <footer class="end">
+          <a class="btn primary" href={prototype} target="_blank" rel="noopener noreferrer">
+            View the prototype in Figma <span class="sr">(opens in a new tab)</span>
+          </a>
+        </footer>
+      </div>
+    </div>
+
+    <ProjectNav current="garagego" />
+
+    <dialog id="lightbox" aria-label="Enlarged screen">
+      <button type="button" id="closeLb" class="close">Close</button>
+      <img id="lbImg" alt="" />
+    </dialog>
+
+    <BackToTop />
+  </main>
+</Layout>
+
+<script>
+  function init() {
+    const root = document.getElementById('gg');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+
+    const lb = document.getElementById('lightbox') as HTMLDialogElement | null;
+    const lbImg = document.getElementById('lbImg') as HTMLImageElement | null;
+    document.querySelectorAll<HTMLButtonElement>('.zoom').forEach((b) => b.addEventListener('click', () => {
+      const img = b.querySelector('img');
+      if (!lb || !lbImg || !img) return;
+      lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lb.showModal();
+    }));
+    document.getElementById('closeLb')?.addEventListener('click', () => lb?.close());
+    lb?.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+  }
+  init();
+  document.addEventListener('astro:page-load', init);
+</script>
+
+<style>
+  .gg {
+    /* The page background is set by the Layout (bg="#fafafa" above), so it fills the whole window. */
+    --bg: #fafafa; --card: #fff; --ink: #111827; --text: #374151; --muted: #6b7280; --line: #e5e7eb; --line-strong: #8b919c;
+    --accent: #1d4ed8;
+    --sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    background: transparent; color: var(--ink); font: 16px/1.65 var(--sans); -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px 96px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .gg a { color: inherit; }
+  .gg :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+  .skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: #fff; color: #111827; padding: 10px 18px; border-radius: 8px; font: 600 14px 'Inter', sans-serif; }
+  .skip:focus { left: 16px; }
+  h1, h2 { margin: 0; font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; }
+  ul, ol { list-style: none; margin: 0; padding: 0; }
+
+  .topbar { padding: 24px 0 20px; border-bottom: 1px solid var(--line); }
+  .back { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font: 500 13px var(--mono); text-decoration: none; color: var(--ink) !important; border-radius: 999px; }
+  .back:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+  /* Hero */
+  .hero { padding: 72px 0 72px; border-bottom: 1px solid var(--line); }
+  .hero-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 64px; align-items: start; }
+  /* Pills in the same shape as the other projects, in GarageGo's own colours */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+  .chip { display: inline-block; font: 500 12px/1 var(--mono); color: var(--ink); padding: 7px 12px; border-radius: 999px; }
+  .chip.type { background: #dbe4fb; }
+  .chip.read { background: #e9ebef; }
+  h1 { font-size: clamp(2.4rem, 5vw, 3.75rem); line-height: 1.05; margin-bottom: 20px; }
+  .lead { font-size: 19px; line-height: 1.6; color: var(--text); margin: 0 0 32px; }
+  .actions, .end { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 26px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--card); font-weight: 600; font-size: 15px; text-decoration: none; transition: border-color .2s, background .2s; }
+  .btn:hover { border-color: var(--ink); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff !important; }
+  .btn.primary:hover { background: #1e40af; border-color: #1e40af; }
+  /* Project card, laid out like the STU case study */
+  .specs { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 1px 2px rgba(17, 24, 39, .04), 0 12px 32px -12px rgba(17, 24, 39, .12); padding: 24px; display: grid; gap: 16px; }
+  .specs dt { font: 500 12px var(--mono); color: var(--muted); }
+  .specs dd { margin: 2px 0 0; font-weight: 600; }
+
+  /* Text */
+  h2 { font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.2; margin-bottom: 16px; }
+  .prose { color: var(--text); max-width: 64ch; }
+  .prose p { margin: 0 0 14px; }
+
+  .intro { display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px; padding: 96px 0; border-bottom: 1px solid var(--line); }
+
+  /* Principles */
+  .principle { display: grid; grid-template-columns: minmax(300px, 1fr) 1.45fr; gap: 56px; align-items: start; padding: 96px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 24px; }
+  .principle:nth-child(even) .text { order: 2; }
+  .num { font: 500 13px var(--mono); color: var(--accent); margin: 0 0 12px; }
+  .points { margin-top: 20px; border-top: 1px solid var(--line); }
+  .points li { position: relative; padding: 10px 0 10px 22px; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--ink); }
+  .points li::before { content: ""; position: absolute; left: 0; top: 1.15em; width: 10px; height: 2px; background: var(--accent); }
+  .zoom { display: block; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--card); cursor: zoom-in; overflow: hidden; box-shadow: 0 1px 2px rgba(17, 24, 39, .04), 0 12px 32px -12px rgba(17, 24, 39, .12); transition: border-color .2s; position: sticky; top: 24px; }
+  .zoom:hover { border-color: var(--line-strong); }
+  .shot { width: 100%; height: auto; display: block; }
+
+  /* Visual language */
+  .visual { padding: 96px 0 72px; border-bottom: 1px solid var(--line); }
+  .visual-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 40px; margin: 0; border-top: 1px solid var(--line); }
+  .visual-grid div { padding: 20px 0; }
+  .visual-grid dt { font: 500 12px var(--mono); color: var(--accent); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .visual-grid dd { margin: 0; color: var(--text); font-size: 15px; }
+
+  /* One layout, one set of parts */
+  .consistency { padding: 96px 0; border-bottom: 1px solid var(--line); }
+  .consistency .prose { max-width: 64ch; }
+  .parts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .parts li { font: 500 13px var(--mono); padding: 8px 14px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--card); }
+
+  .changed { padding: 96px 0; border-bottom: 1px solid var(--line); max-width: 760px; }
+
+  .next { padding: 96px 0 72px; border-bottom: 1px solid var(--line); }
+  .takeaway { padding: 72px 0; max-width: 760px; }
+  .sub { color: var(--muted); margin: -4px 0 32px; max-width: 64ch; }
+  .next-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 48px; margin: 0; border-top: 1px solid var(--line); }
+  .next-grid div { padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .next-grid dt { font-weight: 600; margin-bottom: 4px; }
+  .next-grid dd { margin: 0; color: var(--text); font-size: 15px; }
+  .end { padding-bottom: 32px; }
+
+  /* Lightbox */
+  dialog { border: 0; border-radius: 12px; padding: 12px; max-width: min(1400px, 96vw); max-height: 96vh; background: var(--card); }
+  dialog::backdrop { background: rgba(17, 24, 39, .75); }
+  dialog img { max-width: 100%; max-height: 84vh; display: block; margin: 12px auto 0; }
+  .close { font: 600 13px var(--mono); min-height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--bg); cursor: pointer; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn, .zoom { transition: none; }
+  }
+  @media (max-width: 960px) {
+    .intro, .principle { grid-template-columns: 1fr; gap: 28px; }
+    .principle:nth-child(even) .text { order: 0; }
+    .principle, .visual, .consistency, .changed, .next, .takeaway { padding: 64px 0; }
+    .zoom { position: static; }
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero { padding: 48px 0; }
+    .visual-grid, .next-grid { grid-template-columns: 1fr; }
+    .visual-grid div { border-bottom: 1px solid var(--line); }
+  }
+</style>

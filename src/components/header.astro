@@ -1,15 +1,38 @@
 ---
-const pathname = Astro.url.pathname;
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+
+const workRoutes = [
+  '/work',
+  '/stu', '/research', '/wireframe', '/stylesheet',
+  '/pip', '/pip-system',
+  '/critterandfriends', '/crit-research', '/crit-stylesheet',
+  '/garagego'
+];
+
+const links = [
+  { href: '/', label: 'Home', active: path === '/' },
+  { href: '/aboutMe', label: 'About', active: path === '/aboutMe' },
+  { href: '/work', label: 'Work', active: workRoutes.includes(path) },
+  { href: '/contact', label: 'Contact', active: path === '/contact' }
+];
 ---
 
 <header class="site-header">
-  <a href="/" class="brand-logo">LYDIA STEWART</a>
+  <a href="/" class="brand" aria-label="Lydia Stewart, home">
+    <span class="brand-name">Lydia Stewart</span>
+    <span class="brand-role">UI designer</span>
+  </a>
 
-  <nav class="nav-links">
-    <a href="/" class={pathname === "/" ? "active" : ""}>Home</a>
-    <a href="/aboutMe" class={pathname === "/aboutMe" || pathname === "/aboutMe/" ? "active" : ""}>About</a>
-    <a href="/work" class={pathname === "/work" || pathname === "/work/" ? "active" : ""}>Work</a>
-    <a href="/contact" class={pathname === "/contact" || pathname === "/contact/" ? "active" : ""}>Contact</a>
+  <nav class="nav" aria-label="Main">
+    <ul>
+      {links.map((l) => (
+        <li>
+          <a href={l.href} aria-current={l.active ? 'page' : undefined}>{l.label}</a>
+        </li>
+      ))}
+    </ul>
   </nav>
 </header>
 
@@ -18,41 +41,85 @@ const pathname = Astro.url.pathname;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px 32px;
+    flex-wrap: wrap;
     width: 100%;
-    padding: 20px 0;
-    z-index: 10;
+    padding: 4px 0 20px;
+    border-bottom: 1px solid rgba(17, 17, 17, .12);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 
-  .brand-logo {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+  /* Name */
+  .brand {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
     text-decoration: none;
-    color: #0c0c0c;
+    color: #111;
+    border-radius: 6px;
   }
-
-  .nav-links {
-    display: flex;
-    gap: 24px;
+  .brand-name {
+    font: 600 22px/1.1 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+    letter-spacing: -0.01em;
   }
-
-  .nav-links a {
-    font-size: 11px;
+  .brand-role {
+    font: 500 11px/1.4 'JetBrains Mono', ui-monospace, monospace;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    color: #555; /* 7:1 on the parchment background */
+  }
+
+  /* Navigation */
+  .nav ul {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px; /* a comfortable tap target */
+    padding: 0 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #444; /* 9:1 on the parchment background */
     text-decoration: none;
-    color: #666;
-    transition: color 0.2s ease;
+    border-radius: 999px;
+    transition: color .2s ease, background-color .2s ease;
+  }
+  .nav a:hover {
+    color: #111;
+    background-color: rgba(17, 17, 17, .06);
   }
 
-  .nav-links a:hover {
-    color: #0c0c0c;
-  }
-
-  .nav-links a.active {
-    color: #0c0c0c;
+  /* The current page: darker text and a short bar underneath, so it doesn't rely on colour alone */
+  .nav a[aria-current="page"] {
+    color: #111;
     font-weight: 600;
-    border-bottom: 1px solid #0c0c0c;
+  }
+  .nav a[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 8px;
+    height: 2px;
+    border-radius: 2px;
+    background: #111;
+  }
+
+  /* Phones: name on one line, links on the next, spread across the width */
+  @media (max-width: 560px) {
+    .site-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .nav { width: 100%; }
+    .nav ul { justify-content: space-between; margin: 0 -12px; }
+    .brand-name { font-size: 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav a { transition: none; }
   }
 </style>

@@ -3,23 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pip: six screens</title>
+<title>Pip: live app</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap">
 <style is:global>
-:root{--bg:#e6ede4;--fg:#0e2a2f;--mute:#4f6b6d;--card:#f6f9f3;--line:#b8c9c0;--dusk:#8a7bd8;--glass:#4fb9a1;--amber:#f0a92e;--font:'Bricolage Grotesque',system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e2a2f;--fg:#e6ede4;--mute:#9db8b4;--card:#16383d;--line:#2c5459;--dusk:#a597f0;--glass:#7fd8c3;--amber:#ffc15e}}
-:root[data-theme="dark"]{--bg:#0e2a2f;--fg:#e6ede4;--mute:#9db8b4;--card:#16383d;--line:#2c5459;--dusk:#a597f0;--glass:#7fd8c3;--amber:#ffc15e}
+:root{--bg:#e6ede4;--fg:#0e2a2f;--mute:#4f6b6d;--card:#f6f9f3;--line:#b8c9c0;--line-strong:#718a84;--dusk:#8a7bd8;--glass:#4fb9a1;--amber:#f0a92e;--font:'Bricolage Grotesque',system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e2a2f;--fg:#e6ede4;--mute:#9db8b4;--card:#16383d;--line:#2c5459;--line-strong:#5f8b8c;--dusk:#a597f0;--glass:#7fd8c3;--amber:#ffc15e}}
+:root[data-theme="dark"]{--bg:#0e2a2f;--fg:#e6ede4;--mute:#9db8b4;--card:#16383d;--line:#2c5459;--line-strong:#5f8b8c;--dusk:#a597f0;--glass:#7fd8c3;--amber:#ffc15e}
 *,*::before,*::after{box-sizing:inherit}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;min-height:100%;background:var(--bg);color:var(--fg);font-family:var(--font);padding:20px 16px 40px}
-.top,.stage{max-width:900px;margin:0 auto}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--fg);font-family:var(--font);padding:12px 16px 40px}
+.crumbs,.top,.stage{max-width:900px;margin:0 auto}
+.crumbs{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.crumbs a{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--fg);font:600 15px var(--font);text-decoration:none;border-radius:999px;padding:0 4px}
+.crumbs a:hover{text-decoration:underline;text-underline-offset:4px}
 .top{margin-bottom:24px}
 .top h1{font-size:clamp(34px,6vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1;margin:0 0 10px}
 .top p{margin:0;color:var(--mute);max-width:54ch;line-height:1.5}
 [role=tablist]{display:flex;gap:4px;margin-top:22px;border-bottom:2px solid var(--line);overflow-x:auto}
 [role=tab]{font:600 15px var(--font);color:var(--mute);background:none;border:0;padding:12px 14px;margin-bottom:-2px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
 [role=tab][aria-selected=true]{color:var(--fg);border-bottom-color:var(--fg)}
-button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--fg);outline-offset:3px}
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--fg);outline-offset:3px}
 .stage{display:grid;grid-template-columns:minmax(0,380px) 1fr;gap:48px;align-items:start}
 @media (max-width:760px){.stage{grid-template-columns:1fr}}
 .phone{width:100%;max-width:380px;margin:0 auto;min-height:700px;border-radius:44px;background:var(--card);border:2px solid var(--line);padding:30px 26px 26px;overflow:hidden}
@@ -41,19 +44,19 @@ h2{font-size:34px;line-height:1.02;letter-spacing:-.03em;font-weight:800;margin:
 .hint{font-size:13px;color:var(--mute);text-align:right;max-width:13ch;line-height:1.3}
 .btn{width:100%;height:58px;margin-top:20px;border:0;border-radius:18px;background:var(--fg);color:var(--bg);font:600 17px var(--font);cursor:pointer;transition:transform .15s,background .3s}
 .btn:active{transform:scale(.98)}.btn.ok{background:var(--glass);color:#0e2a2f}
-.btn.quiet{background:none;color:var(--fg);border:2px solid var(--line);margin-top:10px}
+.btn.quiet{background:none;color:var(--fg);border:2px solid var(--line-strong);margin-top:10px}
 .big{font-size:72px;font-weight:800;letter-spacing:-.05em;line-height:.9;text-align:center}
 .big small{font-size:20px;font-weight:600;letter-spacing:0;margin-left:6px;color:var(--mute)}
 .step{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:16px}
-.round{width:52px;height:52px;border-radius:50%;border:2px solid var(--line);background:none;color:var(--fg);font:600 26px var(--font);cursor:pointer}
+.round{width:52px;height:52px;border-radius:50%;border:2px solid var(--line-strong);background:none;color:var(--fg);font:600 26px var(--font);cursor:pointer}
 .round:active{background:var(--line)}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
-.seg button{height:48px;border-radius:14px;border:2px solid var(--line);background:none;color:var(--fg);font:500 15px var(--font);cursor:pointer}
+.seg button{height:48px;border-radius:14px;border:2px solid var(--line-strong);background:none;color:var(--fg);font:500 15px var(--font);cursor:pointer}
 .seg button[aria-pressed=true]{border-color:var(--fg);background:var(--bg);font-weight:600}
 .doses{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:10px}
-.dose{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:2px solid var(--line);border-radius:18px;background:none;color:var(--fg);padding:14px 16px;font:500 16px var(--font);cursor:pointer;transition:background .3s,border-color .3s}
+.dose{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:2px solid var(--line-strong);border-radius:18px;background:none;color:var(--fg);padding:14px 16px;font:500 16px var(--font);cursor:pointer;transition:background .3s,border-color .3s}
 .dose b{display:block;font-weight:600}.dose span{color:var(--mute);font-size:13px}
-.dose i{margin-left:auto;width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:15px;color:transparent;transition:background .3s}
+.dose i{margin-left:auto;width:28px;height:28px;border-radius:50%;border:2px solid var(--line-strong);display:grid;place-items:center;font-style:normal;font-size:15px;color:transparent;transition:background .3s}
 .dose[aria-pressed=true]{background:var(--bg);border-color:var(--glass)}
 .dose[aria-pressed=true] i{background:var(--glass);border-color:var(--glass);color:#0e2a2f}
 .dose[aria-pressed=true] b{text-decoration:line-through;text-decoration-color:var(--mute)}
@@ -77,6 +80,10 @@ h2{font-size:34px;line-height:1.02;letter-spacing:-.03em;font-weight:800;margin:
 </style>
 </head>
 <body>
+<nav class="crumbs" aria-label="Pip pages">
+  <a href="/pip"><span aria-hidden="true">←</span> Back to the Pip case study</a>
+  <a href="/pip-system">Design system</a>
+</nav>
 <header class="top">
   <h1>Pip</h1>
   <p>A small wellbeing companion with a leaf on its head. The leaf lifts when your day goes well and droops when it doesn't, so one character carries every screen.</p>
@@ -98,7 +105,7 @@ h2{font-size:34px;line-height:1.02;letter-spacing:-.03em;font-weight:800;margin:
   <div class="brand">Pip</div>
   <h2>How was today, overall?</h2>
   <div class="vwrap"><div id="mp"></div></div>
-  <div class="read"><div class="word" id="mw" aria-live="polite">Steady</div><div class="hint">Drag Pip up or down, or use arrow keys</div></div>
+  <div class="read"><div class="word" id="mw" aria-live="polite">Steady</div><div class="hint">Drag Pip up or down, or use the arrow keys</div></div>
   <button class="btn" id="ms">Save</button>
 </section>
 
@@ -171,7 +178,7 @@ function pip(el,o={}){
     const c=col(l);a.setAttribute('stop-color',c);b.setAttribute('stop-color',mix(c,INK,.22));
     fts.forEach(f=>f.setAttribute('fill',mix(c,INK,.3)));
     fc.innerHTML=faceSVG(l,closed);
-    if(o.drag)svg.setAttribute('aria-valuenow',Math.round(l*6));
+    if(o.drag){svg.setAttribute('aria-valuenow',Math.round(l*6));svg.setAttribute('aria-valuetext',words[Math.round(l*6)])}
     o.onChange&&o.onChange(l)}};
   if(o.drag){
     const from=e=>{const r=svg.getBoundingClientRect();p.set(clamp(1-(e.clientY-r.top)/r.height))};
@@ -185,6 +192,7 @@ function pip(el,o={}){
 function confirm(b){b.textContent='Saved';b.classList.add('ok');setTimeout(()=>{b.textContent='Save';b.classList.remove('ok')},1800)}
 
 /* Welcome */
+const words=['Drained','Low','Flat','Steady','Light','Good','Glowing'];
 const ws=[['Hi, I\'m Pip','I\'ll help you notice how your days feel, one small check-in at a time.',.9],['Tell me about your day','Drag me up when it felt good and down when it didn\'t. My leaf and face follow.',.5],['Your data stays with you','Check-ins are stored on this device unless you choose to share them.',.7]];
 let wi=0;const wp=pip($('wp'),{l:.9});
 for(let i=0;i<3;i++)$('wd').append(document.createElement('i'));
@@ -192,7 +200,6 @@ function welcome(){const s=ws[wi];$('wh').textContent=s[0];$('wt').textContent=s
 $('wn').onclick=()=>{if(wi<2){wi++;welcome()}else{wi=0;welcome();show(1)}};welcome();
 
 /* Mood */
-const words=['Drained','Low','Flat','Steady','Light','Good','Glowing'];
 const mood=pip($('mp'),{drag:true,onChange:l=>$('mw').textContent=words[Math.round(l*6)]});
 mood.set(.5);$('ms').onclick=e=>confirm(e.target);
 
@@ -223,20 +230,20 @@ wk.forEach((d,i)=>{const b=document.createElement('button');b.className='day';b.
   b.onclick=()=>{[...$('dy').children].forEach(x=>x.setAttribute('aria-pressed',x===b));$('dw').textContent=`${full[i]}: ${words[d[1]].toLowerCase()}`;$('dd').textContent=`${d[2]} hours of sleep, ${d[3]} of 4 doses taken`};$('dy').append(b)});
 $('dy').children[4].click();
 
-/* Tabs + notes */
+/* Tabs and notes */
 const tabs=['Welcome','Mood','Sleep','Doses','Breathe','Week'];
 const notes=[
- ['A first meeting, not a form','Onboarding is three short slides. Pip introduces itself, shows the one gesture the app is built on, and states the privacy promise in plain words. The last button names the next action, "Start my first check-in", and takes you straight there.'],
- ['Direct manipulation, no slider','Instead of a slider and a row of faces, you move the character. Pip squashes down and stretches up, the leaf droops or lifts, and the colour shifts from dusk to sea glass to amber. Arrow keys work and screen readers hear the level.'],
- ['Numbers where numbers help','Sleep needs a precise value, so it gets a large figure with thumb-sized buttons. Pip shows it with closed eyes and a body that fills out with more rest. The feeling question is only three choices.'],
- ['Progress without pressure','Each dose taken brings Pip a little closer to its happiest state. A missed dose is a quieter Pip, never a red warning. Rows are full-width buttons with a check and strike-through, so state does not rely on colour.'],
- ['A tool in the same voice','Breathing reuses the character instead of adding a new component. Pip grows on the in-breath and settles on the out-breath, with the cue written above in large type. Everything works without the animation, because the words lead.'],
- ['Insight in one sentence','The week view leads with one plain finding, then lets you tap any day to see the details. Each day is the same Pip at small size, so patterns read at a glance. All figures here are sample data.']
+ ['A first meeting, not a form','Onboarding is three short slides. Pip introduces itself, shows the one gesture the app is built on, and explains the privacy promise in plain words. The last button names the next step, "Start my first check-in", and takes you straight there.'],
+ ['You move Pip, not a slider','Instead of a slider and a row of faces, you move the character. Pip squashes down and stretches up, the leaf droops or lifts, and the colour shifts from dusk to sea glass to amber. Arrow keys work too, and screen readers hear the mood word.'],
+ ['Numbers where numbers help','Sleep needs an exact amount, so it gets a large figure with thumb-sized buttons. Pip shows it with closed eyes and a body that fills out with more rest. How it felt is just three choices.'],
+ ['Progress without pressure','Each dose taken brings Pip a little closer to its happiest. A missed dose means a quieter Pip, never a red warning. Each row is a full-width button with a tick and a line through it, so the state doesn\'t rely on colour.'],
+ ['A tool in the same voice','Breathing reuses the character rather than adding something new. Pip grows as you breathe in and settles as you breathe out, with the cue written above in large type. It all works without the animation, because the words lead.'],
+ ['One sentence first','The week view leads with one plain finding, then lets you tap any day for the detail. Each day is the same Pip at a small size, so patterns are easy to spot. All the figures here are sample data.']
 ];
 $('tabs').innerHTML=tabs.map((t,i)=>`<button role="tab" id="t${i}" aria-selected="false" aria-controls="v${i}" tabindex="-1">${t}</button>`).join('');
 function show(i){
   tabs.forEach((_,k)=>{const t=$('t'+k);t.setAttribute('aria-selected',k===i);t.tabIndex=k===i?0:-1;$('v'+k).hidden=k!==i});
-  $('notes').innerHTML=`<h3>${notes[i][0]}</h3><p>${notes[i][1]}</p><p><strong>System:</strong> one character, one typeface (Bricolage Grotesque), three colours that mean low, steady and high.</p>`;
+  $('notes').innerHTML=`<h3>${notes[i][0]}</h3><p>${notes[i][1]}</p><p><strong>System:</strong> one character, one typeface (Bricolage Grotesque) and three colours that mean low, steady and high.</p>`;
 }
 tabs.forEach((_,i)=>{const t=$('t'+i);t.onclick=()=>show(i);t.onkeydown=e=>{const d={ArrowRight:1,ArrowLeft:-1}[e.key];if(d){const j=(i+d+tabs.length)%tabs.length;show(j);$('t'+j).focus()}}});
 show(0);

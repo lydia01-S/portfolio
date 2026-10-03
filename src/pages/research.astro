@@ -1,57 +1,52 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import BackToTop from '../components/BackToTop.astro';
+import StuTabs from '../components/StuTabs.astro';
 
 // Sections with an empty array (flow, testing, a11y) are hidden until you have real evidence for them.
-// TODO: set the first tab to the route of your STU case study page.
 const page = {
   title: "STU: UX research",
-  lead: "I surveyed 12 college students about how they use Moodle and compared it with Canvas and Notion, to find out why finding things is hard and what a student app should do first.",
-  back: { href: "/", label: "Back to portfolio" },
-  tabs: [
-    { href: "/stu", label: "Overview" },
-    { href: "/wireframe", label: "IA and wireframes" },
-    { href: "/stylesheet", label: "Design system" },
-    { href: "/research", label: "UX research", current: true }
-  ],
-  // TODO: say what you personally did and who you worked with.
-  role: "UX research and design, college project"
+  lead: "I surveyed 12 college students about how they use Moodle, reviewed it against usability heuristics and compared it with Canvas and Notion. I wanted to find out why finding things is hard, and what a student app should do first.",
+
+  role: "Solo college project: research, design and prototyping."
 };
 
 const summary = {
   question: "Why do students find Moodle hard to use, and what should a student app prioritise?",
-  did: "A 12-question survey of 12 college students, plus competitive research on Moodle, Canvas and Notion drawn from published sources.",
+  did: "A 12-question survey of 12 college students, a heuristic review of Moodle, and a comparison with Canvas and Notion drawn from published sources.",
   findings: [
-    "Navigation is the main pain point: 9 of 12 chose it as the most confusing part, and open answers describe too many steps to get anywhere.",
-    "Deadlines live in several places: 5 students use Moodle, 5 a phone calendar and 2 a notes app or spreadsheet. 10 of 12 would use a built-in planner.",
-    "Students want simple and organised over flashy: 10 of 12 picked simplicity, 8 picked organisation, and 7 of 12 rated deadline reminders 5 out of 5."
+    "Navigation is the main pain point. 9 of 12 chose it as the most frustrating part, and open answers describe too many steps to get anywhere.",
+    "Deadlines live in several places. 5 students use Moodle, 5 a phone calendar and 2 a notes app or spreadsheet, and 10 of 12 would use a built-in planner.",
+    "Students want simple and organised over flashy. 10 of 12 picked simplicity, 8 picked organisation, and 7 of 12 rated deadline reminders 5 out of 5."
   ],
-  changed: "The design opens on deadlines and the timetable, keeps the structure shallow with the deadline as the header of each subject, and adds a built-in planner with reminders."
+  changed: "The app opens on deadlines and the timetable, keeps the structure shallow with the deadline at the top of each subject, and adds a built-in planner with reminders."
 };
 
 const goals = [
   { question: "How often, and for what, do students use Moodle?", informs: "Which tasks the home screen has to make fastest." },
   { question: "How easy is it to find things, and what is most frustrating?", informs: "How shallow the navigation needs to be." },
   { question: "How do students track deadlines today, and how much do reminders matter?", informs: "Whether to build a planner and reminders." },
-  { question: "What do students value in a platform, and which features matter most?", informs: "What gets priority on the dashboard." },
-  { question: "Where would students use the app?", informs: "Whether to design mobile-first, desktop-first or both." }
+  { question: "What do students value in a platform, and which features matter most?", informs: "What gets priority on the home screen." },
+  { question: "Where would students use the app?", informs: "Whether to design for phone, desktop or both." }
 ];
 
 const methods = [
-  { method: "Student survey", who: "College students who use Moodle or similar platforms", n: "12 (11 on the features question, 10 on one open question)", when: "During the project", why: "To hear how students use Moodle and what frustrates them, in numbers and in their own words." },
-  { method: "Competitive research", who: "Moodle, Canvas and Notion", n: "3 platforms", when: "During the project", why: "To see how established tools structure information and where each one falls short." }
+  { method: "Student survey", who: "College students who use Moodle or similar platforms", n: "12 (11 answered the features question)", when: "During the project", why: "To hear how students use Moodle and what frustrates them, in numbers and in their own words." },
+  { method: "Heuristic review", who: "Moodle, reviewed against common usability principles", n: "1 platform", when: "During the project", why: "To mark where the interface itself causes the problems students describe." },
+  { method: "Competitive research", who: "Moodle, Canvas and Notion", n: "3 platforms", when: "During the project", why: "To see how established tools organise information and where each one falls short." }
 ];
-const methodNote = "Limits: a small sample from one college, self-reported answers, and no usability testing of the prototype yet. Read the percentages as directional.";
+const methodNote = "Limits: a small sample from one college, self-reported answers, and no usability testing of the prototype yet. Read the percentages as a direction, not a measurement.";
 
 // Each bar is [label, count]. Percentages are worked out from the number of responses.
-const pct = (c, n) => Math.round((c / n) * 1000) / 10;
+const pct = (c: number, n: number) => Math.round((c / n) * 100);
 const results = [
-  { q: "How easy is it to find what you need on Moodle?", n: 12, note: "Scale of 1 to 5, where 5 is easiest.", bars: [["1", 2], ["2", 4], ["3", 5], ["4", 0], ["5", 1]] },
+  { q: "How easy is it to find what you need on Moodle?", n: 12, note: "1 is hardest, 5 is easiest.", bars: [["1", 2], ["2", 4], ["3", 5], ["4", 0], ["5", 1]] },
   { q: "Which parts feel most confusing or frustrating? (up to 3)", n: 12, note: "Top three answers.", bars: [["Navigation and menu structure", 9], ["Timetable access", 5], ["Grades and feedback", 3]] },
   { q: "What do you mainly use Moodle for? (all that apply)", n: 12, bars: [["Submitting work", 11], ["Accessing lecture materials", 10], ["Viewing assignments", 9], ["Checking grades", 4], ["Checking timetable", 3], ["Communication", 0]] },
   { q: "Which features matter most in a student app? (3 to 5)", n: 11, bars: [["Assignment deadlines overview", 8], ["Lecture materials access", 8], ["Clear timetable", 7], ["Easy assignment submission", 6], ["Grades tracking", 6], ["Group collaboration tools", 4], ["Notifications and reminders", 3], ["Messaging and chat", 2], ["Course overview", 1], ["Cafeteria and college services", 0]] },
   { q: "What matters most in the design of a platform like this? (2 to 3)", n: 12, bars: [["Simplicity", 10], ["Organisation", 8], ["Speed", 5], ["Visual design", 5]] },
   { q: "How do you currently track your deadlines?", n: 12, bars: [["Moodle", 5], ["Personal calendar (phone)", 5], ["Notes app", 1], ["Separate spreadsheet", 1]] },
-  { q: "How important are reminders for deadlines?", n: 12, note: "Scale of 1 to 5, where 5 is most important.", bars: [["1", 0], ["2", 1], ["3", 3], ["4", 1], ["5", 7]] },
+  { q: "How important are reminders for deadlines?", n: 12, note: "1 is least important, 5 is most.", bars: [["1", 0], ["2", 1], ["3", 3], ["4", 1], ["5", 7]] },
   { q: "Would you use a built-in planner or calendar?", n: 12, bars: [["Yes, definitely", 10], ["Maybe", 1], ["No", 1]] },
   { q: "Where would you prefer to use this app?", n: 12, bars: [["Both equally", 9], ["Mobile app", 3], ["Desktop or web", 0]] }
 ];
@@ -59,16 +54,16 @@ const results = [
 const competitors = [
   {
     name: "Moodle",
-    how: "A linear list structure, with information nested deep inside course-specific silos.",
-    gap: "Students have to keep the structure in their heads and move between modules to see their data, which takes a lot of cognitive effort.",
-    differs: "A modular dashboard puts the timetable, deadlines and other data in one viewport, like the command centre of a productivity app.",
+    how: "A long list structure, with information nested deep inside each course.",
+    gap: "Students have to remember where things are and move between courses to see their work, which takes a lot of mental effort.",
+    differs: "One home screen shows the timetable, deadlines and coursework together.",
     refs: [{ label: "NN/g: flat vs deep hierarchy", href: "https://www.nngroup.com/articles/flat-vs-deep-hierarchy/" }]
   },
   {
     name: "Canvas",
-    how: "Task-driven: a sidebar to-do list brings deadlines to the surface.",
-    gap: "The list sits apart from the course itself, so students leave it to find the brief or the submission portal.",
-    differs: "The deadline is the header of each subject, so going from noticing a deadline to opening its brief takes no extra steps.",
+    how: "Task-led: a to-do list in the sidebar brings deadlines to the surface.",
+    gap: "The list sits apart from the course itself, so students leave it to find the brief or the submission page.",
+    differs: "The deadline sits at the top of each subject, so going from a deadline to its brief takes no extra steps.",
     refs: [
       { label: "Canvas usability paper", href: "https://manuelgarcia.info/media/full_paper/usability-canvas-lms.pdf" },
       { label: "AASA: executive functioning", href: "https://www.aasa.org/resources/resource/the-breakthrough-years-for-executive-functioning" }
@@ -76,37 +71,36 @@ const competitors = [
   },
   {
     name: "Notion",
-    how: "A very flexible structure that students shape themselves.",
-    gap: "It starts from a blank page and holds no college data, so students copy information over from their learning environment by hand.",
-    differs: "A personal workspace with a notepad and to-do list lives in the same app as grades and student IDs, so there is less switching between tools.",
+    how: "A very flexible workspace that students shape themselves.",
+    gap: "It starts from a blank page and has no college data, so students copy information over by hand.",
+    differs: "A notepad and to-do list live in the same app as grades and the timetable, so there's less switching between tools.",
     refs: [
       { label: "Ness Labs", href: "https://nesslabs.com/qatalog-featured-tool" },
       { label: "APA: multitasking", href: "https://www.apa.org/topics/research/multitasking" }
     ]
   }
 ];
-const competitorNote = "Drawn from the published sources linked on each card.";
+const competitorNote = "Based on the published sources linked on each card.";
 
 // Evidence, then insight, then implication.
 const findings = [
-  { evidence: "9 of 12 (75%) picked navigation and menu structure as the most confusing part. 6 of 12 rated how easy it is to find what they need as 1 or 2 out of 5.", insight: "Finding things, not missing features, is the core problem.", implication: "Keep the structure shallow and put timetable, deadlines and materials at the top level." },
-  { evidence: "“Frustrating in the sense that it takes too many steps to get where I need to be. And I cannot find what I am looking for.”", insight: "The number of steps is what students feel, in their own words.", implication: "Cut steps to the tasks students do most, and add a clear way to search or jump to a course." },
-  { evidence: "Students mainly use Moodle to submit work (11 of 12), access lecture materials (10 of 12) and view assignments (9 of 12). Only 3 of 12 use it for the timetable.", insight: "Moodle is used for tasks, not for browsing.", implication: "Design around task paths: deadline, brief, submission." },
-  { evidence: "Deadlines are tracked in Moodle (5), a phone calendar (5), a notes app (1) and a spreadsheet (1). 10 of 12 would use a built-in planner, and 7 of 12 rated reminders 5 out of 5.", insight: "Students keep a second copy of their deadlines elsewhere.", implication: "Build a planner with reminders into the app, so there is one place to look." },
-  { evidence: "Simplicity was picked by 10 of 12 (83%) and organisation by 8 of 12 (67%). Visual design and speed were each picked by 5 of 12.", insight: "Students value clarity over looks.", implication: "Use a restrained, well-organised interface, with visual polish second to hierarchy." },
-  { evidence: "9 of 12 would use the app on mobile and web equally, 3 of 12 mainly on mobile, and none mainly on desktop.", insight: "Students expect both.", implication: "Design mobile-first and make sure it scales up to the web." }
+  { evidence: "9 of 12 (75%) picked navigation and menu structure as the most frustrating part. 6 of 12 rated how easy it is to find what they need as 1 or 2 out of 5.", insight: "Finding things, not missing features, is the core problem.", implication: "Keep the structure shallow and put the timetable, deadlines and materials at the top level." },
+  { evidence: "“Frustrating in the sense that it takes too many steps to get where I need to be. And I cannot find what I am looking for.”", insight: "Students feel the problem as too many steps.", implication: "Cut the steps to the tasks students do most, and add a quick way to search or jump to a course." },
+  { evidence: "Students mainly use Moodle to submit work (11 of 12), access lecture materials (10 of 12) and view assignments (9 of 12). Only 3 of 12 use it for the timetable.", insight: "Moodle is used for tasks, not for browsing.", implication: "Design around short task paths: deadline, brief, submission." },
+  { evidence: "Deadlines are tracked in Moodle (5), a phone calendar (5), a notes app (1) and a spreadsheet (1). 10 of 12 would use a built-in planner, and 7 of 12 rated reminders 5 out of 5.", insight: "Students keep a second copy of their deadlines somewhere else.", implication: "Build a planner with reminders into the app, so there's one place to look." },
+  { evidence: "Simplicity was picked by 10 of 12 (83%) and organisation by 8 of 12 (67%). Visual design and speed were each picked by 5 of 12.", insight: "Students value clarity over looks.", implication: "Keep the interface calm and well organised, with visual polish coming second to clear hierarchy." },
+  { evidence: "9 of 12 would use the app on phone and web equally, 3 of 12 mainly on their phone, and none mainly on desktop.", insight: "Students expect both.", implication: "Design for phone first, and make sure it works well on the web too." }
 ];
-const artefacts = [
-  // Save your survey screenshot as public/survey-responses.png.
-  { src: "/survey-responses.png", alt: "Charts of the answers to each survey question: pie and bar charts, plus open-text answers about Moodle", caption: "The survey responses as charts, from the original survey tool." }
-];
+
+const  artefacts: { dates: string; title: string; place: string; note: string }[] = [];
+
 
 // The bridge from research to interface.
 const decisions = [
-  { finding: "8 of 11 ranked an assignment deadlines overview among the most important features, and 7 of 12 rated reminders 5 out of 5.", decision: "The dashboard opens on priority module cards, ranked by urgency.", img: "/h3.png", alt: "STU dashboard with high-contrast priority module cards" },
+  { finding: "8 of 11 ranked an assignment deadlines overview among the most important features, and 7 of 12 rated reminders 5 out of 5.", decision: "The home screen opens on module cards ranked by how soon work is due.", img: "/h3.png", alt: "STU dashboard with high-contrast priority module cards" },
   { finding: "5 of 12 found timetable access confusing, and 7 of 11 want a clear timetable.", decision: "The schedule view shows today as time blocks.", img: "/h8.png", alt: "STU schedule view with today's lectures as time blocks" },
-  { finding: "Submitting work is the second most common use of Moodle (11 of 12), and 6 of 11 want easy submission.", decision: "Each assignment opens a submission drawer with the brief alongside.", img: "/h4.png", alt: "STU assignment view with a submission drawer and the brief" },
-  { finding: "9 of 12 found navigation the most frustrating part, and Canvas separates its to-do list from the course.", decision: "A shallow structure, with the deadline as the header of each subject.", img: "/img2.png", alt: "Information architecture map beside mobile schedule feed prototypes" }
+  { finding: "Submitting work is the most common use of Moodle (11 of 12), and 6 of 11 want easy submission.", decision: "Each assignment opens a submission drawer with the brief beside it.", img: "/h4.png", alt: "STU assignment view with a submission drawer and the brief" },
+  { finding: "9 of 12 found navigation the most frustrating part, and Canvas keeps its to-do list apart from the course.", decision: "A shallow structure, with the deadline at the top of each subject.", img: "/img2.png", alt: "Information architecture map beside mobile schedule screens" }
 ];
 
 const flow = [];
@@ -115,14 +109,14 @@ const a11y = [];
 
 const limits = [
   "The sample is small (12 students), from one college, and self-reported.",
-  "The 1 to 5 questions are shown as raw counts, so they say little about how strongly students feel.",
-  "The competitor comparisons come from published sources, not from my own testing of each product.",
+  "The 1 to 5 ratings come from a small group, so they show a direction, not a measurement.",
+  "The competitor comparisons are based on published sources, not on my own testing of each product.",
   "The prototype hasn't been usability tested yet."
 ];
 const next = [
-  "Run a usability test of the prototype with about five students, with tasks like finding today's deadlines and submitting an assignment.",
+  "Test the prototype with about five students, with tasks like finding today's deadlines and submitting an assignment.",
   "Follow up the survey with short interviews about how students track deadlines.",
-  "Re-check the dashboard against the survey: does it surface the three most-used tasks first?"
+  "Check the home screen against the survey: does it put the three most-used tasks first?"
 ];
 
 const sections = [
@@ -138,9 +132,11 @@ const sections = [
   { id: "accessibility", label: "Accessibility", show: a11y.length > 0 },
   { id: "next", label: "Limits and next steps", show: limits.length + next.length > 0 }
 ].filter((s) => s.show);
+
+
 ---
 
-<Layout title={page.title}>
+<Layout title={page.title} bg="#fbfaf4">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -150,16 +146,11 @@ const sections = [
   <main class="rs">
     <header class="hero">
       <div class="inner">
-        <div class="topbar">
-          <a href={page.back.href} class="back">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            {page.back.label}
-          </a>
-          <nav class="tabs-top" aria-label="Project pages">
-            {page.tabs.map((t) => <a href={t.href} aria-current={t.current ? "page" : undefined}>{t.label}</a>)}
-          </nav>
-        </div>
-        <p class="chips"><span class="chip" style="--c: var(--yellow)">UX research</span></p>
+        <StuTabs current="research" />
+        <p class="chips">
+  <span class="chip" style="--c: var(--yellow)">UX research</span>
+  <span class="chip" style="--c: var(--mint)" id="readTime">3 min read</span>
+</p>
         <h1>{page.title}</h1>
         <p class="lead">{page.lead}</p>
         <p class="role"><span>My role</span> {page.role}</p>
@@ -202,7 +193,7 @@ const sections = [
             <div class="scroll" role="region" aria-label="Research methods table" tabindex="0">
               <table>
                 <caption class="sr">Research methods</caption>
-                <thead><tr><th scope="col">Method</th><th scope="col">Who</th><th scope="col">How many</th><th scope="col">When</th><th scope="col">Why</th></tr></thead>
+                <thead><tr><th scope="col">Method</th><th scope="col">Who or what</th><th scope="col">How many</th><th scope="col">When</th><th scope="col">Why</th></tr></thead>
                 <tbody>{methods.map((m) => <tr><th scope="row">{m.method}</th><td>{m.who}</td><td>{m.n}</td><td>{m.when}</td><td>{m.why}</td></tr>)}</tbody>
               </table>
             </div>
@@ -223,8 +214,8 @@ const sections = [
                     {r.bars.map(([label, count]) => (
                       <li>
                         <span class="bl">{label}</span>
-                        <span class="track" aria-hidden="true"><span class="fill" style={`width:${(count / r.n) * 100}%`}></span></span>
-                        <span class="bv">{count} ({pct(count, r.n)}%)</span>
+                        <span class="track" aria-hidden="true"><span class="fill" style={`width:${(Number(count) / r.n) * 100}%`}></span></span>
+                        <span class="bv">{count} ({pct(Number(count), r.n)}%)</span>
                       </li>
                     ))}
                   </ul>
@@ -282,7 +273,7 @@ const sections = [
         {decisions.length > 0 && (
           <section id="decisions">
             <span class="chip" style="--c: var(--amber)">Decisions</span>
-            <h2>Every key design choice traced back to a finding.</h2>
+            <h2>Every key design choice, traced back to a finding.</h2>
             <ul class="decisions">
               {decisions.map((d) => (
                 <li>
@@ -350,6 +341,7 @@ const sections = [
         )}
       </div>
     </div>
+    <BackToTop />
   </main>
 </Layout>
 
@@ -375,15 +367,8 @@ const sections = [
   .inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
   .hero { border-bottom: 1px solid var(--border); padding: 24px 0 56px; }
-  .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 20px; margin-bottom: 48px; border-bottom: 1px solid var(--border); }
-  .back, .tabs-top a { font: 500 13px var(--mono); text-decoration: none; padding: 8px 12px; border-radius: 999px; transition: background .2s; }
-  .back { display: inline-flex; gap: 6px; align-items: center; padding-left: 0; }
-  .back:hover, .tabs-top a:hover { background: var(--mint); }
-  .tabs-top { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tabs-top a { border: 1px solid var(--border); }
-  .tabs-top a[aria-current="page"], .tabs-top a[aria-current="page"]:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
   h1 { font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1.1; margin-bottom: 20px; }
-  .lead { font-size: 18px; color: #2d3340; max-width: 60ch; margin-bottom: 20px; }
+  .lead { font-size: 18px; color: #2d3340; max-width: 62ch; margin-bottom: 20px; }
   .role { font-size: 14px; color: var(--muted); }
   .role span { font: 500 12px var(--mono); margin-right: 8px; color: var(--ink); }
 
@@ -417,7 +402,7 @@ const sections = [
   thead th { font: 500 12px var(--mono); color: var(--muted); background: var(--bg); }
   tbody th { font-weight: 600; }
   tr:last-child > * { border-bottom: 0; }
-  .note { font-size: 14px; color: var(--muted); margin-top: 14px; }
+  .note { font-size: 14px; color: var(--muted); margin-top: 14px; max-width: 80ch; }
 
   .charts { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
   .chart { margin: 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); }
@@ -426,7 +411,7 @@ const sections = [
   .bars li { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 13px; line-height: 1.35; margin-bottom: 9px; }
   .track { display: block; height: 10px; background: var(--mint); border-radius: 5px; overflow: hidden; }
   .fill { display: block; height: 100%; background: var(--deep); border-radius: 5px; }
-  .bv { font: 500 12px var(--mono); color: var(--muted); white-space: nowrap; }
+  .bv { font: 500 12px var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; text-align: right; min-width: 7ch; }
 
   .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
   .cards.comp { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
@@ -434,7 +419,7 @@ const sections = [
   .cards article h3 { font-size: 1.3rem; margin-bottom: 10px; }
   .cards p:not(.label):not(.refs) { margin: 0; font-size: 15px; color: #333a48; }
   .refs { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }
-  .refs a { font: 500 12px var(--mono); text-decoration: none; padding: 6px 10px; border: 1px solid var(--border); border-radius: 999px; transition: background .2s; }
+  .refs a { display: inline-flex; align-items: center; min-height: 32px; font: 500 12px var(--mono); text-decoration: none; padding: 0 10px; border: 1px solid var(--border); border-radius: 999px; transition: background .2s; }
   .refs a:hover { background: var(--mint); }
 
   .ph { display: grid; place-items: center; min-height: 160px; border: 2px dashed var(--border); border-radius: 12px; background: var(--card); font: 500 12px var(--mono); color: var(--muted); }

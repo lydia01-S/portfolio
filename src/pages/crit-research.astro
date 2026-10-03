@@ -1,23 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import BackToTop from '/src/components/BackToTop.astro';
+import CritterTabs from '../components/CritterTabs.astro';
 
 // Built from the Critter & Friends project documentation. Sections with an empty array are hidden.
-// TODO: add what you personally did, and the number and findings from the family and friends testing.
+// Keep page.role consistent with the Role on the overview page.
 const page = {
   title: "Critter & Friends: UX research",
   lead: "We wanted to know how to make native Irish insects feel like friends to primary school children, without turning learning into homework. We researched the science and the children, then tested the live site with educators.",
-  back: { href: "/work", label: "Back to selected work" },
-  tabs: [
-    { href: "/critterandfriends", label: "Overview" },
-    { href: "/critter-research", label: "UX research", current: true }
-  ],
-  role: "Co-created with Thea Rummel for an MSc in Interactive Digital Media at Griffith College. Thea drew the sitemap, palette, mascot and UI; the scenes, cards and research were shared."
+  role: "Co-created with Thea Rummel for an MSc in Interactive Digital Media at Griffith College. Thea hand-drew the illustrations and UI elements. I worked on the research, and we co-coded the site. We planned the interface together: where each element sits, how it looks and how many buttons a child has to press."
 };
 
 const summary = {
   question: "How can a web experience make native Irish insects feel like friends to primary school children, and keep learning playful?",
-  did: "A literature review, a competitor audit, a museum visit to photograph specimens with the curator of entomology, two personas, and usability feedback from primary school educators plus family and friends.",
+  did: "A literature review, a competitor audit, a museum visit to photograph specimens with the curator of entomology, two personas, and usability feedback from primary school educators.",
   findings: [
     "Children are motivated by curiosity and choice, so the site has a calm collection loop with no timers or leaderboards.",
     "Catching threatened insects sent the wrong message, so the story changed to delivering birthday party invitations to them.",
@@ -34,15 +30,15 @@ const goals = [
   { question: "Does the live site work for real users?", informs: "Fixes to the tutorial, navigation, saved state and mobile." }
 ];
 
+// To add informal family and friends testing back, add a row here with the real number of people and what they found,
+// and mention it in summary.did, methodNote and limits.
 const methods = [
   { method: "Literature review", who: "National Biodiversity Data Centre, NPWS Red Lists, the All-Ireland Pollinator Plan, and research on children, gamification and play", n: "Published sources", when: "During the project", why: "To ground the species, habitats and mechanics in evidence." },
   { method: "Competitor audit and similar work", who: "Scientific databases, educational games, field-guide apps and WebGL nature experiences", n: "4 types of tool", when: "During the project", why: "To find the gap Critter & Friends could fill." },
   { method: "Museum consultation", who: "Dr Aidan O'Hanlon, Curator of Entomology, National Museum of Ireland (Natural History)", n: "1 curator, 1 visit", when: "2026", why: "To photograph real specimens and check which species matter." },
-  { method: "Educator testing", who: "Primary school educators at the International School Westpfalz, Germany", n: "Educators at one school", when: "2026", why: "To see how the live site works for people who know how children use screens." },
-  // TODO: add the number of people and what they found, then add their findings to the testing section below.
-  { method: "Family and friends testing", who: "Family and friends", n: "Add number", when: "2026", why: "Quick, informal feedback on the live site." }
+  { method: "Educator testing", who: "Primary school educators at the International School Westpfalz, Germany", n: "Educators at one school", when: "2026", why: "To see how the live site works for people who know how children use screens." }
 ];
-const methodNote = "Limits: we haven't tested with children yet. Educator feedback came as written messages from a small group, and family and friends feedback was informal.";
+const methodNote = "Limits: we haven't tested with children yet. Educator feedback came as written messages from a small group.";
 
 const personas = [
   { name: "Ciara, 8", role: "Primary learner", bg: "Enjoys tablet games, visual storytelling and collecting digital rewards.", pain: "Gets bored by text-heavy educational sites and frustrated by multi-level menus or slow feedback.", need: "Big targets, hand-drawn visuals, narration and an encouraging collection loop." },
@@ -69,16 +65,18 @@ const artefacts = [
   { src: "/critter/critter-concept-beetle.png", alt: "A line drawing of a diving beetle, an early character concept", caption: "An early concept sketch of the Great Diving Beetle." }
 ];
 
+// wide: true gives a decision the full width, with the image above the text. Use it for long, thin images.
 const decisions = [
   { finding: "Hunting threatened insects risked teaching ownership, not respect.", decision: "A birthday party story. You deliver invitations to insect neighbours, and the party scene is the finale.", img: "/critter/critter-party.jpg", alt: "The birthday party finale: the entomologist and insect guests around a table with a Happy Birthday banner" },
   { finding: "Children need calm, immediate feedback, and no competitive pressure.", decision: "A trading card collection in a collapsible Pokédex drawer, and a progress counter in the corner.", img: "/critter/critter-cards-menu.png", alt: "The trading card drawer showing three unlocked insect cards" },
   { finding: "Nested menus disorient young users, and targets must be large.", decision: "Full-screen scenes with edge-anchored controls: back at top left, information and audio at top right, the counter at bottom right.", img: "/critter/critter-woodland.jpg", alt: "The hand-drawn woodland scene with the back button, information button and a progress counter" },
-  { finding: "Real specimens showed what makes each insect recognisable.", decision: "Insects keep realistic anatomy, and every card pairs real facts with a character.", img: "/critter/critter-cards.png", alt: "All nine insect trading cards in a row" }
+  { finding: "Real specimens showed what makes each insect recognisable.", decision: "Insects keep realistic anatomy, and every card pairs real facts with a character.", img: "/critter/critter-cards.png", alt: "All nine insect trading cards in a row", wide: true }
 ];
 
 const flowTitle = "From sitemap, to first concept, to finished scene.";
+// fit: "contain" shows the whole image on white instead of cropping it. Use it for diagrams.
 const flow = [
-  { stage: "Sitemap", note: "A linear main route (Home, Marsh, Garden, House, Finale) with smaller scenes inside each, and a shared Information hub.", img: "/critter/critter-sitemap.png", alt: "Sitemap: Home, Marsh, Garden, House and Finale in a column, with Pond, Anthill, River, Bush, Sink and Fruitbowl branching off and an Information hub leading to About and Scientific Background" },
+  { stage: "Sitemap", fit: "contain", note: "A linear main route (Home, Marsh, Garden, House, Finale) with smaller scenes inside each, and a shared Information hub.", img: "/critter/critter-sitemap.png", alt: "Sitemap: Home, Marsh, Garden, House and Finale in a column, with Pond, Anthill, River, Bush, Sink and Fruitbowl branching off and an Information hub leading to About and Scientific Background" },
   { stage: "First colour concept", note: "An early draft of the colours and style, before the palette was simplified.", img: "/critter/critter-concept-colour.jpg", alt: "An early colour concept of a cottage garden with a pond" },
   { stage: "Finished scene", note: "The woodland scene as it ships, with hand-drawn shapes and a consistent line.", img: "/critter/critter-woodland.jpg", alt: "The finished woodland scene" }
 ];
@@ -93,6 +91,13 @@ const testing = [
   { tested: "The hand-drawn style, with educators.", problem: "No problem. “The illustrations are super cute though. I love it.”", change: "Keep the single-brush illustration style across new scenes." }
 ];
 
+// Save your phone screenshot as public/critter/critter-mobile.png (or change src), then describe what it shows in alt.
+const mobileShot = {
+  src: "/critter/critter-mobile.jpg",
+  alt: "Critter & Friends on a phone: [describe the scene and controls visible]",
+  caption: "The game on a phone, with the same edge-anchored controls as on desktop."
+};
+
 const a11y = [
   { check: "Narration", method: "Design review", result: "A text-to-speech toggle and paragraph-by-paragraph text reveals are built in." },
   { check: "Text size and layout", method: "Design rules", result: "A 14pt minimum, short chunks of text, large targets, and no scrolling or nested menus." },
@@ -103,7 +108,7 @@ const a11y = [
 
 const limits = [
   "We haven't tested with children. Educators are a stand-in, and they gave feedback by message.",
-  "The testing sample was small and mostly from one school, plus informal family and friends feedback.",
+  "The testing sample was small and came from one school.",
   "We didn't run a structured interview with the entomologist about how to talk to children about conservation.",
   "Keyboard control and focus indicators weren't in the first build, so it isn't fully accessible."
 ];
@@ -127,9 +132,25 @@ const sections = [
   { id: "accessibility", label: "Accessibility", show: a11y.length > 0 },
   { id: "next", label: "Limits and next steps", show: limits.length + next.length > 0 }
 ].filter((s) => s.show);
+
+// Reading time, counted from all the text on the page at about 200 words a minute.
+const allText = [
+  page.lead, page.role, summary.question, summary.did, ...summary.findings, summary.changed,
+  ...goals.flatMap((g) => [g.question, g.informs]),
+  ...methods.flatMap((m) => [m.method, m.who, m.why]), methodNote,
+  ...personas.flatMap((p) => [p.bg, p.pain, p.need]), personaNote,
+  ...competitors.flatMap((c) => [c.how, c.gap, c.differs]), competitorNote,
+  ...findings.flatMap((f) => [f.evidence, f.insight, f.implication]),
+  ...decisions.flatMap((d) => [d.finding, d.decision]),
+  ...flow.map((f) => f.note),
+  ...testing.flatMap((t) => [t.tested, t.problem, t.change]),
+  ...a11y.map((a) => a.result),
+  ...limits, ...next
+].join(' ');
+const readTime = Math.max(1, Math.ceil(allText.split(/\s+/).length / 200));
 ---
 
-<Layout title={page.title}>
+<Layout title={page.title} bg="#fbfaf4">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -139,16 +160,11 @@ const sections = [
   <main class="rs">
     <header class="hero">
       <div class="inner">
-        <div class="topbar">
-          <a href={page.back.href} class="back">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            {page.back.label}
-          </a>
-          <nav class="tabs-top" aria-label="Project pages">
-            {page.tabs.map((t) => <a href={t.href} aria-current={t.current ? "page" : undefined}>{t.label}</a>)}
-          </nav>
-        </div>
-        <p class="chips"><span class="chip" style="--c: var(--yellow)">UX research</span></p>
+        <CritterTabs current="research" />
+        <p class="chips">
+          <span class="chip" style="--c: var(--yellow)">UX research</span>
+          <span class="chip" style="--c: var(--mint)">{readTime} min read</span>
+        </p>
         <h1>{page.title}</h1>
         <p class="lead">{page.lead}</p>
         <p class="role"><span>My role</span> {page.role}</p>
@@ -220,7 +236,7 @@ const sections = [
         {competitors.length > 0 && (
           <section id="competitors">
             <span class="chip" style="--c: var(--lavender)">Competitor audit</span>
-            <h2>Two extremes, and the gap between them.</h2>
+            <h2>Four kinds of tool, and the gap between them.</h2>
             <div class="cards comp">
               {competitors.map((c) => (
                 <article>
@@ -253,7 +269,7 @@ const sections = [
               <div class="artefacts">
                 {artefacts.map((a) => (
                   <figure>
-                    {a.src ? <img src={a.src} alt={a.alt} loading="lazy" /> : <div class="ph">Add image</div>}
+                    {a.src ? <button type="button" class="zoom" aria-label={`Enlarge: ${a.caption}`}><img src={a.src} alt={a.alt} loading="lazy" /></button> : <div class="ph">Add image</div>}
                     <figcaption>{a.caption}</figcaption>
                   </figure>
                 ))}
@@ -268,8 +284,8 @@ const sections = [
             <h2>Every key design choice traced back to a finding.</h2>
             <ul class="decisions">
               {decisions.map((d) => (
-                <li>
-                  {d.img ? <img src={d.img} alt={d.alt} loading="lazy" /> : <div class="ph">Add screen</div>}
+                <li class={d.wide ? 'wide' : undefined}>
+                  {d.img ? <button type="button" class="zoom" aria-label={`Enlarge: ${d.alt}`}><img src={d.img} alt={d.alt} loading="lazy" /></button> : <div class="ph">Add screen</div>}
                   <div><p class="label">Finding</p><p>{d.finding}</p><p class="label">Decision</p><p>{d.decision}</p></div>
                 </li>
               ))}
@@ -281,10 +297,12 @@ const sections = [
           <section id="flow">
             <span class="chip" style="--c: var(--sage)">Structure to interface</span>
             <h2>{flowTitle}</h2>
+            <p class="note top">Select any image to see it full size.</p>
             <ol class="flow">
-              {flow.map((f) => (
+              {flow.map((f, i) => (
                 <li>
-                  {f.img ? <img src={f.img} alt={f.alt} loading="lazy" /> : <div class="ph">Add image</div>}
+                  {f.img ? <button type="button" class="zoom" aria-label={`Enlarge: ${f.stage}`}><img src={f.img} alt={f.alt} loading="lazy" class={f.fit === 'contain' ? 'contain' : undefined} /></button> : <div class="ph">Add image</div>}
+                  <p class="step">Step {i + 1}</p>
                   <h3>{f.stage}</h3><p>{f.note}</p>
                 </li>
               ))}
@@ -305,6 +323,10 @@ const sections = [
                 </article>
               ))}
             </div>
+            <figure class="mobile-shot">
+              <button type="button" class="zoom" aria-label={`Enlarge: ${mobileShot.caption}`}><img src={mobileShot.src} alt={mobileShot.alt} loading="lazy" /></button>
+              <figcaption>{mobileShot.caption}</figcaption>
+            </figure>
           </section>
         )}
 
@@ -335,8 +357,41 @@ const sections = [
     </div>
 
     <BackToTop />
+
+    <dialog id="lightbox" aria-label="Enlarged image">
+      <button type="button" id="closeLb" class="close">Close</button>
+      <img id="lbImg" alt="" />
+    </dialog>
   </main>
 </Layout>
+
+<script>
+  function initResearch() {
+    const root = document.querySelector<HTMLElement>('.rs');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+
+    // Highlight the section you're reading in "On this page"
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
+    const spy = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) links.forEach((a) => a.toggleAttribute('aria-current', a.hash === `#${e.target.id}`));
+    }), { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('.content section').forEach((s) => spy.observe(s));
+
+    // Click any image to see it full size
+    const lb = document.getElementById('lightbox') as HTMLDialogElement | null;
+    const lbImg = document.getElementById('lbImg') as HTMLImageElement | null;
+    document.querySelectorAll<HTMLButtonElement>('.rs .zoom').forEach((b) => b.addEventListener('click', () => {
+      const img = b.querySelector('img');
+      if (!lb || !lbImg || !img) return;
+      lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lb.showModal();
+    }));
+    document.getElementById('closeLb')?.addEventListener('click', () => lb?.close());
+    lb?.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+  }
+  initResearch();
+  document.addEventListener('astro:page-load', initResearch);
+</script>
 
 <style>
   .rs {
@@ -344,7 +399,7 @@ const sections = [
     --deep: #3f6b52; --shadow: 0 8px 28px rgba(31, 36, 48, .08);
     --yellow: #f6e7b0; --sage: #b5d0bf; --mint: #d0e1d4; --coral: #f0b7ab; --amber: #efd3ac; --lavender: #d3c6ea;
     --serif: 'Bodoni Moda', Georgia, serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
-    background: var(--bg); color: var(--ink); font: 16px/1.65 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh;
+    background: transparent; color: var(--ink); font: 16px/1.65 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh;
   }
   .rs :focus-visible { outline: 3px solid var(--deep); outline-offset: 3px; border-radius: 6px; }
   .rs a { color: inherit; }
@@ -356,17 +411,11 @@ const sections = [
   p { margin: 0 0 10px; }
 
   .chip { display: inline-block; font: 500 12px/1 var(--mono); background: var(--c); padding: 7px 12px; border-radius: 999px; margin-bottom: 16px; }
-  .chips { margin: 0 0 16px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+  .chips .chip { margin: 0; }
   .inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
   .hero { border-bottom: 1px solid var(--border); padding: 24px 0 56px; }
-  .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 20px; margin-bottom: 48px; border-bottom: 1px solid var(--border); }
-  .back, .tabs-top a { font: 500 13px var(--mono); text-decoration: none; padding: 8px 12px; border-radius: 999px; transition: background .2s; }
-  .back { display: inline-flex; gap: 6px; align-items: center; padding-left: 0; }
-  .back:hover, .tabs-top a:hover { background: var(--mint); }
-  .tabs-top { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tabs-top a { border: 1px solid var(--border); }
-  .tabs-top a[aria-current="page"], .tabs-top a[aria-current="page"]:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
   h1 { font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1.1; margin-bottom: 20px; }
   .lead { font-size: 18px; color: #2d3340; max-width: 62ch; margin-bottom: 20px; }
   .role { font-size: 14px; color: var(--muted); max-width: 70ch; }
@@ -378,6 +427,7 @@ const sections = [
   .toc-title { font: 500 12px var(--mono); color: var(--muted); margin: 0 0 8px; }
   .toc a { font-size: 14px; text-decoration: none; color: var(--muted); padding: 7px 0 7px 14px; border-left: 2px solid var(--border); }
   .toc a:hover { color: var(--ink); border-left-color: var(--deep); }
+  .toc a[aria-current] { color: var(--ink); font-weight: 600; border-left-color: var(--deep); background: linear-gradient(90deg, var(--mint), transparent); }
 
   section { margin-bottom: 88px; scroll-margin-top: 32px; }
   h2 { font-size: clamp(1.5rem, 2.2vw, 2rem); line-height: 1.25; margin-bottom: 24px; max-width: 28ch; }
@@ -415,7 +465,13 @@ const sections = [
   .refs a:hover { background: var(--mint); }
 
   .ph { display: grid; place-items: center; min-height: 160px; border: 2px dashed var(--border); border-radius: 12px; background: var(--card); font: 500 12px var(--mono); color: var(--muted); }
-  img { max-width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--border); }
+  img { max-width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--border); box-sizing: border-box; }
+
+  /* Every image is a button that opens it full size */
+  .zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 12px; }
+  .zoom img { transition: transform .3s ease, box-shadow .3s ease; }
+  .zoom:hover img { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .note.top { margin: -12px 0 24px; }
   .artefacts { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 32px; }
   figure { margin: 0; }
   figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; }
@@ -423,10 +479,27 @@ const sections = [
   .decisions { display: grid; gap: 20px; }
   .decisions li { display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
   .decisions p:not(.label) { margin: 0; }
+  /* Scene images share one shape; the wide card strip gets the full width, image above text */
+  .decisions img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; box-sizing: border-box; }
+  .decisions li.wide { grid-template-columns: 1fr; gap: 20px; }
+  .decisions li.wide img { aspect-ratio: auto; }
 
   .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .flow h3 { font-size: 1.15rem; margin: 14px 0 4px; }
+  .flow h3 { font-size: 1.15rem; margin: 2px 0 4px; }
+  .flow .step { font: 500 12px var(--mono); color: var(--deep); margin: 14px 0 0; }
   .flow p { font-size: 14px; color: #333a48; }
+  /* All three images the same height, so the headings and captions line up */
+  .flow img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; box-sizing: border-box; }
+  .flow img.contain { object-fit: contain; background: #fff; padding: 12px; }
+
+  dialog { border: 0; border-radius: 16px; padding: 12px; max-width: min(1400px, 96vw); max-height: 96vh; background: var(--card); }
+  dialog::backdrop { background: rgba(31, 36, 48, .75); }
+  dialog img { max-width: 100%; max-height: 84vh; width: auto; margin: 12px auto 0; border: 0; }
+  .close { font: 600 13px var(--mono); min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); color: var(--ink); cursor: pointer; }
+
+  /* A phone screenshot is portrait, so keep it narrow and centred */
+  .mobile-shot { margin: 32px auto 0; max-width: 300px; }
+  .mobile-shot figcaption { text-align: center; }
 
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
   .two h2 { font-size: 1.5rem; margin-bottom: 16px; }
@@ -437,8 +510,13 @@ const sections = [
     .toc-title { display: none; }
     .toc { flex-direction: row; overflow-x: auto; gap: 6px; }
     .toc a { white-space: nowrap; border: 1px solid var(--border); border-radius: 999px; padding: 8px 14px; }
+    .toc a[aria-current] { background: var(--ink); color: #fff; border-color: var(--ink); }
     .summary > div, .rows li, .decisions li, .two { grid-template-columns: 1fr; gap: 8px; }
     .flow { grid-template-columns: 1fr; }
     section { margin-bottom: 64px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .zoom img { transition: none; }
+    .zoom:hover img { transform: none; }
   }
 </style>

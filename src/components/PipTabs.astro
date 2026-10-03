@@ -1,0 +1,35 @@
+---
+
+const tabs = [
+  { id: "overview", href: "/pip", label: "Overview" },
+  { id: "system", href: "/pip-system", label: "Design system" },
+  { id: "app", href: "/pip-app", label: "Live app" }
+];
+
+interface Props { current: "overview" | "system" }
+const { current } = Astro.props;
+---
+
+<div class="ct">
+  <a href="/work" class="ct-back">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to portfolio
+  </a>
+  <nav class="ct-tabs" aria-label="Pip pages">
+    {tabs.map((t) => (
+      <a href={t.href} aria-current={t.id === current ? "page" : undefined}>{t.label}</a>
+    ))}
+  </nav>
+</div>
+
+<style>
+  .ct { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 20px; margin-bottom: 48px; border-bottom: 1px solid var(--border, #d3d6df); }
+  .ct a { color: var(--ink, #1f2430); font: 500 13px 'JetBrains Mono', ui-monospace, monospace; text-decoration: none; border-radius: 999px; transition: background .2s; }
+  .ct a:focus-visible { outline: 3px solid var(--deep, #3f6b52); outline-offset: 3px; }
+  .ct-back { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px 8px 0; }
+  .ct-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ct-tabs a { display: inline-flex; align-items: center; min-height: 40px; padding: 8px 14px; border: 1px solid var(--border, #d3d6df); }
+  .ct a:hover { background: var(--mint, #d0e1d4); }
+  .ct-tabs a[aria-current="page"], .ct-tabs a[aria-current="page"]:hover { background: var(--ink, #1f2430); color: #fff; border-color: var(--ink, #1f2430); }
+  @media (prefers-reduced-motion: reduce) { .ct a { transition: none; } }
+</style>

@@ -1,4 +1,5 @@
 ---
+// src/components/hero.astro
 interface Props {
   year?: string;
 }
@@ -6,67 +7,89 @@ interface Props {
 const { year = "2026" } = Astro.props;
 ---
 
-<main id="hero">
-  <h1 class="heading-welcome">welcome to my</h1>
-  <div class="heading-portfolio-wrapper">
-    <span class="heading-portfolio">portfolio</span>
-    <sup class="year">{year}</sup>
-  </div>
-</main>
-
-
-
+<div id="hero">
+  <!-- One heading for both lines, so screen readers hear "welcome to my portfolio, 2026" -->
+  <h1 class="hero-title">
+    <span class="heading-welcome">welcome to my</span>
+    <span class="heading-portfolio-wrapper">
+      <span class="heading-portfolio">portfolio</span><sup class="year"><span class="sr">, </span>{year}</sup>
+    </span>
+  </h1>
+</div>
 
 <style>
   #hero {
     flex: 1;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 60px 0;
   }
 
-  .heading-welcome {
+  .hero-title {
+    margin: 0;
     font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    font-size: clamp(3.5rem, 8vw, 7.5rem);
     font-weight: 400;
+    color: #0c0c0c;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Sizes follow the screen width, so the words always fit on one line each */
+  .heading-welcome {
+    display: block;
+    font-size: clamp(2.6rem, 11vw, 7.5rem);
     letter-spacing: -0.02em;
     line-height: 1;
-    color: #0c0c0c;
+    white-space: nowrap;
   }
 
   .heading-portfolio-wrapper {
     position: relative;
     display: inline-block;
-    margin-top: -10px;
+    margin-top: -0.04em;
   }
 
   .heading-portfolio {
-    font-family: 'Bodoni Moda', 'Playfair Display', serif;
     font-style: italic;
-    font-weight: 400;
-    font-size: clamp(4rem, 10vw, 9.5rem);
-    line-height: 0.9;
-    color: #0c0c0c;
+    font-size: clamp(3.4rem, 14.5vw, 9.5rem);
+    line-height: 0.95;
+    white-space: nowrap;
   }
 
-  
-
+  /* The year sits just off the top right of "portfolio", measured in em so it scales with it */
   .year {
-    font-family: 'Bodoni Moda', 'Playfair Display', serif;
-    font-size: clamp(1rem, 2vw, 1.75rem);
-    font-weight: 400;
     position: absolute;
-    top: 15%;
-    right: -3.5rem;
+    top: 0.9em;
+    left: 100%;
+    margin-left: 0.1em;
+    font-size: clamp(0.9rem, 2.2vw, 1.75rem);
     font-style: normal;
+    line-height: 1;
+    vertical-align: baseline;
+  }
+
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   @media (max-width: 768px) {
-    .year {
-      right: -2rem;
+    #hero {
+      padding: 32px 0;
+    }
+  }
+
+  /* Very narrow phones: shift "portfolio" left a touch so the year stays on screen */
+  @media (max-width: 400px) {
+    .heading-portfolio-wrapper {
+      margin-right: 1.4rem;
     }
   }
 </style>
