@@ -386,8 +386,8 @@ const day = [
   @keyframes phop { 40% { transform: translateY(-.08em); } }
   .ps .lead { font: 500 clamp(1.3rem, 2.4vw, 1.8rem)/1.4 var(--serif); max-width: 30ch; margin: 28px 0 40px; }
   .ps .try-label { font: 500 13px var(--mono); color: var(--muted); margin: 0 0 12px; }
-    .ps .moods { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
-  .ps .moods button { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; font: 500 14px var(--sans); padding: 12px 4px 10px; border-radius: 22px; border: 1.5px solid #868c9a; background: var(--card); color: var(--ink); cursor: pointer; transition: background .2s, border-color .2s, box-shadow .2s, transform .15s; } border-radius: 22px; border: 1.5px solid #868c9a; background: var(--card); color: var(--ink); cursor: pointer; transition: background .2s, border-color .2s, box-shadow .2s, transform .15s; }
+  .ps .moods { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+  .ps .moods button { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; font: 500 14px var(--sans); padding: 12px 4px 10px; border-radius: 22px; border: 1.5px solid #868c9a; background: var(--card); color: var(--ink); cursor: pointer; transition: background .2s, border-color .2s, box-shadow .2s, transform .15s; }
   .ps .moods button:hover { border-color: var(--ink); }
   .ps .moods button[aria-pressed="true"] { border-color: var(--ink); background: #fff; box-shadow: 0 0 0 1px var(--ink), 0 10px 20px -12px rgba(31, 36, 48, .5); }
   .ps .moods button:active { transform: scale(.97); }
@@ -395,7 +395,7 @@ const day = [
   .ps .mp svg { display: block; width: 100%; height: auto; overflow: visible; }
   .ps .moods button[aria-pressed="true"] .mp { transform: translateY(-4px); }
   .ps .mw { font-weight: 600; }
-  @media (max-width: 520px) { .ps .moods { gap: 8px; } .ps .moods button { min-width: 72px; padding: 10px 8px 8px; } .ps .mp { width: 40px; } }
+  @media (max-width: 640px) { .ps .moods { grid-template-columns: repeat(4, minmax(0, 1fr)); } .ps .mp { width: 40px; } }
   .ps .say { font: italic 500 1.25rem/1.4 var(--serif); margin: 16px 0 36px; min-height: 1.8em; }
   .ps .cta { display: inline-flex; align-items: center; min-height: 48px; background: var(--ink); color: #fff !important; font-weight: 600; text-decoration: none; padding: 0 28px; border-radius: 999px; transition: transform .2s, background .2s; }
   .ps .cta:hover { background: var(--deep); transform: translateY(-2px); }

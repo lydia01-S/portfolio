@@ -212,14 +212,7 @@ $('sm').onclick=()=>{h=Math.max(0,h-.5);sync()};$('sa').onclick=()=>{h=Math.min(
 $('ss').onclick=e=>confirm(e.target);sync();
 
 /* Doses */
-const ds=[['Vitamin D','8:00 am'],['Iron','12:30 pm'],['Magnesium','6:00 pm'],['Antihistamine','10:00 pm']];
-const dp=pip($('dp'),{l:0});let taken=0;
-ds.forEach(([a,t])=>{const li=document.createElement('li'),b=document.createElement('button');b.className='dose';b.setAttribute('aria-pressed','false');b.innerHTML=`<div><b>${a}</b><span>${t}</span></div><i aria-hidden="true">✓</i>`;
-  b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);taken+=on?1:-1;$('dc').textContent=`${taken} of ${ds.length} taken`;dp.set(taken/ds.length,true)};li.append(b);$('dl').append(li)});
-
-/* Breathe */
-const bp=pip($('bp'),{l:.85});let run=false,tm;
-const ph=[['Breathe in',4000,1.16],['Hold',2000,1.16],['Breathe out',6000,.94]];
+ 
 function cycle(i){if(!run)return;const [t,ms,sc]=ph[i%3];$('cue').textContent=t;$('bw').style.transitionDuration=ms+'ms';$('bw').style.transform=`scale(${sc})`;tm=setTimeout(()=>cycle(i+1),ms)}
 $('bb').onclick=()=>{run=!run;clearTimeout(tm);$('bb').textContent=run?'Stop':'Start';if(run)cycle(0);else{$('bw').style.transitionDuration='1s';$('bw').style.transform='scale(1)';$('cue').textContent='Ready when you are'}};
 
