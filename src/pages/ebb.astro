@@ -10,7 +10,7 @@ import desktop from '../../public/home-desktop-1440.png';
 import tablet from '../../public/home-tablet-834.png';
 import mobile from '../../public/home-mobile-390.png';
 
-// Booking journey stills from the desktop prototype. Put these in /public/ebb/.
+// Booking journey stills from the desktop prototype, in /public.
 // These are taken from the prototype recording with the pointer removed. Exporting the same frames
 // from Figma at 2x with the same names will make them even sharper.
 import stepFind from '../../public/ebb-dropdown.jpg';
@@ -29,7 +29,7 @@ import finalMobile from '../../public/ebb-mobile-top.jpg';
 
 const metadata = [
   { label: "Role", value: "UI designer, solo" },
-  { label: "Timeline", value: "Self-initiated project" }, 
+  { label: "Timeline", value: "Self-initiated project" },
   { label: "Scope", value: "Clickable prototypes at desktop, tablet and mobile" },
   { label: "Tools", value: "Figma" }
 ];
@@ -69,13 +69,15 @@ const pins = {
   ]
 };
 
-// What changed along the way. Only add real changes you made, with your own before and after images in /public/ebb/.
+// What changed along the way. Only add real changes you made, with your own before and after images in /public.
 // While this list is empty, the "What changed" part is hidden.
 // Example:
 // { before: "/ebb/change-booking-before.png", after: "/ebb/change-booking-after.png", title: "Booking bar", text: "My first version put the booking form on its own page. I moved it into the hero, so people could start booking without leaving the home page." },
 const changes: { before: string; after: string; title: string; text: string }[] = [];
 
-
+// Research: comparing Ebb with real Dublin sauna websites. Checked October 2026.
+// TODO: visit both sites yourself, take a screenshot of each home page and booking step,
+// and if you looked at these before designing Ebb, say so in the intro below.
 const compareSites = ["The Sea Sauna", "Helios Sauna", "Ebb"];
 const compareRows = [
   { topic: "Where booking starts", cells: ["A schedule at the bottom of the home page, and a separate Bookings page", "Book now, then choose a location, then a product page", "A booking bar on the home page, with defaults filled in"] },
@@ -180,7 +182,7 @@ const nav = [
             <h2>Make booking a sauna hour as easy as the sauna is relaxing.</h2>
             <div class="prose">
               <p>Ebb runs wood-fired saunas on three Dublin piers: Dún Laoghaire, Howth and Skerries. People book an hour, sweat, then swim in the sea. The site has two jobs: explain the experience to first-timers, and get everyone to a booking quickly on whatever device they're using.</p>
-              <p>Ebb is a fictional client and the brief is my own. I wrote it like a real one, with an audience, constraints and a business goal, so I could practise the process an agency follows. --></p>
+              <p>Ebb is a fictional client and the brief is my own. I wrote it like a real one, with an audience, constraints and a business goal, so I could practise the process an agency follows.</p>
               <ul class="bullets">
                 <li><strong>Explain it:</strong> the hero says what Ebb is, and three steps (Heat, Plunge, Rest) take away the fear of doing it wrong.</li>
                 <li><strong>Book it:</strong> a booking bar in the hero and a Book button in the navigation at every size.</li>
@@ -196,7 +198,7 @@ const nav = [
           <div class="cols">
             <h2>What real Dublin sauna websites do, and where Ebb is different.</h2>
             <div class="prose">
-              <p>To test my decisions against real businesses, I compared Ebb with two Dublin sauna websites: The Sea Sauna in Portrane and Helios Sauna, which runs the floating sauna in Dún Laoghaire. Both are popular, and both get people to a booking, but in very different ways. </p>
+              <p>To test my decisions against real businesses, I compared Ebb with two Dublin sauna websites: The Sea Sauna in Portrane and Helios Sauna, which runs the floating sauna in Dún Laoghaire. Both are popular, and both get people to a booking, but in very different ways.</p>
             </div>
           </div>
 
@@ -334,7 +336,7 @@ const nav = [
               </tbody>
             </table>
           </div>
-          <div class="prose"><p>On mobile, the session cards scroll sideways to keep the page short, and the next card is cut off at the edge so it's clear there's more. </p></div>
+          <div class="prose"><p>On mobile, the session cards scroll sideways to keep the page short, and the next card is cut off at the edge so it's clear there's more.</p></div>
         </section>
 
         <!-- 06 Design system: a short teaser, the full system has its own page -->
@@ -422,14 +424,36 @@ const nav = [
     }), { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach((el) => reveal.observe(el));
 
-    // Wireframe and finished design compare slider
+    // Wireframe and finished design compare slider.
+    // Drag anywhere on the image (mouse, pen or finger), tap to jump, or use the arrow keys.
     document.querySelectorAll<HTMLElement>('.wipe').forEach((w) => {
       const range = w.querySelector<HTMLInputElement>('.wipe-range');
       if (!range) return;
       const set = (v: number) => {
-        w.style.setProperty('--pos', `${v}%`);
-        range.setAttribute('aria-valuetext', v < 15 ? 'Showing the wireframe' : v > 85 ? 'Showing the finished design' : `${100 - v}% finished design showing`);
+        const pos = Math.max(0, Math.min(100, v));
+        w.style.setProperty('--pos', `${pos}%`);
+        range.value = String(Math.round(pos));
+        range.setAttribute('aria-valuetext', pos < 15 ? 'Showing the wireframe' : pos > 85 ? 'Showing the finished design' : `${Math.round(100 - pos)}% finished design showing`);
       };
+      const fromPointer = (e: PointerEvent) => {
+        const r = w.getBoundingClientRect();
+        set(((e.clientX - r.left) / r.width) * 100);
+      };
+      let dragging = false;
+      w.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0) return;
+        dragging = true;
+        w.classList.add('dragging');
+        w.setPointerCapture(e.pointerId);
+        fromPointer(e);
+      });
+      w.addEventListener('pointermove', (e) => { if (dragging) fromPointer(e); });
+      const stop = () => { dragging = false; w.classList.remove('dragging'); };
+      w.addEventListener('pointerup', stop);
+      w.addEventListener('pointercancel', stop);
+      w.addEventListener('lostpointercapture', stop);
+      // Keyboard: arrow keys move in steps of 5, Home and End jump to each end
+      range.step = '5';
       range.addEventListener('input', () => set(Number(range.value)));
       set(Number(range.value));
     });
@@ -561,7 +585,7 @@ const nav = [
   .wipe-wrap[hidden] { display: none; }
   .wipe-mobile { grid-template-columns: minmax(220px, 320px) 1fr; align-items: start; }
   .wipe { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); background: var(--card); user-select: none; }
-  .wipe-img { display: block; width: 100%; height: auto; }
+  .wipe-img { display: block; width: 100%; height: auto; pointer-events: none; -webkit-user-drag: none; }
   .wipe-top { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
   .wipe-top .wipe-img { height: 100%; object-fit: cover; }
   .wipe-handle { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 0; pointer-events: none; }
@@ -570,8 +594,11 @@ const nav = [
   .wipe-handle span::before, .wipe-handle span::after { content: ""; position: absolute; top: 50%; width: 8px; height: 8px; margin-top: -4px; border: solid #f6f1e9; border-width: 0 0 2.5px 2.5px; }
   .wipe-handle span::before { left: 11px; transform: rotate(45deg); }
   .wipe-handle span::after { right: 11px; transform: rotate(-135deg); }
-  .wipe-range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; }
-  .wipe:has(.wipe-range:focus-visible) .wipe-handle span { outline: 3px solid var(--sea); outline-offset: 4px; }
+  .wipe { cursor: ew-resize; touch-action: pan-y; }
+  .wipe.dragging { cursor: grabbing; }
+  /* Kept for keyboard and screen readers: visually hidden, but focusable */
+  .wipe-range { position: absolute; left: 0; bottom: 0; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+  .wipe:has(.wipe-range:focus-visible) .wipe-handle span { outline: 3px solid #f6f1e9; box-shadow: 0 0 0 6px var(--sea); }
   .wipe-tag { position: absolute; bottom: 12px; padding: 6px 10px; border-radius: 999px; font: 600 12px var(--sans); background: rgba(246, 241, 233, .92); color: var(--ink); pointer-events: none; }
   .wipe-tag.left { left: 12px; } .wipe-tag.right { right: 12px; }
   .pin-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
