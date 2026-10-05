@@ -211,8 +211,26 @@ $('sm').onclick=()=>{h=Math.max(0,h-.5);sync()};$('sa').onclick=()=>{h=Math.min(
 ['Restless','Okay','Rested'].forEach(t=>{const b=document.createElement('button');b.textContent=t;b.setAttribute('aria-pressed',t===q);b.onclick=()=>{q=t;[...$('sg').children].forEach(x=>x.setAttribute('aria-pressed',x===b))};$('sg').append(b)});
 $('ss').onclick=e=>confirm(e.target);sync();
 
-/* Doses */
- 
+/* Doses: each one taken brings Pip a little closer to its happiest */
+const doseList=[['Vitamin D','8:00 am'],['Iron','12:30 pm'],['Magnesium','6:00 pm'],['Antihistamine','10:00 pm']];
+const dosePip=pip($('dp'),{l:.25});
+function updateDoses(){
+  const taken=[...$('dl').querySelectorAll('.dose')].filter(x=>x.getAttribute('aria-pressed')==='true').length;
+  $('dc').textContent=`${taken} of ${doseList.length} taken`;
+  dosePip.set(.25+.75*taken/doseList.length,true);
+}
+doseList.forEach(([name,time])=>{
+  const li=document.createElement('li');
+  li.innerHTML=`<button class="dose" aria-pressed="false"><span><b>${name}</b><span>${time}</span></span><i aria-hidden="true">✓</i></button>`;
+  li.firstChild.onclick=e=>{const b=e.currentTarget;b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));updateDoses()};
+  $('dl').append(li);
+});
+updateDoses();
+
+/* Breathe: Pip grows as you breathe in and settles as you breathe out */
+pip($('bp'),{l:.85,closed:true});
+const ph=[['Breathe in',4000,1.16],['Hold',2000,1.16],['Breathe out',6000,1]];
+let run=false,tm;
 function cycle(i){if(!run)return;const [t,ms,sc]=ph[i%3];$('cue').textContent=t;$('bw').style.transitionDuration=ms+'ms';$('bw').style.transform=`scale(${sc})`;tm=setTimeout(()=>cycle(i+1),ms)}
 $('bb').onclick=()=>{run=!run;clearTimeout(tm);$('bb').textContent=run?'Stop':'Start';if(run)cycle(0);else{$('bw').style.transitionDuration='1s';$('bw').style.transform='scale(1)';$('cue').textContent='Ready when you are'}};
 

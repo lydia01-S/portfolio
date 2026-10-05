@@ -1,0 +1,698 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import ProjectNav from '../components/ProjectNav.astro';
+import EbbTabs from '../components/EbbTabs.astro';
+import { FIGMA_URL } from '../data/ebb';
+
+// The home page at three sizes (as you already have them in /public)
+import desktop from '../../public/home-desktop-1440.png';
+import tablet from '../../public/home-tablet-834.png';
+import mobile from '../../public/home-mobile-390.png';
+
+// Booking journey stills from the desktop prototype. Put these in /public/ebb/.
+// These are taken from the prototype recording with the pointer removed. Exporting the same frames
+// from Figma at 2x with the same names will make them even sharper.
+import stepFind from '../../public/ebb-dropdown.jpg';
+import stepDate from '../../public/ebb-datepicker.jpg';
+import stepTime from '../../public/ebb-pick-a-time.jpg';
+import stepDetails from '../../public/ebb-your-details.jpg';
+import stepDone from '../../public/ebb-confirmed.jpg';
+import sessionsPage from '../../public/ebb-sessions.jpg';
+
+// Wireframes and the matching finished designs for the compare slider
+import wireDesktop from '../../public/ebb-wire-desktop.png';
+import finalDesktop from '../../public/ebb-home.jpg';
+import wireMobile from '../../public/ebb-wire-mobile.png';
+import finalMobile from '../../public/ebb-mobile-top.jpg';
+
+
+const metadata = [
+  { label: "Role", value: "UI designer, solo" },
+  { label: "Timeline", value: "Self-initiated project" }, 
+  { label: "Scope", value: "Clickable prototypes at desktop, tablet and mobile" },
+  { label: "Tools", value: "Figma" }
+];
+
+const facts = [
+  { value: "3", label: "Breakpoints designed", detail: "Desktop 1440, tablet 834 and mobile 390.", color: "sun" },
+  { value: "3", label: "Steps to a booking", detail: "Choose a time, add your details, confirmed. Prototyped end to end at every size.", color: "foam" },
+  { value: "5.5:1", label: "Contrast on the main button", detail: "Light text on ember-600. The target was WCAG AA, 4.5:1.", color: "ember" }
+];
+const factsNote = "These come from the design and the style guide, not from user testing. I haven't tested Ebb with users yet.";
+
+// The booking journey, step by step
+const journey = [
+  { img: stepFind, step: "Start", title: "Find times from the home page", text: "The booking bar sits over the hero, so booking is visible without scrolling. Location, date and guests start with sensible defaults, and the open location list ticks the current choice.", alt: "Ebb home page with the location dropdown open, showing Dún Laoghaire ticked, Howth and Skerries" },
+  { img: stepDate, step: "Start", title: "Choose a date", text: "The date picker opens under the field with today's month, the selected date filled in ember and past days greyed out. Arrows move between months, and the chosen date is written back into the field so it can be checked at a glance.", alt: "Ebb home page with the date picker open on October 2026 and the 10th selected" },
+  { img: stepTime, step: "Step 1", title: "Pick a time", text: "A bar at the top repeats what you searched for, with a Change button, so you never lose context. Each slot shows the time, session, price and spaces left. Busy slots get a Few spaces badge, sold-out slots are muted and say so in words, and the Continue button stays disabled until you choose.", alt: "Pick a time screen listing sessions from 07:00 with prices, spaces left, a Few spaces badge and a sold-out slot" },
+  { img: stepDetails, step: "Step 2", title: "Your details", text: "Labels sit above every field and optional fields say so. Errors appear under the field with an example of what's expected. The button names the action and the amount, Pay €36, and the booking summary stays beside the form.", alt: "Your details form with an email error message under the field and a booking summary with a Pay €36 button" },
+  { img: stepDone, step: "Step 3", title: "Confirmed", text: "A clear heading, a booking reference and every detail repeated, plus one line about what to bring. Two next actions, Add to calendar and Get directions, answer the questions people have straight after booking.", alt: "Booking confirmation with reference EBB-4821, session details and Add to calendar and Get directions buttons" }
+];
+
+// Structure: the notes under the compare slider.
+const pins = {
+  desktop: [
+    { n: 1, x: 87, y: 4, title: "One action in the navigation", text: "Book is the only filled element in the bar. Everything else is a plain text link, so the main action is always the first thing to find." },
+    { n: 2, x: 20, y: 30, title: "Say what it is first", text: "The headline explains Ebb in six words, and one accented phrase is the only colour in the text." },
+    { n: 3, x: 26, y: 56, title: "Two actions, two weights", text: "A filled button for people ready to book, and an outlined one for first-timers who want to know what to expect." },
+    { n: 4, x: 72, y: 36, title: "Picture on the side", text: "On desktop the illustration sits beside the text, so the headline and actions stay at the top of the screen." },
+    { n: 5, x: 50, y: 68, title: "The booking bar overlaps the hero", text: "Placing it across the bottom of the hero keeps the main task visible without scrolling, and the overlap ties it to the picture above." },
+    { n: 6, x: 30, y: 81, title: "Answer the first questions", text: "Three short facts cover where, when and how much, before anyone has to look for them." }
+  ],
+  mobile: [
+    { n: 1, x: 80, y: 3, title: "Navigation folds into Menu", text: "The links move behind a Menu button, and booking stays one tap away in the hero." },
+    { n: 2, x: 40, y: 14, title: "Same message, same order", text: "The headline and intro keep their order and wording from desktop. Only the size steps down." },
+    { n: 3, x: 50, y: 33, title: "Full-width buttons for thumbs", text: "Both actions stretch across the screen, which makes them easy to tap with one hand." },
+    { n: 4, x: 25, y: 56, title: "Picture moves below the text", text: "The illustration drops under the actions so the message comes first on a small screen." },
+    { n: 5, x: 50, y: 82, title: "Fields stack in one column", text: "Location, date and guests each get the full width, and Find times becomes a full-width button at the bottom." }
+  ]
+};
+
+// What changed along the way. Only add real changes you made, with your own before and after images in /public/ebb/.
+// While this list is empty, the "What changed" part is hidden.
+// Example:
+// { before: "/ebb/change-booking-before.png", after: "/ebb/change-booking-after.png", title: "Booking bar", text: "My first version put the booking form on its own page. I moved it into the hero, so people could start booking without leaving the home page." },
+const changes: { before: string; after: string; title: string; text: string }[] = [];
+
+
+const compareSites = ["The Sea Sauna", "Helios Sauna", "Ebb"];
+const compareRows = [
+  { topic: "Where booking starts", cells: ["A schedule at the bottom of the home page, and a separate Bookings page", "Book now, then choose a location, then a product page", "A booking bar on the home page, with defaults filled in"] },
+  { topic: "Words used", cells: ["Sessions listed as a Class Schedule", "Shop words: Select Options, Add to Cart, Out of Stock", "The activity's words: Find times, spaces left, Sold out"] },
+  { topic: "Navigation", cells: ["Nine links plus a More menu", "Around nine links with dropdowns, plus wishlist and cart", "Five links and one Book button"] },
+  { topic: "Price", cells: ["Not shown on the home page", "Shown up front, from €24.95", "From a price per person on every card, and the total before paying"] },
+  { topic: "Key rules", cells: ["Shared sessions and over 18s, stated at the top of the Bookings page", "Session length and walk-ins explained on the home page", "Capacity on every card, and what to bring on the confirmation"] }
+];
+const lessons = [
+  { title: "Start booking where people already are", text: "On both sites, choosing a time means scrolling to the bottom of the page or going to another page. Ebb puts location, date and guests at the top of the home page, so the first step of booking is also the first thing you see." },
+  { title: "Use the words of the activity, not the software", text: "A sauna hour described as a class or a product in a cart feels like a different service. Ebb's labels describe the sauna itself: times, spaces left and sold out." },
+  { title: "Keep what already works", text: "Helios shows prices before you start, which saves a wasted click. Ebb keeps that idea: every session card shows a price per person, and the total appears before you pay." },
+  { title: "Something Ebb still needs", text: "The Sea Sauna makes its rules clear before you book: sessions are shared and adults only. Ebb doesn't say yet whether open sessions are shared, or whether there's an age limit. That's my next change." }
+];
+
+const responsive = [
+  ["Hero", "Text left, art right", "Stacked, art below", "Stacked, art below"],
+  ["Navigation", "Links, log in, Book", "Book and Menu", "Menu only"],
+  ["Booking bar", "One row", "Two columns, full-width button", "One column"],
+  ["Sessions", "Four across", "Two by two", "Horizontal scroll"],
+  ["Locations", "Three across", "Stacked", "Stacked"],
+  ["Journal", "One large, two small", "One large, two below", "Stacked"],
+  ["Footer", "Sign-up beside links", "Sign-up above links", "Two columns, Follow below"]
+];
+
+const swatches = [
+  ["sand-50", "#f6f1e9"], ["sand-100", "#ece3d4"], ["ink", "#14201f"], ["ember-600", "#a8401a"],
+  ["sun-400", "#e9a23b"], ["sea-900", "#0e2a2c"], ["sea-800", "#16393b"], ["foam-200", "#b9d4ca"]
+];
+
+const nav = [
+  ["brief", "Brief"], ["research", "Research"], ["structure", "Structure"], ["journey", "Booking journey"], ["responsive", "Responsive"],
+  ["system", "Design system"], ["next", "Next steps"]
+];
+---
+
+<Layout title="Ebb: a responsive booking website" bg="#f6f1e9">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+
+  <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+  <a class="skip" href="#content">Skip to case study</a>
+
+  <main class="cs" id="cs">
+    <header class="hero">
+      <div class="inner">
+        <EbbTabs current="overview" />
+        <div class="hero-grid">
+          <div>
+            <p class="chips">
+              <span class="chip" style="--c: var(--sun)">Responsive website</span>
+              <span class="chip" style="--c: var(--foam)" id="readTime">5 min read</span>
+            </p>
+            <h1>Ebb: A booking website for three Dublin sea saunas</h1>
+            <p class="lead">A self-initiated website project. I wrote a client brief, designed the site and its design system, and prototyped the full booking journey at desktop, tablet and mobile sizes.</p>
+            <p class="actions">
+              <a class="cta" target="_blank" rel="noopener noreferrer" href={FIGMA_URL}>
+                Try the prototype in Figma
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3.5 10.5l7-7m0 0H4.67m5.83 0v5.83" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="sr">(opens in a new tab)</span>
+              </a>
+            </p>
+          </div>
+          <dl class="specs" aria-label="Project overview">
+            {metadata.map((m) => (<div><dt>{m.label}</dt><dd>{m.value}</dd></div>))}
+          </dl>
+        </div>
+
+        <div class="devices" role="group" aria-label="The Ebb home page at three sizes">
+          <figure class="dev d-m"><Image src={mobile} alt="Ebb home page on mobile" loading="eager" /></figure>
+          <figure class="dev d-t"><Image src={tablet} alt="Ebb home page on tablet" loading="eager" /></figure>
+          <figure class="dev d-d"><Image src={desktop} alt="Ebb home page on desktop" loading="eager" /></figure>
+        </div>
+
+        <div class="kpis">
+          {facts.map((m) => (
+            <div class="kpi" style={`--c: var(--${m.color})`}>
+              <p class="kpi-value">{m.value}</p>
+              <p class="kpi-label">{m.label}</p>
+              <p class="kpi-detail">{m.detail}</p>
+            </div>
+          ))}
+        </div>
+        <p class="note">{factsNote}</p>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc-wrap">
+        <nav class="toc" aria-label="On this page">
+          <p class="toc-title">On this page</p>
+          {nav.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
+        </nav>
+      </aside>
+
+      <div class="content" id="content">
+        <!-- 01 The brief -->
+        <section id="brief" class="reveal">
+          <span class="chip" style="--c: var(--sun)">01 Brief</span>
+          <div class="cols">
+            <h2>Make booking a sauna hour as easy as the sauna is relaxing.</h2>
+            <div class="prose">
+              <p>Ebb runs wood-fired saunas on three Dublin piers: Dún Laoghaire, Howth and Skerries. People book an hour, sweat, then swim in the sea. The site has two jobs: explain the experience to first-timers, and get everyone to a booking quickly on whatever device they're using.</p>
+              <p>Ebb is a fictional client and the brief is my own. I wrote it like a real one, with an audience, constraints and a business goal, so I could practise the process an agency follows. --></p>
+              <ul class="bullets">
+                <li><strong>Explain it:</strong> the hero says what Ebb is, and three steps (Heat, Plunge, Rest) take away the fear of doing it wrong.</li>
+                <li><strong>Book it:</strong> a booking bar in the hero and a Book button in the navigation at every size.</li>
+                <li><strong>One system:</strong> the same components reflow at desktop, tablet and mobile, rather than becoming three different designs.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 02 Research: how real Dublin sauna sites handle booking -->
+        <section id="research" class="reveal">
+          <span class="chip" style="--c: var(--foam)">02 Research</span>
+          <div class="cols">
+            <h2>What real Dublin sauna websites do, and where Ebb is different.</h2>
+            <div class="prose">
+              <p>To test my decisions against real businesses, I compared Ebb with two Dublin sauna websites: The Sea Sauna in Portrane and Helios Sauna, which runs the floating sauna in Dún Laoghaire. Both are popular, and both get people to a booking, but in very different ways. </p>
+            </div>
+          </div>
+
+          <div class="table-wrap compare-table" role="region" aria-label="Comparison of The Sea Sauna, Helios Sauna and Ebb" tabindex="0">
+            <table>
+              <caption class="sr">How The Sea Sauna, Helios Sauna and Ebb handle booking</caption>
+              <thead><tr><th scope="col"><span class="sr">Topic</span></th>{compareSites.map((n) => <th scope="col" class={n === 'Ebb' ? 'is-ebb' : undefined}>{n}</th>)}</tr></thead>
+              <tbody>
+                {compareRows.map((r) => (
+                  <tr><th scope="row">{r.topic}</th>{r.cells.map((c, i) => <td class={i === 2 ? 'is-ebb' : undefined}>{c}</td>)}</tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="note">Checked on both live websites in October 2026. Booking systems change, so details may differ now.</p>
+
+          <ol class="lessons">
+            {lessons.map((l, i) => (
+              <li class={i === lessons.length - 1 ? 'todo' : undefined}>
+                <span class="lesson-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <div><h3>{l.title}</h3><p>{l.text}</p></div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <!-- 03 Structure: drag between the wireframe and the finished design -->
+        <section id="structure" class="reveal">
+          <span class="chip" style="--c: var(--ember)">03 Structure</span>
+          <h2>From wireframe to finished screen.</h2>
+          <p class="prose">Stripped back to grey boxes, the layout shows the decisions that matter most: what comes first, what's biggest and where the main action sits. Drag the slider to compare the wireframe with the finished design. The notes underneath explain why each part is where it is.</p>
+
+          <div class="compare-ui">
+            <div class="seg" role="group" aria-label="Choose a screen size">
+              <button type="button" class="seg-btn" data-size="desktop" aria-pressed="true">Desktop</button>
+              <button type="button" class="seg-btn" data-size="mobile" aria-pressed="false">Mobile</button>
+            </div>
+
+            {(['desktop', 'mobile'] as const).map((size) => (
+              <div class={`wipe-wrap wipe-${size}`} data-size={size} hidden={size === 'mobile'}>
+                <div class="wipe" style="--pos: 50%">
+                  <Image class="wipe-img" src={size === 'desktop' ? finalDesktop : finalMobile} alt={`The finished Ebb home page on ${size}`} loading="lazy" />
+                  <div class="wipe-top" aria-hidden="true">
+                    <Image class="wipe-img" src={size === 'desktop' ? wireDesktop : wireMobile} alt="" loading="lazy" />
+                  </div>
+                  <span class="wipe-tag left" aria-hidden="true">Wireframe</span>
+                  <span class="wipe-tag right" aria-hidden="true">Finished</span>
+                  <div class="wipe-handle" aria-hidden="true"><span></span></div>
+                  <input class="wipe-range" type="range" min="0" max="100" value="50" aria-label={`Compare the ${size} wireframe with the finished design`} aria-valuetext="Halfway between wireframe and finished design" />
+                </div>
+                <ul class="pin-list">
+                  {pins[size].map((p) => (
+                    <li><strong>{p.title}</strong><p>{p.text}</p></li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {changes.length > 0 && (
+            <div class="changes">
+              <h3 class="sub-h">What changed along the way</h3>
+              {changes.map((c) => (
+                <article class="change">
+                  <figure><img src={c.before} alt={`Earlier version: ${c.title}`} loading="lazy" /><figcaption>Before</figcaption></figure>
+                  <figure><img src={c.after} alt={`Final version: ${c.title}`} loading="lazy" /><figcaption>After</figcaption></figure>
+                  <div><h4>{c.title}</h4><p>{c.text}</p></div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <!-- 04 The booking journey: the heart of the project -->
+        <section id="journey" class="reveal">
+          <span class="chip" style="--c: var(--foam)">04 Booking journey</span>
+          <h2>From the home page to a confirmed booking in three steps.</h2>
+          <p class="prose">I prototyped the whole journey in Figma at desktop, tablet and mobile sizes, including the states that make a booking flow feel trustworthy: open dropdowns and a date picker, limited and sold-out slots, a disabled button and a form error.</p>
+
+
+          <ol class="steps">
+            {journey.map((s) => (
+              <li class="step">
+                <button type="button" class="zoom shot-btn" aria-label={`Enlarge: ${s.title}`}>
+                  <Image src={s.img} alt={s.alt} loading="lazy" widths={[800, 1400]} sizes="(max-width: 960px) 100vw, 560px" />
+                </button>
+                <div>
+                  <p class="step-n">{s.step}</p>
+                  <h3>{s.title}</h3>
+                  <p>{s.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          <div class="cols tight">
+            <h3 class="sub-h">Sessions, filtered</h3>
+            <div class="prose">
+              <p>The sessions page uses filter chips (All sessions, Open, Sunrise, Private hire, Sauna and sound) so people can narrow the list in one tap, and every card keeps the same order: picture, name, facts, price.</p>
+              <button type="button" class="zoom shot-btn" aria-label="Enlarge: sessions page with filter chips">
+                <Image src={sessionsPage} alt="Ebb sessions page with filter chips above four session cards" loading="lazy" widths={[800, 1400]} sizes="(max-width: 960px) 100vw, 560px" />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 05 Responsive -->
+        <section id="responsive" class="reveal">
+          <span class="chip" style="--c: var(--ember)">05 Responsive</span>
+          <h2>One layout at three sizes, each section reflowed on purpose.</h2>
+          <p class="prose">Each size has its own clickable prototype in the Figma file. Designing the home page at desktop (1440), tablet (834) and mobile (390) decided how every section adapts.</p>
+
+          <div class="sizes" role="group" aria-label="The home page at mobile, tablet and desktop">
+            <figure class="size">
+              <button type="button" class="zoom frame" aria-label="Enlarge the mobile design"><Image src={mobile} alt="Ebb home page at mobile size, 390 wide" loading="lazy" /></button>
+              <figcaption><strong>Mobile 390</strong> One column, a Menu button, and sessions that scroll sideways.</figcaption>
+            </figure>
+            <figure class="size">
+              <button type="button" class="zoom frame" aria-label="Enlarge the tablet design"><Image src={tablet} alt="Ebb home page at tablet size, 834 wide" loading="lazy" /></button>
+              <figcaption><strong>Tablet 834</strong> Book and Menu in the header, and session cards two by two.</figcaption>
+            </figure>
+            <figure class="size wide">
+              <button type="button" class="zoom frame" aria-label="Enlarge the desktop design"><Image src={desktop} alt="Ebb home page at desktop size, 1440 wide" loading="lazy" /></button>
+              <figcaption><strong>Desktop 1440</strong> Full navigation, the booking bar in one row, and four sessions across.</figcaption>
+            </figure>
+          </div>
+          <p class="note">Each preview scrolls, and you can select one to see it full size.</p>
+
+          <div class="table-wrap" role="region" aria-label="How each section changes at each size" tabindex="0">
+            <table>
+              <caption class="sr">How each section changes at each size</caption>
+              <thead><tr><th scope="col">Section</th><th scope="col">Desktop 1440</th><th scope="col">Tablet 834</th><th scope="col">Mobile 390</th></tr></thead>
+              <tbody>
+                {responsive.map(([a, b, c, d]) => (<tr><th scope="row">{a}</th><td>{b}</td><td>{c}</td><td>{d}</td></tr>))}
+              </tbody>
+            </table>
+          </div>
+          <div class="prose"><p>On mobile, the session cards scroll sideways to keep the page short, and the next card is cut off at the edge so it's clear there's more. </p></div>
+        </section>
+
+        <!-- 06 Design system: a short teaser, the full system has its own page -->
+        <section id="system" class="reveal">
+          <span class="chip" style="--c: var(--sun)">06 Design system</span>
+          <div class="cols">
+            <h2>Four shapes, eight colours and one type scale.</h2>
+            <div class="prose">
+              <p>Every screen is built from one small system: a serif and sans type scale, eight colour tokens with a stated contrast ratio for each pairing, a spacing and radius scale, and eight components reused across the site.</p>
+              <ul class="mini-swatches" aria-label="The eight core colours">
+                {swatches.map(([name, hex]) => <li><span style={`background:${hex}`}></span>{name}</li>)}
+              </ul>
+              <p><a class="text-link" href="/ebb-system">See the full design system <span aria-hidden="true">→</span></a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 07 Next steps -->
+        <section id="next" class="reveal">
+          <span class="chip" style="--c: var(--ember)">07 Next steps</span>
+          <div class="cards">
+            <article style="--c: var(--foam)">
+              <h3>What I'd test</h3>
+              <p>Whether first-timers reach a booking from the hero alone, and whether the sideways scroll of sessions on mobile gets noticed. I'd run this with about five people who haven't tried a sea sauna.</p>
+            </article>
+            <article style="--c: var(--ember)">
+              <h3>States still to design</h3>
+              <p>The open mobile menu, and what happens when no times are left on the chosen day. A client would expect these before development starts.</p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <ProjectNav current="ebb" />
+
+    <button id="top" class="top" type="button" aria-label="Back to top">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+
+    <dialog id="lightbox" aria-label="Enlarged image">
+      <button type="button" id="closeLb" class="close">Close</button>
+      <img id="lbImg" alt="" />
+    </dialog>
+  </main>
+</Layout>
+
+<script>
+  function init() {
+    const root = document.getElementById('cs');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+    root.classList.add('js');
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Reading time, leaving out tables and code
+    const rt = document.getElementById('readTime');
+    const area = document.getElementById('content');
+    if (rt && area) {
+      const copy = area.cloneNode(true) as HTMLElement;
+      copy.querySelectorAll('table, pre').forEach((n) => n.remove());
+      const words = (copy.textContent || '').trim().split(/\s+/).length;
+      rt.textContent = `${Math.max(1, Math.ceil(words / 200))} min read`;
+    }
+
+    const bar = document.getElementById('bar');
+    const top = document.getElementById('top');
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      if (bar) bar.style.width = `${max > 0 ? (scrollY / max) * 100 : 0}%`;
+      top?.classList.toggle('show', scrollY > 500);
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    top?.addEventListener('click', () => scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' }));
+
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
+    const spy = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) links.forEach((a) => a.toggleAttribute('aria-current', a.hash === `#${e.target.id}`));
+    }), { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('.content section').forEach((s) => spy.observe(s));
+
+    const reveal = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); reveal.unobserve(e.target); }
+    }), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach((el) => reveal.observe(el));
+
+    // Wireframe and finished design compare slider
+    document.querySelectorAll<HTMLElement>('.wipe').forEach((w) => {
+      const range = w.querySelector<HTMLInputElement>('.wipe-range');
+      if (!range) return;
+      const set = (v: number) => {
+        w.style.setProperty('--pos', `${v}%`);
+        range.setAttribute('aria-valuetext', v < 15 ? 'Showing the wireframe' : v > 85 ? 'Showing the finished design' : `${100 - v}% finished design showing`);
+      };
+      range.addEventListener('input', () => set(Number(range.value)));
+      set(Number(range.value));
+    });
+    // Desktop / Mobile switch
+    const segs = [...document.querySelectorAll<HTMLButtonElement>('.seg-btn')];
+    segs.forEach((b) => b.addEventListener('click', () => {
+      segs.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      document.querySelectorAll<HTMLElement>('.wipe-wrap').forEach((wrap) => { wrap.hidden = wrap.dataset.size !== b.dataset.size; });
+    }));
+    // Lightbox
+    const lb = document.getElementById('lightbox') as HTMLDialogElement | null;
+    const lbImg = document.getElementById('lbImg') as HTMLImageElement | null;
+    document.querySelectorAll<HTMLButtonElement>('.cs .zoom').forEach((b) => b.addEventListener('click', () => {
+      const img = b.querySelector('img');
+      if (!lb || !lbImg || !img) return;
+      lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lb.showModal();
+    }));
+    document.getElementById('closeLb')?.addEventListener('click', () => lb?.close());
+    lb?.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+  }
+  init();
+  document.addEventListener('astro:page-load', init);
+</script>
+
+<style>
+  .cs {
+    --bg: #f6f1e9; --card: #fff; --ink: #14201f; --muted: #4f5b58; --border: #d8ccb8; --border-strong: #7a7368;
+    --deep: #a8401a; --shadow: 0 8px 28px rgba(20, 32, 31, .08);
+    --sun: #e9a23b; --foam: #b9d4ca; --ember: #e8b9a4; --sea: #0e2a2c;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter', system-ui, -apple-system, sans-serif;
+    background: transparent; color: var(--ink); font: 16px/1.65 var(--sans); -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  .cs *, .cs *::before, .cs *::after { box-sizing: border-box; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .cs a { color: inherit; }
+  .cs :focus-visible, .top:focus-visible { outline: 3px solid var(--sea); outline-offset: 3px; border-radius: 6px; }
+  .progress { position: fixed; inset: 0 0 auto 0; height: 4px; z-index: 50; pointer-events: none; }
+  #bar { height: 100%; width: 0; background: var(--deep); }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; text-wrap: balance; }
+  ul, ol { list-style: none; margin: 0; padding: 0; }
+  img { max-width: 100%; }
+
+  .chip { display: inline-block; font: 600 12px/1 var(--sans); background: var(--c); color: var(--ink); padding: 8px 12px; border-radius: 999px; margin-bottom: 16px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+  .chips .chip { margin: 0; }
+
+  /* Hero */
+  .hero { border-bottom: 1px solid var(--border); padding: 24px 0 72px; }
+  .inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .hero-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 64px; align-items: start; }
+  h1 { font-size: clamp(2.5rem, 4.6vw, 4rem); line-height: 1.08; margin-bottom: 20px; }
+  .lead { font-size: 18px; max-width: 56ch; margin: 0 0 32px; color: #2b3836; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 0; }
+  .cta { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; background: var(--deep); color: #fff !important; font-weight: 600; text-decoration: none; padding: 0 26px; border-radius: 999px; border: 1px solid var(--deep); transition: background .2s; }
+  .cta:hover { background: #8a3414; border-color: #8a3414; }
+  .cta.ghost { background: transparent; color: var(--ink) !important; border-color: var(--ink); }
+  .cta.ghost:hover { background: rgba(20, 32, 31, .06); }
+  .specs { margin: 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 24px; display: grid; gap: 16px; }
+  .specs dt { font: 600 12px var(--sans); color: var(--muted); }
+  .specs dd { margin: 2px 0 0; font-weight: 600; }
+
+  .devices { display: flex; justify-content: center; align-items: flex-end; gap: 20px; margin-top: 56px; padding: 40px 24px 0; background: var(--sea); border-radius: 24px 24px 0 0; overflow: hidden; }
+  .dev { margin: 0; height: 380px; overflow: hidden; border-radius: 14px 14px 0 0; box-shadow: 0 24px 48px -20px rgba(0, 0, 0, .5); background: var(--bg); }
+  .dev img { width: 100%; height: auto; display: block; }
+  .d-m { width: 18%; } .d-t { width: 26%; } .d-d { width: 44%; }
+
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-top: 6px solid var(--c); border-radius: 16px; padding: 24px; }
+  .kpi-value { font: 400 3rem/1 var(--serif); margin: 0 0 10px; }
+  .kpi-label { font-weight: 600; font-size: 14px; margin: 0 0 4px; }
+  .kpi-detail { font-size: 14px; color: var(--muted); margin: 0; }
+  .note { font-size: 13px; color: var(--muted); margin: 16px 0 0; max-width: 80ch; }
+
+  /* Layout and nav */
+  .layout { max-width: 1100px; margin: 0 auto; padding: 80px 24px 120px; display: grid; grid-template-columns: 200px 1fr; gap: 64px; align-items: start; }
+  .toc-wrap { position: sticky; top: 32px; }
+  .toc { display: flex; flex-direction: column; }
+  .toc-title { font: 600 12px var(--sans); color: var(--muted); margin: 0 0 8px; }
+  .toc a { font-size: 14px; text-decoration: none; color: var(--muted); padding: 7px 0 7px 14px; border-left: 2px solid var(--border); }
+  .toc a:hover { color: var(--ink); }
+  .toc a[aria-current] { color: var(--ink); font-weight: 600; border-left-color: var(--deep); }
+
+  section { margin-bottom: 96px; scroll-margin-top: 32px; }
+  .cols { display: grid; grid-template-columns: 42% 58%; gap: 40px; align-items: start; }
+  .cols.tight { margin-top: 56px; }
+  h2 { font-size: clamp(1.6rem, 2.4vw, 2.2rem); line-height: 1.25; margin-bottom: 8px; }
+  .cols h2 { margin: 0; }
+  .sub-h { font-size: 1.5rem; }
+  .prose { line-height: 1.7; color: #2b3836; max-width: 64ch; margin-top: 16px; }
+  .cols .prose { margin-top: 0; }
+  .prose p { margin: 0 0 14px; }
+  .bullets { margin-top: 14px; }
+  .bullets li { position: relative; padding-left: 22px; margin-bottom: 10px; }
+  .bullets li::before { content: ""; position: absolute; left: 0; top: .7em; width: 8px; height: 8px; border-radius: 50%; background: var(--deep); }
+
+  /* Every image can be enlarged */
+  .zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 10px; overflow: hidden; }
+  .zoom img { display: block; width: 100%; height: auto; transition: transform .3s; }
+  .zoom:hover img { transform: scale(1.01); }
+
+  /* Booking journey */
+  .steps { display: grid; gap: 48px; margin-top: 48px; counter-reset: s; }
+  .step { display: grid; grid-template-columns: 1.25fr 1fr; gap: 36px; align-items: center; }
+  .step:nth-child(even) .shot-btn { order: 2; }
+  .shot-btn { border: 1px solid var(--border); box-shadow: var(--shadow); background: var(--card); }
+  .step-n { font: 600 12px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--deep); margin: 0 0 6px; }
+  .step h3 { font-size: 1.6rem; line-height: 1.2; margin-bottom: 10px; }
+  .step p:not(.step-n) { margin: 0; color: #2b3836; max-width: 48ch; }
+
+  /* Research: comparison table and lessons */
+  .compare-table table { min-width: 680px; }
+  .compare-table th.is-ebb, .compare-table td.is-ebb { background: #fbf3ea; }
+  .compare-table thead th.is-ebb { color: var(--deep); }
+  .compare-table tbody th { width: 150px; }
+  .lessons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
+  .lessons li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; }
+  .lessons li.todo { background: transparent; border-style: dashed; border-color: var(--border-strong); }
+  .lesson-n { font: 400 1.6rem/1 var(--serif); color: var(--deep); }
+  .lessons h3 { font-size: 1.2rem; margin-bottom: 6px; }
+  .lessons p { margin: 0; font-size: 15px; color: #2b3836; }
+
+  /* Structure: wireframe and finished design compare slider */
+  .compare-ui { margin-top: 28px; }
+  .seg { display: inline-flex; gap: 4px; padding: 4px; margin-bottom: 16px; border-radius: 999px; background: #ece3d4; border: 1px solid var(--border); }
+  .seg-btn { min-height: 44px; padding: 0 18px; border: 0; border-radius: 999px; background: transparent; color: var(--ink); font: 600 14px var(--sans); cursor: pointer; }
+  .seg-btn[aria-pressed="true"] { background: var(--sea); color: #f6f1e9; }
+  .wipe-wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .wipe-wrap[hidden] { display: none; }
+  .wipe-mobile { grid-template-columns: minmax(220px, 320px) 1fr; align-items: start; }
+  .wipe { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); background: var(--card); user-select: none; }
+  .wipe-img { display: block; width: 100%; height: auto; }
+  .wipe-top { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+  .wipe-top .wipe-img { height: 100%; object-fit: cover; }
+  .wipe-handle { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 0; pointer-events: none; }
+  .wipe-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1.5px; width: 3px; background: var(--sea); }
+  .wipe-handle span { position: absolute; top: 50%; left: -22px; width: 44px; height: 44px; margin-top: -22px; border-radius: 50%; background: var(--sea); box-shadow: 0 4px 14px rgba(0, 0, 0, .3); }
+  .wipe-handle span::before, .wipe-handle span::after { content: ""; position: absolute; top: 50%; width: 8px; height: 8px; margin-top: -4px; border: solid #f6f1e9; border-width: 0 0 2.5px 2.5px; }
+  .wipe-handle span::before { left: 11px; transform: rotate(45deg); }
+  .wipe-handle span::after { right: 11px; transform: rotate(-135deg); }
+  .wipe-range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; }
+  .wipe:has(.wipe-range:focus-visible) .wipe-handle span { outline: 3px solid var(--sea); outline-offset: 4px; }
+  .wipe-tag { position: absolute; bottom: 12px; padding: 6px 10px; border-radius: 999px; font: 600 12px var(--sans); background: rgba(246, 241, 233, .92); color: var(--ink); pointer-events: none; }
+  .wipe-tag.left { left: 12px; } .wipe-tag.right { right: 12px; }
+  .pin-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .wipe-mobile .pin-list { grid-template-columns: 1fr; }
+  .pin-list li { padding: 14px 16px; border-radius: 12px; background: var(--card); border: 1px solid var(--border); transition: border-color .2s, box-shadow .2s; }
+  .pin-list strong { display: block; margin-bottom: 2px; }
+  .pin-list p { margin: 0; font-size: 14px; color: #2b3836; }
+  .changes { margin-top: 48px; }
+  .change { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 18px; margin-top: 16px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; }
+  .change figure { margin: 0; }
+  .change img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--border); }
+  .change figcaption { font: 600 12px var(--sans); color: var(--muted); margin-top: 6px; }
+  .change > div { grid-column: 1 / -1; }
+  .change h4 { font: 400 1.3rem/1.2 var(--serif); margin: 0 0 6px; }
+  .change p { margin: 0; color: #2b3836; }
+
+  /* Design system teaser */
+  .mini-swatches { display: flex; flex-wrap: wrap; gap: 10px 16px; margin: 18px 0; }
+  .mini-swatches li { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .mini-swatches span { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border); }
+  .text-link { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 600; color: var(--deep) !important; text-underline-offset: 4px; }
+
+  /* Responsive previews */
+  .sizes { display: grid; grid-template-columns: 0.55fr 0.8fr 1.4fr; gap: 20px; align-items: start; margin-top: 28px; }
+  .size { margin: 0; }
+  .size .frame { height: 520px; overflow-y: auto; border: 1px solid var(--border); background: var(--card); box-shadow: var(--shadow); }
+  .size figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .size figcaption strong { display: block; color: var(--ink); font-size: 14px; }
+
+  .shot { margin: 24px 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 12px; }
+  .shot img { width: 100%; height: auto; display: block; border-radius: 10px; }
+  .shot.tall { max-height: 640px; overflow: auto; }
+
+  .swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 24px 0; }
+  .swatches li { display: grid; gap: 2px; font-size: 13px; }
+  .swatches span { color: var(--muted); }
+  .swatches .sw { height: 56px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 6px; }
+  .swatches .use { color: var(--ink); }
+
+  .table-wrap { overflow-x: auto; margin: 28px 0 16px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th { font-size: 12px; color: var(--muted); }
+  tbody th { font-weight: 600; }
+  tr:last-child > * { border-bottom: 0; }
+  table.small { margin: 16px 0; background: var(--card); border-radius: 12px; overflow: hidden; }
+
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 24px; }
+  .comp { margin: 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 12px; }
+  .comp img { height: 200px; object-fit: cover; object-position: top left; background: var(--bg); }
+  .comp figcaption { margin-top: 12px; font-size: 14px; color: #2b3836; }
+
+  pre { background: var(--sea); color: #f6f1e9; padding: 18px 20px; border-radius: 12px; overflow-x: auto; font-size: 13px; line-height: 1.6; margin: 16px 0 0; }
+
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 8px; }
+  .cards article { background: var(--card); border: 1px solid var(--border); border-top: 6px solid var(--c); border-radius: 16px; padding: 22px; }
+  .cards h3 { font-size: 1.15rem; margin-bottom: 8px; }
+  .cards p { margin: 0; font-size: 14px; color: #2b3836; }
+
+  dialog { border: 0; border-radius: 16px; padding: 12px; max-width: min(1400px, 96vw); max-height: 96vh; background: var(--card); }
+  dialog::backdrop { background: rgba(14, 42, 44, .78); }
+  dialog img { display: block; max-width: 100%; max-height: 84vh; margin: 12px auto 0; }
+  .close { font: 600 13px var(--sans); min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer; }
+
+  .top { position: fixed; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 48px; height: 48px; display: grid; place-items: center; background: var(--sea); color: #fff; border: 0; border-radius: 50%; box-shadow: var(--shadow); cursor: pointer; opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+  .top.show { opacity: 1; visibility: visible; }
+  .skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: #fff; color: #14201f; padding: 10px 18px; border-radius: 999px; font: 600 14px 'Inter', sans-serif; }
+  .skip:focus { left: 16px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .js .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .js .reveal.visible { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .zoom img, .cta, .top, .pin-list li { transition: none; }
+    .zoom:hover img { transform: none; }
+  }
+
+  @media (max-width: 960px) {
+    .layout, .hero-grid, .kpis, .cards, .cols, .grid, .step { grid-template-columns: 1fr; }
+    .step { gap: 16px; }
+    .step:nth-child(even) .shot-btn { order: 0; }
+    .sizes { grid-template-columns: 1fr 1fr; }
+    .wipe-mobile, .pin-list, .lessons { grid-template-columns: 1fr; }
+    .wipe-mobile .wipe { max-width: 320px; }
+    .size.wide { grid-column: 1 / -1; }
+    .size .frame { height: 420px; }
+    .toc-wrap { position: sticky; top: 0; z-index: 20; margin: 0 -20px 32px; padding: 8px 20px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .toc-title { display: none; }
+    .toc { flex-direction: row; overflow-x: auto; gap: 6px; }
+    .toc a { white-space: nowrap; border: 1px solid var(--border); border-radius: 999px; padding: 8px 14px; }
+    .toc a[aria-current] { background: var(--sea); color: #fff; border-color: var(--sea); }
+    .swatches { grid-template-columns: repeat(2, 1fr); }
+    .devices { gap: 10px; padding: 24px 12px 0; }
+    .dev { height: 240px; }
+    .layout { gap: 0; padding-top: 56px; }
+    .cols { gap: 20px; }
+    section { margin-bottom: 64px; }
+  }
+  /* Phones */
+  @media (max-width: 768px) {
+    .inner { padding: 0; }
+    .layout { padding-left: 0; padding-right: 0; padding-bottom: 72px; }
+    .hero { padding-bottom: 48px; }
+    .toc a { display: inline-flex; align-items: center; min-height: 44px; }
+    .actions .cta { flex: 1 1 100%; justify-content: center; }
+    .specs { padding: 20px; }
+    .kpis { gap: 12px; margin-top: 28px; }
+    .kpi { padding: 18px; }
+    .kpi-value { font-size: 2.4rem; }
+    .devices { margin-top: 36px; border-radius: 16px 16px 0 0; }
+    .dev { height: 200px; }
+    .wipe-tag { font-size: 11px; padding: 5px 8px; bottom: 8px; }
+    .wipe-tag.left { left: 8px; } .wipe-tag.right { right: 8px; }
+    .wipe-handle span { width: 40px; height: 40px; left: -20px; margin-top: -20px; }
+    .pin-list li { padding: 12px; }
+    .steps { gap: 40px; margin-top: 32px; }
+    .step h3 { font-size: 1.4rem; }
+    .sizes { grid-template-columns: 1fr; }
+    .size .frame { height: 380px; }
+    .size:not(.wide) .frame { max-width: 360px; }
+    .cards { gap: 14px; }
+  }
+</style>

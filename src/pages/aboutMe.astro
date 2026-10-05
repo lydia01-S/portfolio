@@ -30,7 +30,8 @@ const learning = [
 const tools = ["Figma", "Adobe Photoshop", "Adobe Illustrator",  "HTML", "CSS", "JavaScript", "Astro", "Next.js"];
 
 const education = [
-  { dates: "Sep 2025 to Aug 2026", title: "MSc in Interactive Digital Media, First Class Honours", place: "Griffith College, Dublin", note: "Final project: Critter & Friends, a game that helps children aged 5 to 8 learn about native Irish insects, co-created with Thea Rummel." }
+  { dates: "Sep 2025 to Aug 2026", title: "MSc in Interactive Digital Media, First Class Honours", place: "Griffith College, Dublin", note: "Final project: Critter & Friends, a game that helps children aged 5 to 8 learn about native Irish insects, co-created with Thea Rummel." },
+  { dates: "2022 to 2024", title: "BA in Media Production", place: "Coláiste Dhúlaigh, Dublin", note: "Visual design, typography, editorial layout and digital media production." }
 ];
 
 // Optional: a line about life outside design. Leave empty to hide it.
@@ -124,21 +125,13 @@ const outside = ""; // e.g. "Outside of design, I [hobby], which [how it feeds i
           <h2>Education.</h2>
           <ol class="timeline">
             {education.map((e) => (
-              <li><p class="when">{e.dates}</p><div><p class="role">{e.title}</p> <p class="place">{e.place}</p><p class="note">{e.note}</p></div></li>
+              <li><p class="when">{e.dates}</p><div><p class="role">{e.title}</p><p class="place">{e.place}</p><p class="note">{e.note}</p></div></li>
             ))}
           </ol>
         </div>
       </section>
 
       {outside && (
-        <section class="block">
-          <div class="cols">
-            <h2>Outside of design.</h2>
-            <p class="prose">{outside}</p>
-          </div>
-        </section>
-      )}
-    <{outside && (
         <section class="block">
           <div class="cols">
             <h2>Outside of design.</h2>

@@ -1,0 +1,49 @@
+---
+// src/components/EbbTabs.astro
+// The links between the Ebb pages, in one place. Same structure as the STU, Pip and Critter tabs.
+import { FIGMA_URL } from '../data/ebb';
+
+interface Props { current: "overview" | "system" }
+const { current } = Astro.props;
+
+const tabs = [
+  { id: "overview", href: "/ebb", label: "Overview" },
+  { id: "system", href: "/ebb-system", label: "Design system" }
+];
+---
+
+<div class="ct">
+  <a href="/work" class="ct-back">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L4 8l6-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to portfolio
+  </a>
+  <nav class="ct-tabs" aria-label="Ebb pages">
+    {tabs.map((t) => (
+      <a href={t.href} aria-current={t.id === current ? "page" : undefined}>{t.label}</a>
+    ))}
+    <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer">
+      Live prototype
+      <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3.5 10.5l7-7m0 0H4.67m5.83 0v5.83" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="sr">(opens in a new tab)</span>
+    </a>
+  </nav>
+</div>
+
+<style>
+  .ct { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 20px; margin-bottom: 48px; border-bottom: 1px solid var(--border, #d8ccb8); }
+  .ct a { color: var(--ink, #14201f); font: 500 13px 'JetBrains Mono', ui-monospace, monospace; text-decoration: none; border-radius: 999px; transition: background .2s; }
+  .ct a:focus-visible { outline: 3px solid var(--sea, #0e2a2c); outline-offset: 3px; }
+  .ct-back { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px 0 0; }
+  .ct-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ct-tabs a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border: 1px solid var(--border-strong, #7a7368); }
+  .ct a:hover { background: var(--foam, #b9d4ca); }
+  .ct-tabs a[aria-current="page"], .ct-tabs a[aria-current="page"]:hover { background: var(--sea, #0e2a2c); color: #f6f1e9; border-color: var(--sea, #0e2a2c); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  /* Phones: the tabs share one row and scroll sideways if they don't fit */
+  @media (max-width: 560px) {
+    .ct { margin-bottom: 32px; }
+    .ct-tabs { width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 2px; }
+    .ct-tabs a { flex: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .ct a { transition: none; } }
+</style>

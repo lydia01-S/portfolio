@@ -3,8 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/hero.astro';
 import BackToTop from '../components/BackToTop.astro';
 
-// Selected Work: all four projects, in the same order as the Selected Work page.
-// fit: "contain" shows the whole image (good for phone screens); "cover" fills the frame.
+
 const projects = [
   {
     slug: "/stu",               // Leads to src/pages/stu.astro
@@ -14,7 +13,19 @@ const projects = [
     year: "2025",
     imageSrc: "/3.png",
     fit: "contain",
-    cardBg: "#dbe4d9",           // Muted Sage Green
+    cardBg: "#dde3ee",    
+    rotation: "-1deg",
+    offsetY: "0px"
+  },
+    {
+    slug: "/ebb",               
+    title: "Ebb: A website for three Dublin sea saunas",
+    summary: "A self-initiated website project for desktop, tablet and mobile sizes",
+    category: "UX/UI case study",
+    year: "2026",
+    imageSrc: "/ebb-home.jpg",
+    fit: "contain",
+    cardBg: "#d6e7e1 ",         
     rotation: "-1deg",
     offsetY: "0px"
   },
@@ -26,7 +37,7 @@ const projects = [
     year: "2026",
     imageSrc: "/pip_drag_animation_storyboard.png",
     fit: "contain",
-    cardBg: "#d6e7e1",           // Sea Glass
+    cardBg: "#dbe4d9",           // Sea Glass
     rotation: "1.2deg",
     offsetY: "60px"
   },
@@ -42,18 +53,7 @@ const projects = [
     rotation: "0.8deg",
     offsetY: "0px"
   },
-  {
-    slug: "/critterandfriends", // Leads to src/pages/critterandfriends.astro
-    title: "Critter & Friends: An interactive game",
-    summary: "A web game about native Irish insects for children aged 5 to 8, tested with educators.",
-    category: "Web Design, UX/UI",
-    year: "2026",
-    imageSrc: "/critterandfriends.png",
-    fit: "cover",
-    cardBg: "#e8cfc4",           // Warm Terracotta / Clay
-    rotation: "-1.2deg",
-    offsetY: "60px"
-  }
+
 ];
 const projectCount = String(projects.length).padStart(2, '0');
 

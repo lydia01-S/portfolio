@@ -1,0 +1,470 @@
+---
+// src/pages/ebb-system.astro
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import EbbTabs from '../components/EbbTabs.astro';
+import ProjectNav from '../components/ProjectNav.astro';
+
+import cover from '../../public/Cover.png';
+import styleGuide from '../../public/style-guide.png';
+import navbar from '../../public/NavBar.png';
+import button from '../../public/Button.png';
+import bookingBar from '../../public/BookingBar.png';
+import sessionCard from '../../public/SessionCard.png';
+import locationCard from '../../public/LocationCard.png';
+import journalCard from '../../public/JournalCard.png';
+import badge from '../../public/Badge.png';
+import footer from '../../public/Footer.png';
+
+// Every value below comes from the Ebb style guide.
+const colours = [
+  { group: "Light grounds", tokens: [
+    ["sand-50", "#f6f1e9", "Page background. The default ground for every light section."],
+    ["sand-100", "#ece3d4", "Alternate sections, like How it works and Journal, and the sky in the hero art."],
+    ["sand-200", "#d8ccb8", "Decorative hairlines and card dividers only. Never a control border, because it fails 3:1."],
+    ["surface-card", "#ffffff", "Cards and the booking bar, sitting on sand-50 or sand-100."]
+  ]},
+  { group: "Text and controls", tokens: [
+    ["ink", "#14201f", "Headings and body copy: 14.9:1 on sand-50 and 13.1:1 on sand-100."],
+    ["ink-muted", "#4f5b58", "Secondary copy, meta and captions: 6.3:1 on sand-50, 5.6:1 on sand-100 and 7.1:1 on white."],
+    ["control-border", "#7a7368", "Input and select borders: 4.7:1 on white cards and 4.2:1 on sand-50."]
+  ]},
+  { group: "Accent", tokens: [
+    ["ember-600", "#a8401a", "Primary button fill (light label 5.5:1), text links and prices. The sauna heat: one per view."],
+    ["ember-700", "#8a3414", "Hover and pressed state of ember-600."],
+    ["sun-400", "#e9a23b", "The sun in the art and availability badges. Always with sea-900 text (7.0:1), never as text on light grounds."]
+  ]},
+  { group: "Dark grounds", tokens: [
+    ["sea-900", "#0e2a2c", "Dark sections (Locations, Membership, footer), the secondary button fill and the sea in the art."],
+    ["sea-800", "#16393b", "Cards raised on sea-900."],
+    ["foam-200", "#b9d4ca", "Accent on dark: eyebrow labels and icons, 9.6:1 on sea-900 and 7.9:1 on sea-800."],
+    ["on-dark", "#f6f1e9", "Headings and body on dark: 13.5:1 on sea-900 and 11.1:1 on sea-800."],
+    ["on-dark-muted", "#a8bfb9", "Secondary copy on dark: 7.8:1 on sea-900 and 6.4:1 on sea-800."]
+  ]},
+  { group: "Focus", tokens: [
+    ["focus", "#0e2a2c", "A 3px outline with a 3px offset on every light ground (11.9:1 or better). Same value as sea-900."],
+    ["focus-on-dark", "#b9d4ca", "The 3px outline inside dark sections. Same value as foam-200."]
+  ]}
+];
+
+
+const typefaceNote = "A serif for display sizes, for warmth and calm, and a plain sans for body copy, forms and prices, where clarity matters most.";
+
+const type = [
+  { token: "display-xl", spec: "88 / 84 · Regular", use: "Hero headline on desktop. 64/62 on tablet and 52/52 on mobile. One per page.", sample: "Heat, then the sea.", cls: "s-xl" },
+  { token: "display-l", spec: "60 / 62 · Regular", use: "Section titles on desktop. 40/44 on mobile.", sample: "Swim all winter", cls: "s-l" },
+  { token: "display-m", spec: "40 / 44 · Regular", use: "Step numbers, location names and the membership price.", sample: "Dún Laoghaire", cls: "s-m" },
+  { token: "display-s", spec: "28 / 32 · Regular", use: "Card titles.", sample: "Sunrise session", cls: "s-s" },
+  { token: "heading", spec: "20 / 28 · SemiBold", use: "Small headings inside steps and footer columns.", sample: "Plunge", cls: "s-h" },
+  { token: "body-l", spec: "20 / 30 · Regular", use: "Hero and section intros. At most 52 characters a line.", sample: "Wood-fired saunas on three Dublin harbours.", cls: "s-bl" },
+  { token: "body", spec: "17 / 26 · Regular", use: "Default copy. At most 68 characters a line.", sample: "Fifteen minutes at 80°C, then the sea.", cls: "s-b" },
+  { token: "button", spec: "16 / 20 · SemiBold", use: "Buttons and navigation links.", sample: "Book a session", cls: "s-btn" },
+  { token: "label", spec: "13 / 16 · SemiBold, uppercase", use: "Eyebrows and field labels.", sample: "Sea saunas · Dublin", cls: "s-lab" },
+  { token: "caption", spec: "14 / 20 · Regular", use: "Meta lines, footnotes and legal text.", sample: "60 min · up to 12 people", cls: "s-cap" }
+];
+
+const spacing = [["space-1", 4], ["space-2", 8], ["space-3", 12], ["space-4", 16], ["space-5", 20], ["space-6", 24], ["space-8", 32], ["space-10", 40], ["space-12", 48], ["space-16", 64], ["space-20", 80], ["space-30", 120]];
+const radius = [["radius-sm", "6px", 6], ["radius-md", "14px", 14], ["radius-lg", "28px", 28], ["radius-pill", "999px", 999]];
+
+const components = [
+  { img: navbar, title: "Navigation", note: "Five links and one primary action. Book is the only filled element in the bar, so it's always the first thing to find. On tablet it becomes Book and Menu, and on mobile just Menu.", alt: "Ebb navigation bar with five links, Log in and a Book a session button" },
+  { img: bookingBar, title: "Booking bar", note: "Location, date and guests with sensible defaults, then one action. The only element in the system with a shadow, because it's the only one that floats.", alt: "Ebb booking bar with location, date and guests fields and a Find times button" },
+  { img: button, title: "Buttons", note: "Filled, outlined and text-link styles, each with hover and focus states. The focus ring changes colour inside dark sections so it always stands out.", alt: "Ebb buttons in default, hover, focus and small states, plus outlined, text link and dark versions" },
+  { img: sessionCard, title: "Session cards", note: "Illustration, a badge only when it matters, the key facts, then the price and action at the foot of every card, so cards line up in a row.", alt: "Four Ebb session cards with illustrations, titles, details and prices" },
+  { img: locationCard, title: "Location cards", note: "Hours, capacity and facilities each pair an icon with words. Today's sea temperature sits top right, because it's what decides whether people swim.", alt: "Three Ebb location cards with sea temperatures, hours and facilities" },
+  { img: journalCard, title: "Journal cards", note: "One lead story and two smaller ones, each with a category and reading time, so people know what they're opening.", alt: "Ebb journal cards: one large and two smaller article cards" },
+  { img: badge, title: "Badges", note: "Short words, never colour alone. Sun yellow always carries dark text, and Sold out uses a quiet sand fill.", alt: "Ebb badges reading Few spaces Sat, New and Sold out" },
+  { img: footer, title: "Footer", note: "A newsletter sign-up that says what arrives and how to leave, then links grouped by task: Visit, Help and Follow.", alt: "Ebb footer with a newsletter sign-up, three link columns and the ebb wordmark" }
+];
+
+const contrast = [
+  ["ink on sand-50", "14.9:1", "Text", 4.5], ["ink-muted on sand-50", "6.3:1", "Text", 4.5], ["Light label on ember-600", "5.5:1", "Text", 4.5],
+  ["sea-900 text on sun-400", "7.0:1", "Text", 4.5], ["on-dark on sea-900", "13.5:1", "Text", 4.5], ["on-dark-muted on sea-800", "6.4:1", "Text", 4.5],
+  ["control-border on white", "4.7:1", "Control", 3], ["Focus ring on light grounds", "11.9:1", "Control", 3], ["sand-200 hairline on sand-50", "Below 3:1", "Decoration only", 0]
+];
+
+const rules = [
+  ["Nothing relies on colour alone.", "Badges are words, sold-out slots say so, and errors are written under the field with an example."],
+  ["One ember element per view.", "The heat colour marks the main action, so it loses its meaning if it's everywhere."],
+  ["Hairlines are decoration, never controls.", "Inputs, selects and outlined buttons use control-border, which passes 3:1."],
+  ["Every interactive element has a visible focus ring.", "3px with a 3px offset, in sea-900 on light grounds and foam-200 on dark ones."],
+  ["Line lengths are capped.", "52 characters for intros and 68 for body copy, so text stays easy to read at every size."]
+];
+
+const sections = [
+  ["overview", "Overview"], ["colour", "Colour"], ["type", "Type"], ["layout-tokens", "Spacing and shape"],
+  ["components", "Components"], ["access", "Accessibility"], ["guide", "Style guide"], ["gaps", "Not covered yet"]
+];
+
+---
+
+<Layout title="Ebb: design system" bg="#f6f1e9">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+
+  <a class="skip" href="#content">Skip to the design system</a>
+
+  <main class="ds" id="ds">
+    <header class="hero">
+      <div class="inner">
+        <EbbTabs current="system" />
+        <p class="chips">
+          <span class="chip" style="--c: var(--sun)">Design system</span>
+          <span class="chip" style="--c: var(--foam)" id="readTime">4 min read</span>
+        </p>
+        <h1>Ebb design system</h1>
+        <p class="lead">The colours, type, spacing and components behind every Ebb screen, written so a developer or another designer could build a new page without guessing.</p>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc-wrap">
+        <nav class="toc" aria-label="On this page">
+          <p class="toc-title">On this page</p>
+          {sections.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
+        </nav>
+      </aside>
+
+      <div class="content" id="content">
+        <section id="overview">
+          <span class="chip" style="--c: var(--sun)">Overview</span>
+          <h2>A small system with a rule for every choice.</h2>
+          <div class="prose">
+            <p>Ebb's system is deliberately small: two typefaces, seventeen colour tokens with a stated role and contrast ratio for each, one spacing scale, four corner sizes and a single shadow. Every illustration uses the same four shapes, so the brand stays consistent without a long guide.</p>
+          </div>
+          <figure class="shot">
+            <button type="button" class="zoom" aria-label="Enlarge the Ebb cover"><Image src={cover} alt="Ebb cover: the wordmark beside an illustration of an ember sauna, a sun and the sea" loading="eager" /></button>
+            <figcaption>The four shapes: an ember pill for the sauna, a sun disc, a band of sea and thin foam lines for water.</figcaption>
+          </figure>
+        </section>
+
+        <section id="colour">
+          <span class="chip" style="--c: var(--foam)">Colour</span>
+          <h2>Seventeen tokens, each with one job.</h2>
+          <p class="prose">Tokens are named by role, not by shade, so it's clear where each one belongs. Every pairing used for text or controls has its contrast ratio stated.</p>
+          {colours.map((g) => (
+            <div class="group">
+              <h3>{g.group}</h3>
+              <ul class="tokens">
+                {g.tokens.map(([name, hex, use]) => (
+                  <li>
+                    <span class="sw" style={`background:${hex}`} aria-hidden="true"></span>
+                    <div><p class="t-name"><code>{name}</code><span>{hex}</span></p><p class="t-use">{use}</p></div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+
+        <section id="type">
+          <span class="chip" style="--c: var(--ember)">Type</span>
+          <h2>Two typefaces, ten styles.</h2>
+          <p class="prose">{typefaceNote}</p>
+          <ul class="type">
+            {type.map((t) => (
+              <li>
+                <p class="t-meta"><code>{t.token}</code> {t.spec}</p>
+                <p class={`sample ${t.cls}`}>{t.sample}</p>
+                <p class="t-use">{t.use}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section id="layout-tokens">
+          <span class="chip" style="--c: var(--sun)">Spacing and shape</span>
+          <h2>One spacing scale, four corners, one shadow.</h2>
+          <div class="split">
+            <div>
+              <h3>Spacing</h3>
+              <ul class="space">
+                {spacing.map(([n, v]) => (
+                  <li><code>{n}</code><span class="bar" style={`width:${v}px`} aria-hidden="true"></span><span>{v}px</span></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3>Radius</h3>
+              <ul class="radius">
+                {radius.map(([n, label, v]) => (
+                  <li><span class="r-box" style={`border-radius:${Math.min(Number(v), 40)}px`} aria-hidden="true"></span><code>{n}</code><span>{label}</span></li>
+                ))}
+              </ul>
+              <h3>Shadow</h3>
+              <div class="shadow-demo">shadow-float: only the booking bar</div>
+              <p class="t-use">One shadow in the whole system, for the one element that floats over other content.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="components">
+          <span class="chip" style="--c: var(--foam)">Components</span>
+          <h2>Built once in Figma, reused on every page.</h2>
+          <p class="prose">Select any component to see it full size.</p>
+          <div class="grid">
+            {components.map((c) => (
+              <figure class="comp">
+                <button type="button" class="zoom" aria-label={`Enlarge: ${c.title}`}><Image src={c.img} alt={c.alt} loading="lazy" /></button>
+                <figcaption><strong>{c.title}.</strong> {c.note}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+
+        <section id="access">
+          <span class="chip" style="--c: var(--ember)">Accessibility</span>
+          <h2>Contrast and focus decided in the system, not fixed later.</h2>
+          <p class="prose">Text needs 4.5:1 and controls need 3:1 under WCAG 2.1 AA. These are the key pairings and how they measure.</p>
+          <div class="table-wrap" role="region" aria-label="Contrast ratios" tabindex="0">
+            <table>
+              <caption class="sr">Contrast ratios for the key colour pairings</caption>
+              <thead><tr><th scope="col">Pairing</th><th scope="col">Ratio</th><th scope="col">Used for</th><th scope="col">Result</th></tr></thead>
+              <tbody>
+                {contrast.map(([pair, ratio, kind, need]) => (
+                  <tr>
+                    <th scope="row">{pair}</th><td>{ratio}</td><td>{kind}</td>
+                    <td><span class={need === 0 ? "tag info" : "tag ok"}>{need === 0 ? "Not used for text or controls" : `Passes ${need}:1`}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <ol class="rules">
+            {rules.map(([rule, why]) => <li><p class="rule">{rule}</p><p class="why">{why}</p></li>)}
+          </ol>
+        </section>
+
+        <section id="guide">
+          <span class="chip" style="--c: var(--sun)">Style guide</span>
+          <h2>The full style guide.</h2>
+          <figure class="shot tall">
+            <button type="button" class="zoom" aria-label="Enlarge the full style guide"><Image src={styleGuide} alt="The full Ebb style guide: colour, type, spacing, radius and shadow" loading="lazy" /></button>
+            <figcaption>The style guide from the Figma file. Select it to see it full size.</figcaption>
+          </figure>
+        </section>
+
+        <section id="gaps">
+          <span class="chip" style="--c: var(--foam)">Not covered yet</span>
+          <h2>What this system doesn't include yet.</h2>
+          <ul class="bullets">
+            <li>The booking flow's components at tablet and mobile sizes.</li>
+            <li>An open state for the mobile menu.</li>
+            <li>Loading and empty states, such as no times left on the chosen day.</li>
+            <li>Motion guidance for hovers, page changes and the booking bar.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <ProjectNav current="ebb" />
+
+    <button id="top" class="top" type="button" aria-label="Back to top">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+
+    <dialog id="lightbox" aria-label="Enlarged image">
+      <button type="button" id="closeLb" class="close">Close</button>
+      <img id="lbImg" alt="" />
+    </dialog>
+  </main>
+</Layout>
+
+<script>
+  function initSystem() {
+    const root = document.getElementById('ds');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Reading time, leaving out tables and code
+    const rt = document.getElementById('readTime');
+    const area = document.getElementById('content');
+    if (rt && area) {
+      const copy = area.cloneNode(true) as HTMLElement;
+      copy.querySelectorAll('table, pre').forEach((n) => n.remove());
+      const words = (copy.textContent || '').trim().split(/\s+/).length;
+      rt.textContent = `${Math.max(1, Math.ceil(words / 200))} min read`;
+    }
+
+    // Back to top
+    const top = document.getElementById('top');
+    const onScroll = () => top?.classList.toggle('show', scrollY > 500);
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    top?.addEventListener('click', () => scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' }));
+
+    // Highlight the current section in "On this page"
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
+    const spy = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) links.forEach((a) => a.toggleAttribute('aria-current', a.hash === `#${e.target.id}`));
+    }), { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('.content section').forEach((s) => spy.observe(s));
+
+    // Lightbox
+    const lb = document.getElementById('lightbox') as HTMLDialogElement | null;
+    const lbImg = document.getElementById('lbImg') as HTMLImageElement | null;
+    document.querySelectorAll<HTMLButtonElement>('.ds .zoom').forEach((b) => b.addEventListener('click', () => {
+      const img = b.querySelector('img');
+      if (!lb || !lbImg || !img) return;
+      lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; lb.showModal();
+    }));
+    document.getElementById('closeLb')?.addEventListener('click', () => lb?.close());
+    lb?.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+  }
+  initSystem();
+  document.addEventListener('astro:page-load', initSystem);
+</script>
+
+<style>
+  .ds {
+    --bg: #f6f1e9; --card: #fff; --ink: #14201f; --muted: #4f5b58; --border: #d8ccb8; --border-strong: #7a7368;
+    --deep: #a8401a; --shadow: 0 8px 28px rgba(20, 32, 31, .08);
+    --sun: #e9a23b; --foam: #b9d4ca; --ember: #e8b9a4; --sea: #0e2a2c;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    background: transparent; color: var(--ink); font: 16px/1.65 var(--sans); -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  .ds *, .ds *::before, .ds *::after { box-sizing: border-box; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .ds a { color: inherit; }
+  .ds :focus-visible, .top:focus-visible { outline: 3px solid var(--sea); outline-offset: 3px; border-radius: 6px; }
+  .skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: #fff; color: #14201f; padding: 10px 18px; border-radius: 999px; font: 600 14px 'Inter', sans-serif; }
+  .skip:focus { left: 16px; }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; text-wrap: balance; }
+  ul, ol { list-style: none; margin: 0; padding: 0; }
+  p { margin: 0; }
+  code { font: 500 12.5px var(--mono); }
+
+  .chip { display: inline-block; font: 600 12px/1 var(--sans); background: var(--c); color: var(--ink); padding: 8px 12px; border-radius: 999px; margin-bottom: 16px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+  .chips .chip { margin: 0; }
+
+  .hero { border-bottom: 1px solid var(--border); padding: 24px 0 56px; }
+  .inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  h1 { font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1.1; margin-bottom: 20px; }
+  .lead { font-size: 18px; color: #2b3836; max-width: 60ch; }
+
+  .layout { max-width: 1100px; margin: 0 auto; padding: 72px 24px 120px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 64px; align-items: start; }
+  .toc-wrap { position: sticky; top: 32px; }
+  .toc { display: flex; flex-direction: column; }
+  .toc-title { font: 600 12px var(--sans); color: var(--muted); margin: 0 0 8px; }
+  .toc a { font-size: 14px; text-decoration: none; color: var(--muted); padding: 7px 0 7px 14px; border-left: 2px solid var(--border); }
+  .toc a:hover { color: var(--ink); }
+  .toc a[aria-current] { color: var(--ink); font-weight: 600; border-left-color: var(--deep); }
+
+  section { margin-bottom: 96px; scroll-margin-top: 32px; }
+  h2 { font-size: clamp(1.6rem, 2.4vw, 2.2rem); line-height: 1.25; margin-bottom: 12px; max-width: 28ch; }
+  h3 { font-size: 1.3rem; margin: 32px 0 14px; }
+  .prose { color: #2b3836; max-width: 64ch; margin-bottom: 8px; }
+  .bullets li { position: relative; padding-left: 22px; margin-bottom: 10px; max-width: 64ch; color: #2b3836; }
+  .bullets li::before { content: ""; position: absolute; left: 0; top: .7em; width: 8px; height: 8px; border-radius: 50%; background: var(--deep); }
+
+  /* Images: every one can be enlarged */
+  .zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 10px; overflow: hidden; }
+  .zoom img { display: block; width: 100%; height: auto; transition: transform .3s; }
+  .zoom:hover img { transform: scale(1.01); }
+  .shot { margin: 24px 0 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 12px; }
+  .shot figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .shot.tall .zoom { max-height: 560px; overflow-y: auto; }
+
+  /* Colour */
+  .group h3 { font: 600 12px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .tokens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .tokens li { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 14px; align-items: start; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; }
+  .sw { display: block; width: 56px; height: 56px; border-radius: 12px; border: 1px solid rgba(20, 32, 31, .15); }
+  .t-name { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; margin-bottom: 4px; }
+  .t-name code { font-size: 13px; color: var(--ink); }
+  .t-name span { font: 500 12px var(--mono); color: var(--muted); }
+  .t-use { font-size: 14px; color: #2b3836; }
+
+  /* Type */
+  .type li { padding: 20px 0; border-top: 1px solid var(--border); }
+  .type li:last-child { border-bottom: 1px solid var(--border); }
+  .t-meta { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .t-meta code { color: var(--ink); margin-right: 8px; }
+  .sample { color: var(--ink); margin-bottom: 6px; overflow-wrap: anywhere; }
+  .s-xl { font: 400 clamp(2.6rem, 7vw, 5.5rem)/1 var(--serif); letter-spacing: -0.02em; }
+  .s-l { font: 400 clamp(2.2rem, 5vw, 3.75rem)/1.05 var(--serif); }
+  .s-m { font: 400 clamp(1.9rem, 3.5vw, 2.5rem)/1.1 var(--serif); }
+  .s-s { font: 400 1.75rem/1.15 var(--serif); }
+  .s-h { font: 600 1.25rem/1.4 var(--sans); }
+  .s-bl { font: 400 1.25rem/1.5 var(--sans); }
+  .s-b { font: 400 1.0625rem/1.55 var(--sans); }
+  .s-btn { font: 600 1rem/1.25 var(--sans); }
+  .s-lab { font: 600 .8125rem/1.25 var(--sans); letter-spacing: .08em; text-transform: uppercase; }
+  .s-cap { font: 400 .875rem/1.45 var(--sans); }
+
+  /* Spacing and shape */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .split h3:first-child { margin-top: 12px; }
+  .space li { display: grid; grid-template-columns: 90px minmax(0, 1fr) 52px; gap: 12px; align-items: center; padding: 6px 0; font-size: 13px; color: var(--muted); }
+  .space .bar { display: block; height: 12px; max-width: 100%; border-radius: 3px; background: var(--deep); }
+  .radius { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .radius li { display: grid; gap: 6px; justify-items: start; font-size: 13px; color: var(--muted); }
+  .r-box { width: 64px; height: 48px; background: var(--sea); }
+  .shadow-demo { padding: 20px; margin-bottom: 10px; background: var(--card); border-radius: 14px; box-shadow: 0 18px 40px -16px rgba(20, 32, 31, .35); font-size: 14px; }
+
+  /* Components */
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 20px; }
+  .comp { margin: 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 12px; }
+  .comp img { height: 200px; object-fit: cover; object-position: top left; background: var(--bg); }
+  .comp figcaption { margin-top: 12px; font-size: 14px; color: #2b3836; }
+
+  /* Accessibility */
+  .table-wrap { overflow-x: auto; margin: 20px 0 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; }
+  th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th { font-size: 12px; color: var(--muted); }
+  tbody th { font-weight: 600; }
+  tr:last-child > * { border-bottom: 0; }
+  .tag { display: inline-block; font: 600 12px var(--sans); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  .tag.ok { background: #dce9e3; }
+  .tag.info { background: #ece3d4; }
+  .rules { margin-top: 28px; }
+  .rules li { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 16px 0; border-top: 1px solid var(--border); }
+  .rules li:last-child { border-bottom: 1px solid var(--border); }
+  .rule { font-weight: 600; }
+  .why { color: #2b3836; }
+
+
+  dialog { border: 0; border-radius: 16px; padding: 12px; max-width: min(1400px, 96vw); max-height: 96vh; background: var(--card); }
+  dialog::backdrop { background: rgba(14, 42, 44, .78); }
+  dialog img { display: block; max-width: 100%; max-height: 84vh; margin: 12px auto 0; }
+  .close { font: 600 13px var(--sans); min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); cursor: pointer; }
+  .top { position: fixed; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 48px; height: 48px; display: grid; place-items: center; background: var(--sea); color: #fff; border: 0; border-radius: 50%; box-shadow: var(--shadow); cursor: pointer; opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+  .top.show { opacity: 1; visibility: visible; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .zoom img, .top { transition: none; }
+    .zoom:hover img { transform: none; }
+  }
+
+  /* Tablets */
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: minmax(0, 1fr); gap: 0; padding-top: 48px; }
+    .toc-wrap { position: sticky; top: 0; z-index: 20; margin: 0 -20px 32px; padding: 8px 20px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .toc-title { display: none; }
+    .toc { flex-direction: row; overflow-x: auto; gap: 6px; scrollbar-width: none; }
+    .toc a { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; border: 1px solid var(--border); border-radius: 999px; padding: 0 14px; }
+    .toc a[aria-current] { background: var(--sea); color: #fff; border-color: var(--sea); }
+    .split { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    section { margin-bottom: 64px; }
+  }
+
+  /* Phones */
+  @media (max-width: 768px) {
+    .inner { padding: 0; }
+    .layout { padding-left: 0; padding-right: 0; padding-bottom: 72px; }
+    .hero { padding-bottom: 40px; }
+    .tokens, .grid { grid-template-columns: minmax(0, 1fr); }
+    .tokens li { grid-template-columns: 44px minmax(0, 1fr); }
+    .sw { width: 44px; height: 44px; }
+    .radius { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .rules li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .space li { grid-template-columns: 80px minmax(0, 1fr) 48px; }
+    .comp img { height: 170px; }
+  }
+</style>

@@ -1,0 +1,1 @@
+export const FIGMA_URL = "https://www.figma.com/proto/TrqNJ4lPg1fPXgFm3QcslH/ebb?node-id=43-5934&t=KPqGMRyMyIaVBCoT-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=43%3A5934";
