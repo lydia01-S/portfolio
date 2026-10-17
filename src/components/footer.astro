@@ -1,14 +1,14 @@
 ---
 interface Props {
   name?: string;
-  role?: string;
+
   email?: string;
   phone?: string; // as you'd say it, e.g. "087 453 7335"
 }
 
 const {
   name = "Lydia Stewart",
-  role = "UI designer",
+
   email = "lydiastew01@gmail.com",
   phone = "087 453 7335",
 } = Astro.props;
@@ -35,7 +35,7 @@ const year = new Date().getFullYear();
   <div class="top">
     <div class="intro">
       <p class="name">{name}</p>
-      <p class="role">{role}</p>
+
       <p class="pitch">I'd love to hear about your team.</p>
     </div>
 
