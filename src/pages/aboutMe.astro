@@ -3,13 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import BackToTop from '../components/BackToTop.astro';
 
 const email = "lydiastew01@gmail.com";
-const cvHref = "/lydia_stewart_cv.pdf"; 
+
 
 // Where I'm heading: the growth story. Keep it in your own words.
-const growth = [
-  "I've finished my studies, and now I want to learn from people who do this every day. I'm looking for a team where I can work on real client projects, get honest critique and see how experienced designers make decisions.",
-  "I like feedback, because it's the fastest way I improve. On Critter & Friends, educators testing the live game showed us that our back-button idea caused accidental exits. We replaced it with a standard button in the top corner, and that taught me more than any brief."
-];
+
 
 // How I work: each point is backed by a project in the portfolio.
 const principles = [
@@ -53,11 +50,11 @@ const outside = ""; // e.g. "Outside of design, I [hobby], which [how it feeds i
             <span class="chip" style="--c: var(--yellow)">About</span>
           </p>
           <h1>I design in Figma, build in code and learn from every round of feedback.</h1>
-          <p class="lead">I'm Lydia, an Interactive Digital Media graduate who loves colour, typography and building what I design. I'm ready to start my career in UI design and I want to grow quickly by working alongside people who are better than me.</p>
+          <p class="lead">I'm Lydia, an Interactive Digital Media graduate who loves colour, typography and building what I design.</p>
           <p class="actions">
             <a class="cta" href="/work">See my work</a>
             <a class="cta ghost" href={`mailto:${email}`}>Email me</a>
-            <a class="cta ghost" href={cvHref} download>Download my CV <span class="sr">(PDF)</span></a>
+         
           </p>
         </div>
         <figure class="portrait">
@@ -69,8 +66,8 @@ const outside = ""; // e.g. "Outside of design, I [hobby], which [how it feeds i
     <div class="inner body">
       <section class="block">
         <div class="cols">
-          <h2>Where I'm heading.</h2>
-          <div class="prose">{growth.map((p) => <p>{p}</p>)}</div>
+    
+         
         </div>
       </section>
 
